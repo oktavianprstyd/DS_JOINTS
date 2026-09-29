@@ -1,0 +1,29 @@
+# Python & Bytecode
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# Model Weights & Large Binaries
+weights/
+*.pkl
+*.bin
+*.model
+*.h5
+*.pt
+*.pth
+
+# Training artifacts & Logs
+catboost_info/
+*.log
+lightning_logs/
+
+# Environments & IDEs
+.venv/
+env/
+venv/
+.idea/
+.vscode/

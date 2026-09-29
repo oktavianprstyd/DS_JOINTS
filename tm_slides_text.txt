@@ -1,0 +1,139 @@
+=== PAGE 1 ===
+JOINTS X INSPIRE 2026
+Data Science Technical Meeting 
+
+=== PAGE 2 ===
+● Kompetisi menguji kemampuan peserta dalam menyelesaikan masalah 
+nyata berbasis data.
+● Menggunakan pendekatan machine learning, deep learning, dan 
+analisis data komprehensif.
+● Peserta akan diberikan dataset dan objective tertentu untuk 
+menghasilkan model prediksi terbaik.
+● Evaluasi mencakup performa akurasi, kualitas dokumentasi, serta 
+interpretasi hasil.
+Deskripsi Umum
+
+=== PAGE 3 ===
+● Data Preprocessing & Cleaning:  Penanganan missing values, outliers, dan 
+pembersihan data.
+● Exploratory Data Analysis (EDA):  Visualisasi data, analisis distribusi, dan 
+pemahaman insight awal.
+● Feature Engineering: Ekstraksi ﬁtur, seleksi ﬁtur, dan transformasi variabel.
+● Machine Learning & Deep Learning:  Pembangunan model, pemilihan 
+algoritma, serta eﬁsiensi komputasi.
+● Model Evaluation & Validation:  Metrik evaluasi, k-fold cross-validation, dan 
+pencegahan overﬁtting.
+Materi Umum
+
+=== PAGE 4 ===
+Timeline
+
+
+=== PAGE 5 ===
+● Platform: link Kaggle Competition akan dibagikan di group WhatsApp (28 September 09:00 WIB)
+● Ketentuan Tim: Ketua tim membuat tim Kaggle dan mengundang seluruh anggota tim 
+● Nama Tim: Sesuai dengan nama tim yang didaftarkan (nama tim yang tidak terdapat di daftar 
+peserta tim didiskualiﬁkasi)
+● Akses Data: Dataset dan metrik evaluasi disediakan langsung via platform Kaggle.
+● Batas Submission: Maksimal 3 kali submission per hari 📌
+ 
+PENYISIHAN - Mekanisme
+
+=== PAGE 6 ===
+PERMITTED ✅
+● Teknik Transfer Learning dengan Pre-trained Model publik (contoh: HuggingFace, ImageNet 
+weights, dsb.)
+● Penggunaan Data Eksternal untuk memperkaya informasi dataset. 📌
+● Bebas menggunakan bahasa pemrograman, library, framework, maupun tools open-source 
+apapun.
+STRICTLY FORBIDDEN 🚫
+● Sangat DILARANG menggunakan framework Automated Machine Learning (AutoML). 
+PENYISIHAN - Ketentuan T ools & Pemodelan
+
+=== PAGE 7 ===
+Aturan Pengkodean Notebook:
+● Instalasi Dependency: perintah pip install seluruh dependency beserta versi spesiﬁknya dalam mode 
+quiet (-q). 📌
+● Random State: mencantumkan seed / random_state pada setiap proses acak demi reprodusibilitas. 📌
+● Alur Runtut: Notebook memuat seluruh tahapan secara runtut (Data Acquisition, EDA, Preprocessing, 
+Data Cleaning, Feature Engineering, Modeling, Evaluation).
+● Penjelasan & Visualisasi: Disertai penjelasan naratif dan visualisasi yang jelas pada tiap langkah.
+● Pretrained Model: Jika memakai Pretrained Model, jelaskan sumber dan metode penerapannya secara detail.
+Contoh Kode Cell Pertama Notebook:
+PENYISIHAN - Ketentuan Notebook
+
+
+=== PAGE 8 ===
+Ketentuan Umum
+● Perwakilan Pengirim: Dilakukan oleh Ketua Tim melalui google forms yang diberikan panitia.
+● Format Berkas: Seluruh berkas (notebook dan model weights) wajib digabungkan ke dalam satu ﬁle .zip.
+● Batas Ukuran Model Weights: Ukuran ﬁle bobot model (model weights) maksimal 200 MB. 📌
+ 
+● Batas Pengumpulan: 13 Oktober 2026 (23:59 WIB)📌
+ 
+Struktur & Penamaan File Submisi
+📁
+ File ZIP Utama: [Nama Tim].zip
+- File Notebook: [Nama Tim].ipynb
+- File Model Weights: [Nama Tim](.pkl, .pt, .pth, .hf, .tf, atau format relevan lainnya)
+Contoh Penamaan File
+📁
+ DataVictory.zip 
+- DataVictory.ipynb
+- DataVictory.pt (ukuran ≤ 200 MB)
+PENYISIHAN - Submission
+
+=== PAGE 9 ===
+Bobot Asesmen Penyisihan
+● Score Private Leaderboard Kaggle: 90%
+● Penilaian Kualitas Dokumentasi Notebook: 10%
+Prosedur Uji Reprodusibilitas (Code Veriﬁcation)
+● 10 kandidat ﬁnalis wajib lolos Uji Reprodusibilitas.
+● Panitia akan melakukan re-run terhadap notebook dan ﬁle model yang dikumpulkan.
+● Hasil running ulang harus menghasilkan skor yang konsisten dengan Private Leaderboard.
+● Jika ada selisih signiﬁkan akibat kelalaian reproduksi, tim akan didiskualiﬁkasi dan digantikan 
+peringkat di bawahnya.
+PENYISIHAN - Sistem Penilaian
+
+=== PAGE 10 ===
+Daftar Pelanggaran Fatal:
+1. Terdaftar di lebih dari satu tim.
+2. Melakukan plagiarisme, berbagi kode/solusi, atau bekerja sama antar tim.
+3. Penggunaan framework Automated Machine Learning (AutoML).
+4. Segala bentuk kecurangan yang mempengaruhi proses dan hasil lomba.
+5. Keterlambatan dalam mengumpulkan ﬁle submission penyisihan maupun ﬁle presentasi ﬁnal.
+6. Tidak hadir secara ofﬂine pada saat Babak Final di FMIPA UGM.
+ℹ
+ Panitia akan mengontak tim terduga (wajib direspon maks. 1x24 jam)
+PENYISIHAN - Ketentuan Diskualifikasi
+
+=== PAGE 11 ===
+BABAK FINAL- Ketentuan 
+● Peserta: 10 tim terbaik yang lolos veriﬁkasi penyisihan.
+● Format Acara: OFFLINE pada 1 November 2026 di FMIPA Universitas Gadjah Mada, Yogyakarta. 📌
+ 
+● Batas Submit Slide Presentasi: Maksimal 31 Oktober 2026 (Format .pdf atau .pptx). 📌
+ 
+● Mekanisme Presentasi:
+○ Durasi total: 30 Menit (Presentasi di depan juri + Sesi Tanya Jawab).
+○ Bahan presentasi didasarkan pada hasil analisis dan pemodelan babak penyisihan.
+● Detail rubrik penilaian ﬁnal akan disampaikan saat Technical Meeting Final (25 Oktober 2026).
+
+
+=== PAGE 12 ===
+QnA
+ https://app.sli.do/event/tQVrF7frqAipg3ncbi474Y
+
+=== PAGE 13 ===
+- Kriteria penggunaan AI: Diperbolehkan untuk menggunakan LLM pada development 
+code, namun dilarang keras untuk menggunakannya sebagai inference secara langsung, 
+- Dilarang menggunakan AI agent 
+- Dilarang menggunakan AI API calling untuk inference
+- Ketentuan 90% skor itu purely dr private
+- Data eksternal: Format data eksternal dibebaskan (boleh labelled/unlabelled) namun 
+sumbernya harus dapat diakses secara publik
+Notulensi TM
+
+=== PAGE 14 ===
+Thank you
+
