@@ -33,6 +33,9 @@ def create_notebook(output_path="solution.ipynb"):
     # Title & Metadata
     add_md("""# 🎬 JOINTS X INSPIRE 2026 - Data Science Competition
 ## High-Performance Box Office Forecasting System: Predict Cinema Ticket Sales (D4–D10)
+
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/oktavianprstyd/DS_JOINTS/blob/main/solution.ipynb)
+
 ---
 ### 📌 Executive Summary & Methodology
 - **Objective**: Predict daily ticket sales (`total_ticket`) for the first full week of screening (Days 4 to 10) given the first 3 days of opening weekend history (Days 1 to 3) across Indonesian cinema theaters.
@@ -52,6 +55,11 @@ def create_notebook(output_path="solution.ipynb"):
     add_md("""## 1. Setup Environment & Reproducibility""")
     add_code("""# Pinned dependencies installation in quiet mode as required by TM guidelines
 !pip install -q lightgbm==4.6.0 xgboost==3.1.2 catboost==1.2.10 scikit-learn==1.6.1 scipy==1.15.2
+
+import os
+# Auto-clone repository files (including data/) if running in Google Colab environment
+if not os.path.exists('data/train.csv'):
+    !git clone https://github.com/oktavianprstyd/DS_JOINTS.git .
 
 import os
 import re

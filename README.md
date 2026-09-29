@@ -1,5 +1,7 @@
 # 🎬 DS_JOINTS - JOINTS X INSPIRE UGM 2026 Data Science Competition
 
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/oktavianprstyd/DS_JOINTS/blob/main/solution.ipynb)
+
 Repositori kolaborasi tim untuk kompetisi **JOINTS X INSPIRE UGM 2026** (Data Science Track).
 
 ## 📌 Ringkasan Masalah (Problem Statement)
@@ -51,6 +53,26 @@ Hasil prediksi submission akan otomatis diekspor ke folder `submissions/`.
 
 ### 4. Ekplorasi Notebook
 Buka dan jalankan [solution.ipynb](file:///solution.ipynb) untuk melihat analisis visual, EDA, validasi silang, dan inferensi.
+
+---
+
+## 🌐 Menjalankan di Google Colab
+
+Proyek ini sepenuhnya kompatibel dan sangat disarankan dijalankan di **Google Colab** (dengan GPU T4 gratis):
+
+1. **Cara Cepat (1 Klik)**:
+   - Klik tombol **Open in Colab** di atas atau buka link:  
+     [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/oktavianprstyd/DS_JOINTS/blob/main/solution.ipynb)
+   - Aktifkan GPU gratis melalui menu: **Runtime** -> **Change runtime type** -> **T4 GPU**.
+   - Jalankan sel secara berurutan (*Runtime -> Run all*). Sel pertama sudah otomatis mendeteksi lingkungan Colab dan mengunduh dataset secara instan.
+
+2. **Menjalankan Skrip Python di Colab Baru**:
+   Buka notebook kosong di Colab, lalu jalankan:
+   ```python
+   !git clone https://github.com/oktavianprstyd/DS_JOINTS.git
+   %cd DS_JOINTS
+   !python train_champion_model.py
+   ```
 
 ---
 
