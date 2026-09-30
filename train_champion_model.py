@@ -48,38 +48,64 @@ def main():
     print(f"  Clean History Rows: {len(clean_hist)}")
     print(f"  Clean Target Rows : {len(clean_targ)}")
 
-    # Cinema historical priors strictly derived from train
+    # Cinema & City historical priors strictly derived from train
     cinema_priors = train_raw.groupby('cinema_ids').agg(
         cinema_prior_tickets=('total_ticket', 'mean'),
         cinema_prior_occ=('occupation_rate', 'mean'),
         cinema_prior_shows=('total_show', 'mean'),
     ).reset_index()
 
+    city_priors = train_raw.groupby('city_name').agg(
+        city_prior_tickets=('total_ticket', 'mean'),
+        city_prior_shows=('total_show', 'mean'),
+        city_prior_cinemas=('cinema_ids', 'nunique')
+    ).reset_index()
+
     # 3. Feature Engineering
-    print("\n[3/6] Engineering Feature Spaces...")
-    df_train = build_features(clean_hist, clean_targ, movies_df, holidays_df, prices_df, cinema_priors=cinema_priors)
-    df_test = build_features(test_hist_raw, test_raw, movies_df, holidays_df, prices_df, cinema_priors=cinema_priors)
+    print("\n[3/6] Engineering 5-Pillar Feature Spaces...")
+    df_train = build_features(clean_hist, clean_targ, movies_df, holidays_df, prices_df, 
+                              cinema_priors=cinema_priors, city_priors=city_priors)
+    df_test = build_features(test_hist_raw, test_raw, movies_df, holidays_df, prices_df, 
+                             cinema_priors=cinema_priors, city_priors=city_priors)
 
     df_train['target_z'] = (df_train['total_ticket'] / df_train['scale']).clip(0.001, 10.0)
 
-    cat_cols = ['cinema_ids', 'city_name', 'genre_primary', 'age_rating', 'dow_pair', 'day_tipe']
+    cat_cols = ['cinema_ids', 'city_name', 'genre_primary', 'age_rating', 'dow_pair', 'day_tipe', 'wom_trajectory']
     num_cols = [
+        # 1. Scale & Baseline
         'scale', 'daily_scale', 'scale_factor', 'active_days',
         'ticket_d1', 'ticket_d2', 'ticket_d3',
-        'ratio_d2_d1', 'ratio_d3_d2', 'ratio_d3_d1',
+        
+        # 2. Opening Momentum & Trajectory (Pilar 1)
+        'ratio_d2_d1', 'ratio_d3_d2', 'ratio_d3_d1', 'ticket_accel', 'occ_growth_d3_d1',
         'share_d1', 'share_d2', 'share_d3',
         'occ_d1', 'occ_d2', 'occ_d3', 'occ_mean', 'occ_max', 'occ_min', 'occ_trend', 'occ_accel',
         'show_d1', 'show_d2', 'show_d3', 'show_mean', 'show_sum', 'show_trend', 'show_ratio_d3_d1',
         'est_capacity', 'tps_d1', 'tps_d2', 'tps_d3', 'tps_mean', 'tps_trend',
+        
+        # 3. Nationwide Velocity & Local Dynamics
         'nat_scale', 'nat_cinemas', 'nat_cities', 'nat_avg_occ', 'nat_avg_shows',
         'nat_trend_d2_d1', 'nat_trend_d3_d2', 'nat_trend_d3_d1',
         'cinema_share', 'local_vs_nat_occ', 'local_growth_vs_nat',
+        
+        # 4. Calendar, Holidays & Proximity (Pilar 2)
         'day_num_clipped', 'day_of_week', 'day_of_month', 'opening_dow',
         'is_weekend', 'is_friday', 'is_saturday', 'is_sunday', 'is_monday', 'is_payday', 'is_holiday',
-        'effective_weekend', 'dow_transition_num', 'day_weekend_inter', 'decay_curve', 'exp_decay', 'ceil',
-        'is_imax', 'is_3d', 'is_uncut',
+        'is_next_day_holiday', 'is_prev_day_holiday', 'long_weekend_span', 'is_bridge_day',
+        'effective_weekend', 'dow_transition_num', 'day_weekend_inter', 'decay_curve', 'exp_decay',
+        'projected_decay_rate',
+        
+        # 5. Empirical Transition Baseline (Pilar 5)
+        'empirical_transition_ratio',
+        
+        # 6. Format, Metadata & Star Power (Pilar 4)
+        'ceil', 'is_imax', 'is_3d', 'is_uncut',
         'has_horror', 'has_action', 'has_drama', 'has_comedy', 'has_animation', 'genre_count', 'casts_count',
-        'cinema_prior_tickets', 'cinema_prior_occ', 'cinema_prior_shows'
+        'director_experience', 'producer_experience', 'is_major_studio', 'has_star_director',
+        
+        # 7. Cinema & City Priors (Pilar 3)
+        'cinema_prior_tickets', 'cinema_prior_occ', 'cinema_prior_shows',
+        'city_prior_tickets', 'city_prior_shows', 'city_prior_cinemas', 'cinema_to_city_share'
     ]
 
     features = num_cols + cat_cols

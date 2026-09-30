@@ -1,7 +1,11 @@
 """
-Feature Engineering Script for JOINTS X INSPIRE 2026
-Implements opening momentum, cinema profiling, calendar/holiday effects,
-and movie metadata features to optimize MASE.
+Advanced Feature Engineering Script for JOINTS X INSPIRE 2026.
+Implements:
+1. Word-of-Mouth (WOM) Trajectory & Projected Decay Curves
+2. Advanced Indonesian Calendar Dynamics & Long Weekend / Holiday Proximity
+3. City & Regional Macro Dynamics with Unseen Entity Fallback Imputation
+4. Star Power & Studio Metadata Track Records (Directors, Producers, Casts)
+5. Empirical Day-of-Week Transition Baseline (Anchor Ratios)
 """
 
 import os
@@ -11,7 +15,7 @@ import numpy as np
 import pandas as pd
 
 def clean_movie_title(title):
-    return re.sub(r'\s*\((IMAX|3D|2D|UNCUT)[^\)]*\)', '', title).strip()
+    return re.sub(r'\s*\((IMAX|3D|2D|UNCUT)[^\)]*\)', '', str(title)).strip()
 
 def extract_clean_consecutive_train(train_raw):
     """
@@ -55,20 +59,38 @@ def extract_clean_consecutive_train(train_raw):
 
     return clean_hist, clean_targ
 
-def build_features(history_df, target_df, movies_df, holidays_df, prices_df, cinema_priors=None):
+# Precomputed Empirical Transition Baseline Table (opening_dow x day_num -> median ratio)
+EMPIRICAL_RATIO_DICT = {
+    (0, 4): 0.897, (0, 5): 0.808, (0, 6): 0.959, (0, 7): 0.771, (0, 8): 0.692, (0, 9): 0.629, (0, 10): 0.632,
+    (1, 4): 1.114, (1, 5): 1.201, (1, 6): 1.072, (1, 7): 0.985, (1, 8): 1.135, (1, 9): 1.061, (1, 10): 0.912,
+    (2, 4): 1.216, (2, 5): 1.054, (2, 6): 0.615, (2, 7): 0.518, (2, 8): 0.452, (2, 9): 0.422, (2, 10): 0.453,
+    (3, 4): 0.974, (3, 5): 0.633, (3, 6): 0.593, (3, 7): 0.518, (3, 8): 0.483, (3, 9): 0.556, (3, 10): 0.680,
+    (4, 4): 0.597, (4, 5): 0.486, (4, 6): 0.361, (4, 7): 0.380, (4, 8): 0.378, (4, 9): 0.432, (4, 10): 0.424,
+    (5, 4): 0.949, (5, 5): 0.879, (5, 6): 0.812, (5, 7): 1.052, (5, 8): 1.194, (5, 9): 1.148, (5, 10): 0.842,
+    (6, 4): 1.231, (6, 5): 1.178, (6, 6): 0.711, (6, 7): 0.540, (6, 8): 0.667, (6, 9): 0.576, (6, 10): 0.400,
+}
+GLOBAL_DAY_NUM_FALLBACK = {
+    4: 1.099, 5: 0.910, 6: 0.738, 7: 0.768, 8: 0.828, 9: 0.924, 10: 0.983
+}
+
+def build_features(history_df, target_df, movies_df, holidays_df, prices_df, 
+                   cinema_priors=None, city_priors=None):
     h = history_df.copy()
     t = target_df.copy()
 
     h['date_show'] = pd.to_datetime(h['date_show'])
     t['date_show'] = pd.to_datetime(t['date_show'])
 
+    # 1. Day numbering for history
     movie_day_order = h.groupby(['movie_title', 'date_show']).size().reset_index()[['movie_title', 'date_show']].sort_values(['movie_title', 'date_show'])
     movie_day_order['h_day_num'] = movie_day_order.groupby('movie_title').cumcount() + 1
     h = h.merge(movie_day_order, on=['movie_title', 'date_show'], how='left')
 
+    # Baseline scale sp
     scale_series = (h.groupby(['movie_title', 'cinema_ids'])['total_ticket'].sum() / 3.0).clip(lower=1.0).rename('scale').reset_index()
     act_days = h.groupby(['movie_title', 'cinema_ids'])['date_show'].nunique().rename('active_days').reset_index()
 
+    # Pivot opening days
     piv_ticket = h.pivot_table(index=['movie_title', 'cinema_ids'], columns='h_day_num', values='total_ticket', fill_value=0).reset_index()
     piv_ticket.columns = ['movie_title', 'cinema_ids'] + [f'ticket_d{col}' for col in piv_ticket.columns[2:]]
 
@@ -92,10 +114,23 @@ def build_features(history_df, target_df, movies_df, holidays_df, prices_df, cin
     pair_stats['scale_factor'] = 3.0 / pair_stats['active_days']
     pair_stats['daily_scale'] = (pair_stats['scale'] * pair_stats['scale_factor']).clip(lower=1.0)
 
-    # Momentum features
+    # ----------------------------------------------------
+    # PILAR 1: TRAJECTORY & MOMENTUM FEATURES
+    # ----------------------------------------------------
     pair_stats['ratio_d2_d1'] = (pair_stats['ticket_d2'] + 1.0) / (pair_stats['ticket_d1'] + 1.0)
     pair_stats['ratio_d3_d2'] = (pair_stats['ticket_d3'] + 1.0) / (pair_stats['ticket_d2'] + 1.0)
     pair_stats['ratio_d3_d1'] = (pair_stats['ticket_d3'] + 1.0) / (pair_stats['ticket_d1'] + 1.0)
+
+    # WOM Trajectory classification
+    def get_wom_type(r):
+        if r > 1.20: return 'sleeper_hit'
+        elif r < 0.80: return 'frontloaded'
+        else: return 'steady'
+    pair_stats['wom_trajectory'] = pair_stats['ratio_d3_d1'].apply(get_wom_type)
+
+    # Curvature / Acceleration
+    pair_stats['ticket_accel'] = (pair_stats['ticket_d3'] - pair_stats['ticket_d2']) - (pair_stats['ticket_d2'] - pair_stats['ticket_d1'])
+    pair_stats['occ_growth_d3_d1'] = (pair_stats['occ_d3'] + 1.0) / (pair_stats['occ_d1'] + 1.0)
 
     tot_tickets = pair_stats['ticket_d1'] + pair_stats['ticket_d2'] + pair_stats['ticket_d3'] + 1.0
     pair_stats['share_d1'] = pair_stats['ticket_d1'] / tot_tickets
@@ -122,6 +157,7 @@ def build_features(history_df, target_df, movies_df, holidays_df, prices_df, cin
     pair_stats['tps_mean'] = (pair_stats['tps_d1'] + pair_stats['tps_d2'] + pair_stats['tps_d3']) / 3.0
     pair_stats['tps_trend'] = pair_stats['tps_d3'] - pair_stats['tps_d1']
 
+    # Nationwide stats
     nat_stats = h.groupby('movie_title').agg(
         nat_scale=('total_ticket', lambda s: s.sum() / 3.0),
         nat_cinemas=('cinema_ids', 'nunique'),
@@ -142,6 +178,7 @@ def build_features(history_df, target_df, movies_df, holidays_df, prices_df, cin
     first_date_map = h.groupby('movie_title')['date_show'].min().rename('opening_date').reset_index()
     first_date_map['opening_dow'] = first_date_map['opening_date'].dt.dayofweek
 
+    # Base merge
     df = t.merge(pair_stats, on=['movie_title', 'cinema_ids'], how='left')
     df = df.merge(nat_stats, on='movie_title', how='left')
     df = df.merge(first_date_map, on='movie_title', how='left')
@@ -150,6 +187,7 @@ def build_features(history_df, target_df, movies_df, holidays_df, prices_df, cin
     df['local_vs_nat_occ'] = df['occ_mean'] - df['nat_avg_occ']
     df['local_growth_vs_nat'] = df['ratio_d3_d1'] / (df['nat_trend_d3_d1'] + 1e-4)
 
+    # Days mapping
     df['day_num'] = (df['date_show'] - df['opening_date']).dt.days + 1
     df['day_num_clipped'] = df['day_num'].clip(lower=4, upper=10)
     df['day_of_week'] = df['date_show'].dt.dayofweek
@@ -162,16 +200,37 @@ def build_features(history_df, target_df, movies_df, holidays_df, prices_df, cin
     df['is_monday'] = (df['day_of_week'] == 0).astype(int)
     df['is_payday'] = ((df['day_of_month'] >= 25) | (df['day_of_month'] <= 2)).astype(int)
 
+    # Formats
     t_str = df['movie_title'].astype(str)
     df['is_imax'] = t_str.str.contains('IMAX', case=False, regex=True).astype(int)
     df['is_3d'] = t_str.str.contains('3D', case=False, regex=True).astype(int)
     df['is_uncut'] = t_str.str.contains('UNCUT', case=False, regex=True).astype(int)
 
+    # ----------------------------------------------------
+    # PILAR 4: METADATA & STAR POWER (DIRECTORS & PRODUCERS)
+    # ----------------------------------------------------
     df['clean_title'] = df['movie_title'].apply(clean_movie_title)
     m_clean = movies_df.copy()
     m_clean['clean_title'] = m_clean['original_title'].apply(clean_movie_title)
     m_clean = m_clean.drop_duplicates(subset='clean_title')
-    df = df.merge(m_clean[['clean_title', 'age_rating', 'genre', 'director', 'producer', 'casts']], on='clean_title', how='left')
+
+    # Experience counts / track record
+    dir_counts = m_clean['director'].value_counts().to_dict()
+    prod_counts = m_clean['producer'].value_counts().to_dict()
+    m_clean['director_experience'] = m_clean['director'].map(dir_counts).fillna(1)
+    m_clean['producer_experience'] = m_clean['producer'].map(prod_counts).fillna(1)
+
+    # Major studio & star directors flags
+    major_studios = ['MANOJ', 'PUNJABI', 'PARWEZ', 'SERVIA', 'FREDERICA', 'SORAYA', 'RAPI', 'WARNER', 'DISNEY', 'UNIVERSAL', 'COLUMBIA', 'PARAMOUNT', 'LIONSGATE', 'MAX PICTURES', 'FALCON', 'STARVISION']
+    star_directors = ['AZHAR KINOI', 'HANUNG', 'AWI SURYADI', 'RIZAL MANTOVANI', 'MONTY TIWA', 'HADRAH DAENG', 'ANGGY UMBARA', 'KIMO STAMBOEL', 'JOKO ANWAR', 'DANNY BOYLE']
+
+    prod_upper = m_clean['producer'].fillna('').str.upper()
+    dir_upper = m_clean['director'].fillna('').str.upper()
+    m_clean['is_major_studio'] = prod_upper.apply(lambda x: int(any(s in x for s in major_studios)))
+    m_clean['has_star_director'] = dir_upper.apply(lambda x: int(any(d in x for d in star_directors)))
+
+    meta_cols = ['clean_title', 'age_rating', 'genre', 'director_experience', 'producer_experience', 'is_major_studio', 'has_star_director', 'casts']
+    df = df.merge(m_clean[meta_cols], on='clean_title', how='left')
 
     df['genre'] = df['genre'].fillna('Unknown')
     df['genre_primary'] = df['genre'].apply(lambda x: str(x).split(',')[0].strip())
@@ -181,16 +240,39 @@ def build_features(history_df, target_df, movies_df, holidays_df, prices_df, cin
     df['has_drama'] = df['genre'].str.contains('Drama', case=False, na=False).astype(int)
     df['has_comedy'] = df['genre'].str.contains('Comedy', case=False, na=False).astype(int)
     df['has_animation'] = df['genre'].str.contains('Animation', case=False, na=False).astype(int)
-    df['age_rating'] = df['age_rating'].fillna('Unknown')
+    df['age_rating'] = df['age_rating'].fillna('Semua Umur')
     df['casts_count'] = df['casts'].apply(lambda x: len(str(x).split(',')) if pd.notnull(x) else 0)
 
+    # ----------------------------------------------------
+    # PILAR 2: ADVANCED CALENDAR & HOLIDAY PROXIMITY
+    # ----------------------------------------------------
     hol_copy = holidays_df.copy()
     hol_copy['date_show'] = pd.to_datetime(hol_copy['date'])
+    hol_copy = hol_copy.sort_values('date_show').reset_index(drop=True)
     hol_copy['is_holiday'] = (hol_copy['holiday_tipe'] == 'holiday').astype(int)
-    df = df.merge(hol_copy[['date_show', 'day_tipe', 'is_holiday']], on='date_show', how='left')
+    hol_copy['is_wknd'] = hol_copy['day_tipe'].isin(['weekend']).astype(int)
+    hol_copy['eff_off'] = ((hol_copy['is_holiday'] == 1) | (hol_copy['is_wknd'] == 1)).astype(int)
+
+    # Lead and lag holidays
+    hol_copy['is_next_day_holiday'] = hol_copy['is_holiday'].shift(-1).fillna(0).astype(int)
+    hol_copy['is_prev_day_holiday'] = hol_copy['is_holiday'].shift(1).fillna(0).astype(int)
+
+    # Consecutive off days (long weekend span)
+    s = hol_copy['eff_off']
+    blocks = (s != s.shift()).cumsum()
+    hol_copy['long_weekend_span'] = (hol_copy.groupby(blocks)['eff_off'].transform('sum') * s).astype(int)
+    hol_copy['is_bridge_day'] = ((hol_copy['eff_off'] == 0) & (hol_copy['is_next_day_holiday'] == 1) & (hol_copy['date_show'].dt.dayofweek == 4)).astype(int)
+
+    cal_cols = ['date_show', 'day_tipe', 'is_holiday', 'is_next_day_holiday', 'is_prev_day_holiday', 'long_weekend_span', 'is_bridge_day']
+    df = df.merge(hol_copy[cal_cols], on='date_show', how='left')
     df['is_holiday'] = df['is_holiday'].fillna(0).astype(int)
+    df['is_next_day_holiday'] = df['is_next_day_holiday'].fillna(0).astype(int)
+    df['is_prev_day_holiday'] = df['is_prev_day_holiday'].fillna(0).astype(int)
+    df['long_weekend_span'] = df['long_weekend_span'].fillna(1).astype(int)
+    df['is_bridge_day'] = df['is_bridge_day'].fillna(0).astype(int)
     df['effective_weekend'] = ((df['is_weekend'] == 1) | (df['is_holiday'] == 1)).astype(int)
 
+    # Ticket prices
     p_df = prices_df.copy()
     def get_price_day(row):
         if row['effective_weekend'] == 1:
@@ -203,16 +285,44 @@ def build_features(history_df, target_df, movies_df, holidays_df, prices_df, cin
     df = df.merge(p_df, on=['city_name', 'price_day'], how='left')
     df['ceil'] = df['ceil'].fillna(df['ceil'].median())
 
+    # Transitions & Decays
     df['dow_pair'] = df['opening_dow'].astype(str) + '_' + df['day_of_week'].astype(str)
     df['dow_transition_num'] = df['opening_dow'] * 7 + df['day_of_week']
     df['day_weekend_inter'] = df['day_num_clipped'] * df['effective_weekend']
     df['decay_curve'] = 1.0 / np.sqrt(df['day_num_clipped'].values)
     df['exp_decay'] = np.exp(-0.1 * (df['day_num_clipped'].values - 4.0))
 
+    # Interaction of trajectory and decay curve
+    df['projected_decay_rate'] = df['ratio_d3_d1'] * df['decay_curve']
+
+    # ----------------------------------------------------
+    # PILAR 5: EMPIRICAL TRANSITION RATIO BASELINE
+    # ----------------------------------------------------
+    def get_empirical_ratio(row):
+        key = (int(row['opening_dow']), int(row['day_num_clipped']))
+        if key in EMPIRICAL_RATIO_DICT:
+            return EMPIRICAL_RATIO_DICT[key]
+        return GLOBAL_DAY_NUM_FALLBACK.get(int(row['day_num_clipped']), 1.0)
+
+    df['empirical_transition_ratio'] = df.apply(get_empirical_ratio, axis=1)
+
+    # ----------------------------------------------------
+    # PILAR 3: CINEMA & CITY PRIORS (WITH ROBUST FALLBACKS)
+    # ----------------------------------------------------
     if cinema_priors is not None:
         df = df.merge(cinema_priors, on='cinema_ids', how='left')
         for c in cinema_priors.columns:
             if c != 'cinema_ids':
                 df[c] = df[c].fillna(df[c].median())
+
+    if city_priors is not None:
+        df = df.merge(city_priors, on='city_name', how='left')
+        for c in city_priors.columns:
+            if c != 'city_name':
+                df[c] = df[c].fillna(df[c].median())
+        if 'city_prior_tickets' in df.columns:
+            df['cinema_to_city_share'] = df['scale'] / (df['city_prior_tickets'] * df.get('city_prior_cinemas', 1) + 1.0)
+    else:
+        df['cinema_to_city_share'] = 0.5
 
     return df

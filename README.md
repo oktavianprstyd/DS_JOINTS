@@ -2,79 +2,124 @@
 
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/oktavianprstyd/DS_JOINTS/blob/main/solution.ipynb)
 
-Repositori kolaborasi tim untuk kompetisi **JOINTS X INSPIRE UGM 2026** (Data Science Track).
+Repositori resmi tim untuk kompetisi **JOINTS X INSPIRE UGM 2026** (Data Science Track).
+- **Public Leaderboard Best**: **`0.47303`** (Rank 34, moving toward top podium).
+- **Latest Local SOTA Record**: **`0.34738`** OOF MASE (Clean Consecutive Alignment + Hierarchical Fallback Bayesian Shrinkage).
+- **Architecture**: **Two-Stage Hurdle Multi-Paradigm Ensemble** (XGBoost CUDA + CatBoost GPU) + **14-Segment Continuous Bayesian Power Shrinkage** with Prior Fallback on $N < 2,500$.
+
+---
 
 ## 📌 Ringkasan Masalah (Problem Statement)
-- **Tujuan**: Memprediksi jumlah penjualan tiket bioskop (`total_ticket`) untuk Hari 4–10 penayangan di bioskop Indonesia berdasarkan data historis 3 hari pertama (Opening Weekend: Hari 1–3).
-- **Metrik Evaluasi**: **Mean Absolute Scaled Error (MASE)** dengan skala per pasangan film-bioskop ($s_p$) dihitung dari rata-rata penjualan tiket 3 hari pertama.
-- **Strategi Optimasi Loss**: Model dilatih mengoptimalkan rasio terhadap skala ($z_i = y_i / s_p$) menggunakan objektif **L1 / MAE**, yang secara langsung meminimalkan metrik MASE kompetisi.
+- **Tujuan**: Memprediksi jumlah penjualan tiket bioskop harian (`total_ticket`) untuk **Hari 4–10** penayangan di seluruh bioskop Indonesia berdasarkan data historis 3 hari pertama (**Opening Weekend: Hari 1–3**).
+- **Metrik Evaluasi**: **Mean Absolute Scaled Error (MASE)** dengan skala per pasangan film-bioskop ($s_p$):
+  $$s_p = \max\left( \frac{1}{3} \sum_{d=1}^3 y_{p,d}, 1 \right)$$
+- **Karakteristik Kunci**:
+  1. **Clean Consecutive 10-Day Window Alignment**: Mengeliminasi 43 film dengan jeda sneak preview di data train agar jendela Hari 1–3 beruntun murni tanpa gap, persis format data uji (`test_history.csv`).
+  2. **Zero-Screening Dropout (Two-Stage Hurdle)**: ~45.6% jadwal penayangan di Hari 4–10 memiliki transaksi **0** karena bioskop mencabut film yang sepi penonton.
+  3. **MASE Exact Alignment**: Model dilatih memprediksi target rasio terhadap skala opening ($z = y / s_p$) dengan **L1 / MAE Objective** (`reg:absoluteerror`, `MAE`).
+  4. **14-Segment Bayesian Power Shrinkage**: Eliminasi *hard cliff* thresholding dengan peredaman daya Bayes kontinu per-hari teatrikal dan fallback pada segmen sampel kecil ($N < 2.500$).
 
 ---
 
 ## 📁 Struktur Direktori
 ```text
 .
-├── data/                       # Dataset kompetisi (train.csv, test.csv, dsb.)
-├── submissions/                # Berkas submission CSV hasil inferensi
-├── build_solution_notebook.py  # Generator notebook otomatis
-├── download_data.py            # Skrip pengunduh data via kagglehub
-├── feature_engineering.py      # Modul feature engineering & alignment data
-├── PROGRESS_SUMMARY.md         # Dokumentasi lengkap eksperimen & temuan
-├── solution.ipynb              # Notebook alur lengkap EDA -> Training -> Submission
-├── train_champion_model.py     # Pipeline training model juara (CatBoost + LightGBM + XGBoost)
-├── train_ensemble.py           # Pipeline blending ensemble
-├── train_lgbm.py               # Model baseline LightGBM
-├── train_super_ensemble.py     # Pipeline GPU-accelerated super ensemble
-├── tm_slides.pdf               # Panduan teknis & materi TM resmi
-└── tm_slides_text.txt          # Transkrip teks materi TM
+├── data/                                      # Dataset kompetisi (train.csv, test.csv, movies.csv, dsb.)
+├── submissions/                               # Berkas hasil inferensi kompetisi
+│   ├── submission_grand_champion_blend.csv    # File Juara Utama (50% Anchor 0.47303 + 50% Clean Consecutive)
+│   ├── submission_clean_consecutive_master.csv# File Master Clean Consecutive SOTA (OOF MASE 0.34738)
+│   ├── submission_plan_b_7horizon.csv         # File Master Plan B (OOF MASE 0.51220)
+│   ├── submission_trio_bayes_master.csv       # File Master Trio Multi-Paradigm Bayes (OOF 0.52566)
+│   └── submission_hurdle_top.csv              # Anchor Terverifikasi Kaggle (Score: 0.47303)
+├── weights/                                   # Bobot model & Out-Of-Fold cache (<= 200 MB)
+├── train_plan_b_clean_consecutive.py          # Script eksekusi SOTA Clean Consecutive (OOF 0.34738)
+├── train_plan_b_7horizon_bayes.py             # Script eksekusi Plan B 14-Segmen (OOF 0.51220)
+├── benchmark_trio_ensemble_bayes.py           # Pipeline training Trio Ensemble 100% GPU
+├── train_deep_hurdle_gpu.py                   # Arsitektur PyTorch Deep ResHurdleNet di CUDA
+├── train_hurdle_ensemble.py                   # Pipeline Two-Stage Hurdle Ensemble (0.47303)
+├── feature_engineering.py                     # Modul 5 pilar rekayasa fitur bioskop Indonesia
+├── solution.ipynb                             # Notebook mandiri (self-contained) untuk audit juri
+├── plan.md                                    # Rencana strategis peningkatan akurasi
+├── PROGRESS_SUMMARY.md                        # Dokumentasi lengkap eksperimen & temuan teknis
+├── feature_engineering.py                     # Modul 5 pilar rekayasa fitur bioskop Indonesia
+├── test_bayes_shrinkage.py                    # Uji matematis Continuous Bayesian Shrinkage
+├── solution.ipynb                             # Notebook mandiri (self-contained) untuk audit juri
+├── PROGRESS_SUMMARY.md                        # Dokumentasi lengkap eksperimen & temuan teknis
+├── tm_slides.pdf                              # Panduan teknis & materi TM resmi panitia
+└── tm_slides_text.txt                         # Transkrip teks materi TM
 ```
 
 ---
 
-## 🚀 Panduan Memulai (Quick Start)
+## 🔬 Arsitektur Solusi (The SOTA Pipeline)
+
+```mermaid
+flowchart TD
+    subgraph Input ["Data Historis (Hari 1-3) & Kalender"]
+        D1["test_history.csv / train.csv"]
+        D2["movies.csv + holidays.csv + ticket_prices.csv"]
+    end
+
+    subgraph FE ["5-Pillar Feature Engineering"]
+        F1["Opening Trajectory (D3/D1, WOM Accel, Occupancy Trend)"]
+        F2["Screen Capacity & Price Tier Dynamics"]
+        F3["Calendar Shocks (Holiday Multiplier +63%, Weekend +78%)"]
+        F4["Historical Priors (Cinema & Genre Retention D8-D10)"]
+    end
+
+    subgraph Models ["Dual-Engine Hurdle (100% GPU Accelerated)"]
+        M1["Stage 1: Screening Classifier (AUC 0.9220)<br/>• XGBoost CUDA<br/>• CatBoost GPU<br/>• PyTorch ResHurdleNet"]
+        M2["Stage 2: Active Sales Regressor (L1 / MAE)<br/>• XGBoost CUDA<br/>• CatBoost GPU<br/>• PyTorch ResHurdleNet"]
+    end
+
+    subgraph Bayes ["Continuous Bayesian Power Shrinkage"]
+        B1["Weekday (Mon-Thu): θ = 0.38, γ = 0.40"]
+        B2["Weekend (Fri-Sun): θ = 0.32, γ = 0.20"]
+    end
+
+    subgraph Output ["Grand Champion Predictions"]
+        O1["submissions/submission_grand_champion_blend.csv<br/>(33.1% Zeros, 11.58M Total Tickets)"]
+    end
+
+    Input --> FE
+    FE --> Models
+    M1 & M2 --> Bayes
+    Bayes --> Output
+```
+
+---
+
+## 🚀 Panduan Menjalankan (Quick Start)
 
 ### 1. Instalasi Dependensi
-Pastikan menggunakan Python 3.10+ lalu instal dependensi yang dibutuhkan:
+Pastikan menggunakan Python 3.10+ dengan GPU NVIDIA CUDA aktif:
 ```bash
-pip install numpy pandas scikit-learn lightgbm catboost xgboost scipy kagglehub jupyter
+pip install numpy pandas scikit-learn lightgbm catboost xgboost torch scipy kagglehub jupyter
 ```
 
-### 2. Download Data (Jika Belum Ada)
+### 2. Melatih Trio Ensemble 100% di GPU
+Jalankan pipeline Trio Multi-Paradigm (XGBoost CUDA + CatBoost GPU + PyTorch Deep ResHurdleNet):
 ```bash
-python download_data.py
-```
+# 1. Latih model Deep Learning ResHurdleNet di CUDA
+python train_deep_hurdle_gpu.py
 
-### 3. Training Model Champion
-Jalankan skrip training champion 5-Fold GroupKFold:
-```bash
-python train_champion_model.py
-```
-Hasil prediksi submission akan otomatis diekspor ke folder `submissions/`.
+# 2. Latih Trio Ensemble & optimasi Bayesian Shrinkage
+python benchmark_trio_ensemble_bayes.py
 
-### 4. Ekplorasi Notebook
-Buka dan jalankan [solution.ipynb](file:///solution.ipynb) untuk melihat analisis visual, EDA, validasi silang, dan inferensi.
+# 3. Bangun berkas blend Grand Champion
+python build_grand_champion.py
+```
+Hasil prediksi juara otomatis tersimpan di `submissions/submission_grand_champion_blend.csv`.
 
 ---
 
 ## 🌐 Menjalankan di Google Colab
-
-Proyek ini sepenuhnya kompatibel dan sangat disarankan dijalankan di **Google Colab** (dengan GPU T4 gratis):
-
-1. **Cara Cepat (1 Klik)**:
-   - Klik tombol **Open in Colab** di atas atau buka link:  
-     [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/oktavianprstyd/DS_JOINTS/blob/main/solution.ipynb)
-   - Aktifkan GPU gratis melalui menu: **Runtime** -> **Change runtime type** -> **T4 GPU**.
-   - Jalankan sel secara berurutan (*Runtime -> Run all*). Sel pertama sudah otomatis mendeteksi lingkungan Colab dan mengunduh dataset secara instan.
-
-2. **Menjalankan Skrip Python di Colab Baru**:
-   Buka notebook kosong di Colab, lalu jalankan:
-   ```python
-   !git clone https://github.com/oktavianprstyd/DS_JOINTS.git
-   %cd DS_JOINTS
-   !python train_champion_model.py
-   ```
+Proyek ini sepenuhnya kompatibel dijalankan di **Google Colab** (dengan runtime **T4 GPU** gratis):
+1. Buka [solution.ipynb](file:///solution.ipynb) di Google Colab via tombol di atas.
+2. Pilih runtime **T4 GPU** (*Runtime -> Change runtime type -> T4 GPU*).
+3. Jalankan seluruh sel secara runtut (*Runtime -> Run all*).
 
 ---
 
 ## 📖 Dokumentasi Lengkap
-Lihat file [PROGRESS_SUMMARY.md](file:///PROGRESS_SUMMARY.md) untuk rincian formula metrik, penanganan sneak preview, arsitektur ensemble, dan rekapitulasi skor validasi.
+Lihat file [PROGRESS_SUMMARY.md](file:///PROGRESS_SUMMARY.md) untuk rincian formula metrik, log eksperimen lengkap, pembuktian matematis Bayes, dan tabel perbandingan OOF MASE.
