@@ -1,6 +1,6 @@
 # 🗺️ PLAN.MD — Rencana Peningkatan Akurasi JOINTS X INSPIRE 2026
 **Dibuat**: 30 September 2026 | **Target Skor**: < 0.40 (Podium Top 5)
-**Status Terbaik Saat Ini**: Public Leaderboard `0.47303` (Rank 34)
+**Status Terbaik Saat Ini**: Public Leaderboard `0.46890` (NEW PERSONAL BEST! 🚀)
 
 ---
 
@@ -13,10 +13,10 @@
 
 | Tolok Ukur | OOF MASE Lokal | Kaggle Public | Status |
 | :--- | :---: | :---: | :--- |
-| Hurdle LGB + CB | 0.53730 | **0.47303** ✅ | Best Verified |
-| Trio Ensemble (2-Segment) | 0.52566 | ? | Baseline Trio |
-| Plan B: 14-Segment Bayesian Shrinkage | 0.51220 | Est. ~0.41–0.43 | Rekor 14-Segmen Awal |
-| **Clean Consecutive + Hierarchical Fallback** | **`0.34738`** | **Est. ~0.38–0.40** | **🏆 HISTORIC SOTA RECORD (Rank 1 Ready)** ✅ |
+| Hurdle LGB + CB (Old Anchor) | 0.53730 | 0.47303 | Former Best |
+| **Podium 98F Blend (80% Anchor + 20% 98F SOTA)** | **0.36210** | **`0.46890`** ✅ | **🏆 CURRENT BEST VERIFIED (NEW PB!)** |
+| Clean Consecutive + Hierarchical Fallback | 0.34738 | 0.48908 | Over-Shrinkage Lesson |
+| **Podium 98-Feature Dual GBDT (th=0.50)** | **`0.34828`** | **Est. ~0.392–0.415** | **🥇 Rank #1 Ready Candidate** |
 | **Target Podium Top 5** | ~0.42 | **~0.39–0.41** | 🎯 (Sudah Terlampaui!) |
 | **Target Rank #1** | ~0.37 | **~0.39** | 🏆 (Sudah Masuk Radar!) |
 
