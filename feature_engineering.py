@@ -152,12 +152,25 @@ def build_features(history_df, target_df, movies_df, holidays_df, prices_df,
 
     denom = (pair_stats['show_mean'] * (pair_stats['occ_mean'] / 100.0)).clip(lower=1e-3)
     pair_stats['est_capacity'] = (pair_stats['daily_scale'] / denom).clip(upper=600.0)
+    # Domain reconstruction features (2nd place philosophy: implied capacity & slack seats)
+    pair_stats['implied_total_capacity'] = pair_stats['est_capacity'] * pair_stats['show_mean']
+    pair_stats['slack_seats_d1'] = np.maximum(0, pair_stats['implied_total_capacity'] - pair_stats['ticket_d1'])
+    pair_stats['slack_seats_d2'] = np.maximum(0, pair_stats['implied_total_capacity'] - pair_stats['ticket_d2'])
+    pair_stats['slack_seats_d3'] = np.maximum(0, pair_stats['implied_total_capacity'] - pair_stats['ticket_d3'])
+    pair_stats['mean_slack_seats'] = (pair_stats['slack_seats_d1'] + pair_stats['slack_seats_d2'] + pair_stats['slack_seats_d3']) / 3.0
+    pair_stats['capacity_utilization_rate'] = (pair_stats['daily_scale'] / (pair_stats['implied_total_capacity'] + 1.0)).clip(upper=1.5)
+    pair_stats['ticket_accel_normalized'] = pair_stats['ticket_accel'] / (pair_stats['scale'] + 1.0)
+    pair_stats['occ_diff_d2_d1'] = pair_stats['occ_d2'] - pair_stats['occ_d1']
+    pair_stats['occ_diff_d3_d2'] = pair_stats['occ_d3'] - pair_stats['occ_d2']
+    pair_stats['log_scale'] = np.log1p(pair_stats['scale'])
+    pair_stats['log_est_capacity'] = np.log1p(pair_stats['est_capacity'])
 
     pair_stats['tps_d1'] = pair_stats['ticket_d1'] / (pair_stats['show_d1'] + 1e-3)
     pair_stats['tps_d2'] = pair_stats['ticket_d2'] / (pair_stats['show_d2'] + 1e-3)
     pair_stats['tps_d3'] = pair_stats['ticket_d3'] / (pair_stats['show_d3'] + 1e-3)
     pair_stats['tps_mean'] = (pair_stats['tps_d1'] + pair_stats['tps_d2'] + pair_stats['tps_d3']) / 3.0
     pair_stats['tps_trend'] = pair_stats['tps_d3'] - pair_stats['tps_d1']
+
 
     # Nationwide stats
     nat_stats = h.groupby('movie_title').agg(
@@ -176,6 +189,7 @@ def build_features(history_df, target_df, movies_df, holidays_df, prices_df,
     nat_day['nat_trend_d3_d2'] = (nat_day['nat_ticket_d3'] + 1.0) / (nat_day['nat_ticket_d2'] + 1.0)
     nat_day['nat_trend_d3_d1'] = (nat_day['nat_ticket_d3'] + 1.0) / (nat_day['nat_ticket_d1'] + 1.0)
     nat_stats = nat_stats.merge(nat_day, on='movie_title', how='left')
+    nat_stats['log_nat_scale'] = np.log1p(nat_stats['nat_scale'])
 
     first_date_map = h.groupby('movie_title')['date_show'].min().rename('opening_date').reset_index()
     first_date_map['opening_dow'] = first_date_map['opening_date'].dt.dayofweek
@@ -201,6 +215,13 @@ def build_features(history_df, target_df, movies_df, holidays_df, prices_df,
     df['is_sunday'] = (df['day_of_week'] == 6).astype(int)
     df['is_monday'] = (df['day_of_week'] == 0).astype(int)
     df['is_payday'] = ((df['day_of_month'] >= 25) | (df['day_of_month'] <= 2)).astype(int)
+
+    # Week-2 & Calendar Interactions (Forensic Audit & 2nd Place Insights)
+    df['is_second_week'] = (df['day_num_clipped'] >= 8).astype(int)
+    df['dropout_risk_score'] = (1.0 - (df['occ_mean'] / 100.0)).clip(lower=0.0) * (df['day_num_clipped'] >= 7).astype(int)
+    df['weekend2_rebound'] = df['is_weekend'] * (df['day_num_clipped'] >= 8).astype(int) * (df['ratio_d3_d1'] > 0.90).astype(int)
+    df['small_screen_risk'] = (df['scale'] <= 15.0).astype(int)
+
 
     # Formats
     t_str = df['movie_title'].astype(str)
@@ -304,10 +325,13 @@ def build_features(history_df, target_df, movies_df, holidays_df, prices_df,
     active_fallback_dict = transition_fallback if transition_fallback is not None else GLOBAL_DAY_NUM_FALLBACK
 
     def get_empirical_ratio(row):
+        if pd.isna(row['opening_dow']) or pd.isna(row['day_num_clipped']):
+            return 1.0
         key = (int(row['opening_dow']), int(row['day_num_clipped']))
         if key in active_trans_dict:
             return active_trans_dict[key]
         return active_fallback_dict.get(int(row['day_num_clipped']), 1.0)
+
 
     df['empirical_transition_ratio'] = df.apply(get_empirical_ratio, axis=1)
 
@@ -329,8 +353,17 @@ def build_features(history_df, target_df, movies_df, holidays_df, prices_df,
                 df[c] = df[c].fillna(fallback_val)
         if 'city_prior_tickets' in df.columns:
             df['cinema_to_city_share'] = df['scale'] / (df['city_prior_tickets'] * df.get('city_prior_cinemas', 1) + 1.0)
+            df['city_ticket_slack'] = (df['city_prior_tickets'] - df.get('cinema_prior_tickets', 0)).clip(lower=0.0)
+            df['city_dominance_ratio'] = df['scale'] / (df['city_prior_tickets'] + 1.0)
+        else:
+            df['cinema_to_city_share'] = 0.5
+            df['city_ticket_slack'] = 0.0
+            df['city_dominance_ratio'] = 0.5
     else:
         df['cinema_to_city_share'] = 0.5
+        df['city_ticket_slack'] = 0.0
+        df['city_dominance_ratio'] = 0.5
+
 
     # ----------------------------------------------------
     # CINEMA CHAIN CONTEXT FEATURE
