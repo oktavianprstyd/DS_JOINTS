@@ -6,16 +6,20 @@
 ---
 
 ### STATUS TERKINI
-Public leaderboard best resmi saat ini: **`0.46562`** (🏆 **NEW VERIFIED ALL-TIME PERSONAL BEST!**).
-Dihasilkan oleh: `submissions/submission_upgrade_sota60_anchor40.csv` (Perpaduan 60% Roadmap Clean SOTA V9 + 40% Hurdle Anchor dengan Zero-Preservation).
-Local OOF yang dicatat: **0.34826**.
+Public leaderboard best resmi saat ini: **`0.46524`** (🏆 **NEW VERIFIED ALL-TIME PERSONAL BEST!**).
+Dihasilkan oleh: `submissions/submission_master_champion_70_30.csv` (Perpaduan 70% PB 0.46562 + 30% V11 Deep Golden Tri 0.46605 dengan Zero-Preservation).
+Local OOF yang dicatat: **0.35210**.
 
 **Riwayat Kemajuan Submisi Resmi Terkini:**
-1. `submission_upgrade_sota60_anchor40.csv` : **`0.46562`** (All-Time PB, 60% SOTA + 40% Anchor ZP) 🏆
-2. `submission_clean_sota_roadmap.csv`      : **`0.46832`** (Roadmap Clean SOTA Pure V9) 🚀
-3. `submission_podium_roadmap_blend.csv`    : **`0.46888`** (Podium Roadmap Blend)
-4. `submission_podium_blend_anchor_80_90f_20_zp.csv` : **`0.46890`** (Podium 98F Blend 80/20)
-5. `submission_clean_consecutive_master.csv`: **`0.48908`** (Over-Shrunk Baseline)
+1. `submission_master_champion_70_30.csv`        : **`0.46524`** (All-Time PB, 70% PB + 30% V11 Tri ZP) 🏆
+2. `submission_upgrade_sota60_anchor40.csv`      : **`0.46562`** (Previous Best)
+3. `submission_deep_sota_v11_golden_tri.csv`     : **`0.46605`** (V11 Deep SOTA + Capacity Reconstruction)
+4. `submission_upgrade_v10_golden_tri_blend.csv` : **`0.46665`** (V10 Scale-Aware Tri-Blend)
+5. `submission_clean_sota_roadmap.csv`           : **`0.46832`** (Roadmap Clean SOTA Pure V9) 🚀
+6. `submission_podium_roadmap_blend.csv`         : **`0.46888`** (Podium Roadmap Blend)
+7. `submission_podium_blend_anchor_80_90f_20_zp.csv` : **`0.46890`** (Podium 98F Blend 80/20)
+8. `submission_hurdle_top.csv`                   : **`0.47303`** (Initial Anchor)
+9. `submission_clean_consecutive_master.csv`     : **`0.48908`** (Over-Shrunk Baseline)
 
 Dokumen ini adalah checklist eksekusi teknis. Tujuannya bukan menjanjikan peringkat tertentu, melainkan memaksimalkan kualitas prediksi dengan eksperimen yang terukur, validasi yang ketat, dan submission yang benar-benar reproducible.
 
@@ -31,7 +35,8 @@ Dokumen ini adalah checklist eksekusi teknis. Tujuannya bukan menjanjikan pering
 
 | Area | Kondisi Sekarang | Keputusan |
 | :--- | :--- | :--- |
-| **Public LB** | **`0.46562`** | 🏆 **NEW ALL-TIME PERSONAL BEST!** Pertahankan `submission_upgrade_sota60_anchor40.csv` sebagai patokan utama. |
+| **Public LB** | **`0.46524`** | 🏆 **NEW ALL-TIME PERSONAL BEST!** Pertahankan `submission_master_champion_70_30.csv` sebagai patokan utama. |
+
 | **Local OOF** | $0.34826$ | Berguna untuk diagnosis, tetapi jangan dianggap sebagai estimasi hidden-test tanpa *nested calibration / temporal checks*. |
 | **Leak-free priors** | Sudah diterapkan di `run_roadmap_experiments.py` | Pertahankan. |
 | **Safe categorical encoding** | Sudah diterapkan untuk XGBoost | Pertahankan. |
