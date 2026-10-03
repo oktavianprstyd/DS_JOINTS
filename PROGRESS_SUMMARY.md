@@ -147,15 +147,20 @@ flowchart LR
 | **FIX 3: CLEAN CONSECUTIVE RESCALED (1.18x)** | Rescaling post-hoc volume $1.18\times$ pada Clean Master untuk mengembalikan intensitas penonton aktif ke skala penuh 12M | **0.34738** | Volume terkalibrasi ke **12,074,161 tiket** (selisih hanya -28k dari anchor), zeros 42.3%. File: `submissions/submission_clean_rescaled_118.csv`. |
 | **FIX 1A: CLEAN HARD HURDLE (NO SHRINKAGE)** | Clean Consecutive 183 movies + Hard Hurdle murni ($z$ jika $p \ge 0.46$ else 0) tanpa diskon Bayesian power | **0.36453** | Mempertahankan volume **10,983,664 tiket** (zeros 38.4%) tanpa distorsi over-shrinkage. File: `submissions/submission_clean_hard_hurdle_th46.csv`. |
 | **FIX 4: SMART SOTA BLEND (80% ANCHOR + 20% CLEAN RESCALED)** | Perpaduan 80% Anchor Hurdle (0.47303) + 20% Clean Rescaled (1.18x) | Podium Winner Candidate | Volume sempurna 12,097,141 tiket (selisih hanya -5k tiket dari 0.47303 anchor), zeros 38.2%, korelasi 0.9983, MAE vs Anchor 8.27. File: `submissions/submission_blend_anchor_80_clean_rescale118_20.csv`. |
-| **PODIUM 98-FEATURE DUAL GBDT PIPELINE** | **Clean Consecutive 183 Movies + Full 98-Feature Domain Space (WOM, Star Power, Calendar Bridge, Transitions) + Per-Horizon Hard Hurdle** | **`0.34828`** *(Day 8: **0.32197**, Day 9: **0.33067**, Day 10: **0.33467**, AUC: **0.9296**)* | **🏆 HISTORIC VALIDATED SOTA (Est. Kaggle 0.392 - 0.415)**. Murni Hard Hurdle tanpa shrinkage bias. Volume 11.46M tiket (zeros 39.7%). File: `submissions/submission_podium_90f_th50.csv`. |
-| **ROADMAP CLEAN SOTA (PURE V9)** | **100% Leak-Free Context Priors + Per-Horizon Hurdle + Calibrated Thresholds** | **Local OOF: `0.34826`**<br/>**Kaggle Public: `0.46832`** 🚀 | **🏆 NEW VERIFIED PERSONAL BEST!** Memecahkan rekor sebelumnya 0.46888 murni tanpa ketergantungan anchor! File: `submissions/submission_clean_sota_roadmap.csv`. |
-| **PODIUM 98F SOTA ZERO-PRESERVED BLEND (80/20)** | **80% Anchor (0.47303) + 20% Podium 98-Feature Pipeline (th=0.50)** | **Kaggle Public: `0.46888`** *(Previous PB)* | **Volume 11.94M tiket**, zeros persis **40.41%**, MAE vs Anchor **4.70**, korelasi **0.99943**. Berhasil resmi memecahkan rekor anchor 0.47303! |
+| **PODIUM 98-FEATURE DUAL GBDT PIPELINE** | **Clean Consecutive 183 Movies + Full 98-Feature Domain Space (WOM, Star Power, Calendar Bridge, Transitions) + Per-Horizon Hard Hurdle** | **`0.34828`** *(Day 8: **0.32197**, Day 9: **0.33067**, Day 10: **0.33467**, AUC: **0.9296**)* | **🏆 HISTORIC VALIDATED SOTA**. Murni Hard Hurdle tanpa shrinkage bias. Volume 11.46M tiket (zeros 39.7%). File: `submissions/submission_podium_90f_th50.csv`. |
+| **ROADMAP CLEAN SOTA (PURE V9)** | **100% Leak-Free Context Priors + Per-Horizon Hurdle + Calibrated Thresholds** | **Local OOF: `0.34826`**<br/>**Kaggle Public: `0.46832`** 🚀 | **Single-Model SOTA**: Memecahkan rekor tanpa ketergantungan anchor! File: `submissions/submission_clean_sota_roadmap.csv`. |
+| **PODIUM ROADMAP BLEND** | **80% Anchor (0.47303) + 20% Roadmap Clean SOTA (Zero-Preserved)** | **Kaggle Public: `0.46888`** | Volume 11.95M tiket, zeros 40.41%. File: `submissions/submission_podium_roadmap_blend.csv`. |
+| **PODIUM 98F SOTA ZERO-PRESERVED BLEND (80/20)** | **80% Anchor (0.47303) + 20% Podium 98-Feature Pipeline (th=0.50)** | **Kaggle Public: `0.46890`** | Volume 11.94M tiket, zeros persis **40.41%**, MAE vs Anchor 4.70. File: `submissions/submission_podium_blend_anchor_80_90f_20_zp.csv`. |
+| **UPGRADE SOTA 60 / ANCHOR 40 (ZP BLEND)** | **60% Roadmap Clean SOTA (0.46832) + 40% Anchor Hurdle (0.47303) dengan Zero-Preservation** | **Local OOF: `0.35410`**<br/>**Kaggle Public: `0.46562`** 🏆 | **👑 CURRENT ALL-TIME PERSONAL BEST!** Mengombinasikan ketajaman sinyal leak-free V9 dengan stabilitas distribusi volume anchor. Volume 11.59M tiket, zeros 40.41%. File: `submissions/submission_upgrade_sota60_anchor40.csv`. |
 
 > [!TIP]
-> **Post-Mortem Skor 0.48908 & Solusi Over-Shrinkage:**
-> 1. **Penyebab Utama (Over-Shrinkage)**: Formula Bayesian power shrinkage $((p - \theta)/(1 - \theta))^\gamma$ dengan cutoff $\theta \ge 0.55$ dan $\gamma \ge 0.40$ memotong 15%–53% estimasi tiket bioskop aktif. Akibatnya total tiket turun drastis ke 10.23M (-15.5% defisit dari 12.10M tiket anchor).
-> 2. **Solusi Terbaik (Fix 4 - Smart SOTA Blend 80/20)**: Memadukan 80% Anchor 0.47303 dengan 20% Clean Rescaled 1.18x mengembalikan volume persis ke **12.097M tiket** seraya menginjeksi sinyal bebas distorsi sneak preview dari 183 film bersih.
-> 3. **Solusi Standalone (Fix 3 - Clean Rescaled 1.18x)**: Jika ingin submit model mandiri tanpa anchor, gunakan `submission_clean_rescaled_118.csv` (12.07M tiket).
+> **Riwayat Hasil Submisi Kaggle Terverifikasi:**
+> - `submission_upgrade_sota60_anchor40.csv` : **`0.46562`** 🏆 (NEW ALL-TIME PERSONAL BEST!)
+> - `submission_clean_sota_roadmap.csv`      : **`0.46832`** 🚀 (Single Model Pure SOTA)
+> - `submission_podium_roadmap_blend.csv`    : **`0.46888`**
+> - `submission_podium_blend_anchor_80_90f_20_zp.csv` : **`0.46890`**
+> - `submission_hurdle_top.csv`              : **`0.47303`** (Initial Anchor)
+> - `submission_clean_consecutive_master.csv`: **`0.48908`** (Over-Shrunk Baseline)
 
 ---
 

@@ -3,9 +3,10 @@
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/oktavianprstyd/DS_JOINTS/blob/main/solution.ipynb)
 
 Repositori resmi tim untuk kompetisi **JOINTS X INSPIRE UGM 2026** (Data Science Track).
-- **Public Leaderboard Best**: **`0.46832`** (NEW PERSONAL BEST! 🚀; previous: `0.46888` / `0.47303`).
+- **Public Leaderboard Best**: **`0.46562`** (🏆 **NEW ALL-TIME PERSONAL BEST!**; previous: `0.46832` / `0.46888` / `0.47303`).
 - **Latest Local SOTA Record**: **`0.34826`** OOF MASE (Leak-Free Per-Horizon Hurdle Architecture).
-- **Architecture**: **Two-Stage Hurdle Multi-Paradigm Ensemble** (XGBoost CUDA + CatBoost GPU) + **Leak-Free Context Priors & Per-Horizon Calibration**.
+- **Winning Submission**: `submissions/submission_upgrade_sota60_anchor40.csv` (60% Roadmap Clean SOTA V9 + 40% Anchor Hurdle with Zero-Preservation).
+- **Architecture**: **Two-Stage Hurdle Multi-Paradigm Ensemble** (XGBoost CUDA + CatBoost GPU) + **Fold-Safe Context Priors & Per-Horizon Calibration**.
 
 ---
 

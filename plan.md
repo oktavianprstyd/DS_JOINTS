@@ -1,11 +1,11 @@
 # 🗺️ PLAN.MD — Rencana Peningkatan Akurasi JOINTS X INSPIRE 2026
 **Dibuat**: 30 September 2026 | **Target Skor**: < 0.40 (Podium Top 5)
-**Status Terbaik Saat Ini**: Public Leaderboard **`0.46832`** (NEW PERSONAL BEST! 🚀)
+**Status Terbaik Saat Ini**: Public Leaderboard **`0.46562`** (🏆 **NEW ALL-TIME PERSONAL BEST!**)
 
 ---
 
 > [!IMPORTANT]
-> Semua rencana di bawah **WAJIB 100% di GPU** (device='cuda' / task_type='GPU'). Tidak ada pelatihan di CPU agar RAM sistem tidak penuh. Setiap submission hanya setelah OOF MASE memberikan sinyal positif yang signifikan.
+> Semua rencana di bawah **WAJIB 100% di GPU** (device='cuda' / task_type='GPU'). Tidak ada pelatihan di CPU agar RAM sistem tidak penuh. Setiap submission hanya setelah evaluasi 3-lapis (Validation A, B, C) memberikan sinyal positif yang signifikan.
 
 ---
 
@@ -13,11 +13,14 @@
 
 | Tolok Ukur | OOF MASE Lokal | Kaggle Public | Status |
 | :--- | :---: | :---: | :--- |
-| **Roadmap Clean SOTA (Pure V9)** | **0.34826** | **`0.46832`** 🚀 | **🏆 NEW VERIFIED PERSONAL BEST! (Murni Leak-Free SOTA)** |
-| Podium 98F Blend (80% Anchor + 20% 98F) | 0.36210 | `0.46888` / `0.46890` | Previous Verified PB |
+| **Upgrade SOTA 60 / Anchor 40 (ZP Blend)** | **0.35410** | **`0.46562`** 🏆 | **🏆 ALL-TIME PERSONAL BEST! (`submission_upgrade_sota60_anchor40.csv`)** |
+| Roadmap Clean SOTA (Pure V9) | 0.34826 | `0.46832` 🚀 | Verified Single Model SOTA |
+| Podium Roadmap Blend | 0.35820 | `0.46888` | Intermediate Blend |
+| Podium 98F Blend (80% Anchor + 20% 98F) | 0.36210 | `0.46890` | Previous Verified PB |
 | Hurdle LGB + CB (Initial Anchor) | 0.53730 | 0.47303 | Former Best Anchor |
 | **Target Podium Top 5** | ~0.42 | **~0.39–0.41** | 🎯 (Sudah Sangat Dekat!) |
 | **Target Rank #1** | ~0.37 | **~0.39** | 🏆 (Target Utama Juara) |
+
 
 ---
 

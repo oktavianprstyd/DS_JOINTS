@@ -33,7 +33,7 @@ def create_notebook(output_path="solution.ipynb"):
     # Title & Metadata
     add_md(r"""# 🎬 JOINTS X INSPIRE 2026 - Data Science Competition
 ## High-Performance Box Office Forecasting System: Predict Cinema Ticket Sales (D4–D10)
-**Tim**: Jarvis | **Metrik Evaluasi**: Mean Absolute Scaled Error (MASE) | **Kaggle Public Score**: `0.46890` (NEW PERSONAL BEST!) | **SOTA OOF MASE**: `0.34828`
+**Tim**: Jarvis | **Metrik Evaluasi**: Mean Absolute Scaled Error (MASE) | **Kaggle Public Score**: `0.46562` (🏆 ALL-TIME PERSONAL BEST!) | **SOTA OOF MASE**: `0.34826`
 
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/oktavianprstyd/DS_JOINTS/blob/main/solution.ipynb)
 
@@ -41,16 +41,16 @@ def create_notebook(output_path="solution.ipynb"):
 ### 📌 Executive Summary & Methodology
 - **Objective**: Memprediksi jumlah penjualan tiket harian (`total_ticket`) untuk pekan penayangan reguler (Hari ke-4 s.d. Hari ke-10) di bioskop-bioskop Indonesia berdasarkan performa pembukaan 3 hari pertama (Hari ke-1 s.d. Hari ke-3 / *Opening Weekend*).
 - **Evaluation Metric**: **Mean Absolute Scaled Error (MASE)**
-  $$\\mathrm{MASE} = \\frac{1}{N} \\sum_{i=1}^N \\frac{|y_i - \\hat{y}_i|}{s_{p(i)}}, \\quad s_p = \\max\\left( \\frac{1}{3} \\sum_{d=1}^3 y_{p,d}, 1 \\right)$$
+  $$\mathrm{MASE} = \frac{1}{N} \sum_{i=1}^N \frac{|y_i - \hat{y}_i|}{s_{p(i)}}, \quad s_p = \max\left( \frac{1}{3} \sum_{d=1}^3 y_{p,d}, 1 \right)$$
 - **Mathematical Optimization Breakthrough**:
-  Dengan mendefinisikan target rasio ternormalisasi $z_i = \\frac{y_i}{s_{p(i)}}$, pelatihan model Gradient Boosted Trees (**XGBoost CUDA, CatBoost GPU**) dengan fungsi objektif **L1 / MAE Loss** secara eksak dan langsung meminimalkan metrik kompetisi:
-  $$\\mathrm{MAE}(z, \\hat{z}) = \\frac{1}{N} \\sum_{i=1}^N |z_i - \\hat{z}_i| \\equiv \\mathrm{MASE}$$
+  Dengan mendefinisikan target rasio ternormalisasi $z_i = \frac{y_i}{s_{p(i)}}$, pelatihan model Gradient Boosted Trees (**XGBoost CUDA, CatBoost GPU**) dengan fungsi objektif **L1 / MAE Loss** secara eksak dan langsung meminimalkan metrik kompetisi:
+  $$\mathrm{MAE}(z, \hat{z}) = \frac{1}{N} \sum_{i=1}^N |z_i - \hat{z}_i| \equiv \mathrm{MASE}$$
 - **Key Breakthroughs & Solusi Masalah**:
-  1. **Two-Stage Hurdle Architecture**: Memisahkan klasifikasi kelangsungan tayang $P(\\text{active})$ (ROC-AUC `0.9296`) dan regresi intensitas penjualan tiket $z$ pada baris aktif.
+  1. **Two-Stage Hurdle Architecture**: Memisahkan klasifikasi kelangsungan tayang $P(\text{active})$ (ROC-AUC `0.9296`) dan regresi intensitas penjualan tiket $z$ pada baris aktif.
   2. **Clean Consecutive Alignment (183 Film Bersih)**: Mengeliminasi 43 film sneak preview dengan jeda hari kosong yang merusak pembagi skala $s_p$.
   3. **Full 98-Feature Domain Space**: Memanfaatkan 98 fitur profil pasar perfilman Indonesia (WOM trajectory curvature, kalender libur kejepit, star director/major studio, empirical transitions).
   4. **Per-Horizon Hard Hurdle ($\gamma = 0$)**: Mengatasi fenomena *Over-Shrinkage* dengan threshold diskret terkalibrasi per hari (D4 s.d. D10) tanpa memotong volume tiket aktif.
-  5. **Zero-Preserved Ensembling Engine**: Menggabungkan 80% Anchor (0.47303) dengan 20% SOTA 98-Fitur, mengunci struktur nol di 40.41% dan volume 11.94M tiket, yang sukses memecahkan rekor Kaggle menjadi **`0.46890`**!""")
+  5. **Zero-Preserved Ensembling Engine**: Menggabungkan 60% Roadmap Clean SOTA (0.46832) dengan 40% Anchor Hurdle (0.47303), mengunci struktur nol di 40.41% dan volume 11.59M tiket, yang sukses memecahkan rekor Kaggle menjadi **`0.46562`**!""")
 
     # Cell 1: Environment & Pip Install Quiet
     add_md("""## 1. Setup Environment & Reproducibility
@@ -305,7 +305,7 @@ test_ids = df_test['id'].values""")
 
     # Cell 6: Step-by-Step Evolution of Experiments (Ablation Table)
     add_md(r"""## 6. Step-by-Step Evolution of Experiments (Ablation Study)
-Tabel riwayat eksperimen tim Jarvis dari awal kompetisi hingga memecahkan rekor Personal Best **`0.46890`**:
+Tabel riwayat eksperimen tim Jarvis dari awal kompetisi hingga memecahkan rekor Personal Best **`0.46562`**:
 
 | Iterasi Eksperimen | Deskripsi Pendekatan | OOF MASE | Public LB | Catatan Teknis & Analisis Pembelajaran |
 | :--- | :--- | :---: | :---: | :--- |
@@ -316,8 +316,9 @@ Tabel riwayat eksperimen tim Jarvis dari awal kompetisi hingga memecahkan rekor 
 | **5. Trio + Bayesian Shrinkage** | XGBoost + CatBoost + PyTorch ResHurdleNet | 0.52566 | - | Eliminasi hard-cliff threshold dengan peredaman daya Bayes kontinu (2-Segmen) |
 | **6. Plan B: 14-Segmen** | Day 4..10 x Weekday/Weekend Decoupling | 0.51220 | - | Optimasi 14 segmen independen, memangkas error weekday ke 0.48469 |
 | **7. Clean Consecutive + Fallback** | Clean Consecutive 183 Movies + Bayesian Shrinkage | 0.34738 | 0.48908 | **Over-Shrinkage Trap**: Pemotongan volume (-15.5%) menghukum bioskop aktif di test set |
-| **8. Podium SOTA Zero-Preserved** | **Full 98-Feature Dual GBDT + Per-Horizon Hurdle + Zero-Preserved Ensembling (80/20)** | **`0.34828`** | **`0.46890`** 🏆 | **VERIFIED PERSONAL BEST! Memecahkan anchor 0.47303 secara konsisten dan aman.** |
-| **9. Leak-Free Roadmap Pipeline** | **Fold-Safe Priors + Safe Categorical Encoding + Clean OOF Blend + 5-Fold Artifact** | **`0.34826`** | **`0.46890`** 🚀 | **Roadmap P0-P2 Audit Lulus 100%: Menghilangkan target leakage, validasi jujur, preservasi volume 11.93M** |""")
+| **8. Podium SOTA Zero-Preserved** | **Full 98-Feature Dual GBDT + Per-Horizon Hurdle + Zero-Preserved Ensembling (80/20)** | **`0.34828`** | **`0.46890`** | Memecahkan rekor anchor 0.47303 secara konsisten dan aman |
+| **9. Leak-Free Roadmap Pipeline** | **Fold-Safe Priors + Safe Categorical Encoding + Clean OOF Blend + 5-Fold Artifact** | **`0.34826`** | **`0.46832`** 🚀 | **Single Model SOTA**: Memecahkan rekor murni tanpa ketergantungan anchor |
+| **10. Upgrade SOTA 60 / Anchor 40** | **60% Roadmap Clean SOTA + 40% Anchor Hurdle (Zero-Preserved)** | **`0.35410`** | **`0.46562`** 🏆 | **ALL-TIME PERSONAL BEST! Menggabungkan ketajaman sinyal leak-free V9 dengan volume safety anchor** |""")
 
     # Cell 7: Dual-Engine GPU Training (5-Fold GroupKFold)
     add_md("""## 7. Two-Stage Dual Engine Modeling (5-Fold GroupKFold)
@@ -511,7 +512,7 @@ with open(weights_path, 'wb') as f:
         'ensemble_models': ensemble_models,
         'optimal_thresholds': dict(th_table),
         'oof_mase': total_oof_mase,
-        'kaggle_pb': 0.46890
+        'kaggle_pb': 0.46562
     }, f)
 
 weights_mb = os.path.getsize(weights_path) / (1024 * 1024)
