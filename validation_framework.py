@@ -90,26 +90,85 @@ def print_evaluation_summary(metrics, experiment_name="Model Evaluation"):
     print(f"    {h_str}")
     print("=" * 80)
 
-def fit_context_priors(train_hist_part, train_targ_part):
+def fit_context_priors(train_hist_part, train_targ_part, movies_df=None):
     """
     Leak-free priors computation strictly on training fold.
-    Calculates cinema priors, city priors, empirical transition table, and fallbacks.
+    Calculates cinema priors, city priors, cultural affinity priors (city x genre, cinema x genre),
+    empirical transition table, and fallbacks.
     """
+    import re
+
     # 1. Cinema priors
     cinema_priors = train_hist_part.groupby('cinema_ids').agg(
         cinema_prior_tickets=('total_ticket', 'mean'),
         cinema_prior_occ=('occupation_rate', 'mean'),
         cinema_prior_shows=('total_show', 'mean'),
+        cinema_tot_tickets=('total_ticket', 'sum'),
     ).reset_index()
 
     # 2. City priors
     city_priors = train_hist_part.groupby('city_name').agg(
         city_prior_tickets=('total_ticket', 'mean'),
+        city_prior_occ=('occupation_rate', 'mean'),
         city_prior_shows=('total_show', 'mean'),
         city_prior_cinemas=('cinema_ids', 'nunique')
     ).reset_index()
 
-    # 3. Empirical transition table
+    # 3. Cultural Affinity Priors (City x Genre & Cinema x Genre)
+    if movies_df is None:
+        try:
+            movies_df = pd.read_csv('data/movies.csv')
+        except Exception:
+            movies_df = None
+
+    city_genre_df = None
+    cinema_genre_df = None
+
+    if movies_df is not None:
+        def clean_movie_title(title):
+            return re.sub(r'\s*\((IMAX|3D|2D|UNCUT)[^\)]*\)', '', str(title)).strip()
+
+        m_clean = movies_df.copy()
+        m_clean['clean_title'] = m_clean['original_title'].apply(clean_movie_title)
+        m_clean['genre_primary'] = m_clean['genre'].apply(lambda x: str(x).split(',')[0].strip())
+        movie_genre_map = m_clean.drop_duplicates('clean_title').set_index('clean_title')['genre_primary'].to_dict()
+
+        h_copy = train_hist_part.copy()
+        h_copy['clean_title'] = h_copy['movie_title'].apply(clean_movie_title)
+        h_copy['genre_primary'] = h_copy['clean_title'].map(movie_genre_map).fillna('Unknown')
+
+        # City x Genre Empirical Bayes Smoothing (m = 10.0)
+        m_city = 10.0
+        cg = h_copy.groupby(['city_name', 'genre_primary']).agg(
+            cg_sum_occ=('occupation_rate', 'sum'),
+            cg_count=('occupation_rate', 'count')
+        ).reset_index().merge(city_priors[['city_name', 'city_prior_occ']], on='city_name', how='left')
+
+        cg['city_prior_occ'] = cg['city_prior_occ'].fillna(float(h_copy['occupation_rate'].mean()))
+        cg['city_genre_occ_smooth'] = (cg['cg_sum_occ'] + m_city * cg['city_prior_occ']) / (cg['cg_count'] + m_city)
+        cg['city_genre_affinity'] = cg['city_genre_occ_smooth'] / np.maximum(cg['city_prior_occ'], 1.0)
+        city_genre_df = cg[['city_name', 'genre_primary', 'city_genre_affinity']]
+
+        # Cinema x Genre Empirical Bayes Smoothing (m = 12.0 shrunk towards city_genre_occ_smooth)
+        m_cin = 12.0
+        kg = h_copy.groupby(['cinema_ids', 'genre_primary']).agg(
+            kg_sum_occ=('occupation_rate', 'sum'),
+            kg_count=('occupation_rate', 'count'),
+            kg_tickets=('total_ticket', 'sum')
+        ).reset_index()
+
+        cin_city = h_copy.groupby('cinema_ids')['city_name'].first().reset_index()
+        kg = kg.merge(cin_city, on='cinema_ids', how='left')
+        kg = kg.merge(cg[['city_name', 'genre_primary', 'city_genre_occ_smooth']], on=['city_name', 'genre_primary'], how='left')
+        kg = kg.merge(cinema_priors[['cinema_ids', 'cinema_prior_occ', 'cinema_tot_tickets']], on='cinema_ids', how='left')
+
+        kg['city_genre_occ_smooth'] = kg['city_genre_occ_smooth'].fillna(kg['cinema_prior_occ'])
+        kg['cinema_genre_occ_smooth'] = (kg['kg_sum_occ'] + m_cin * kg['city_genre_occ_smooth']) / (kg['kg_count'] + m_cin)
+        kg['cinema_genre_affinity'] = kg['cinema_genre_occ_smooth'] / np.maximum(kg['cinema_prior_occ'], 1.0)
+        kg['cinema_genre_ticket_share'] = (kg['kg_tickets'] + 5.0) / (kg['cinema_tot_tickets'] + 50.0)
+        cinema_genre_df = kg[['cinema_ids', 'genre_primary', 'cinema_genre_affinity', 'cinema_genre_ticket_share']]
+
+    # 4. Empirical transition table
     scale_df = (train_hist_part.groupby(['movie_title', 'cinema_ids'])['total_ticket'].sum() / 3.0).clip(lower=1.0).rename('scale').reset_index()
     first_dow = pd.to_datetime(train_hist_part.groupby('movie_title')['date_show'].min()).dt.dayofweek.rename('opening_dow').reset_index()
 
@@ -120,7 +179,7 @@ def fit_context_priors(train_hist_part, train_targ_part):
     trans_table = targ_eval.groupby(['opening_dow', 'day_num_clipped'])['target_z'].median().to_dict()
     trans_fallback = targ_eval.groupby('day_num_clipped')['target_z'].median().to_dict()
 
-    # 4. Fallback medians
+    # 5. Fallback medians
     medians = {}
     for c in cinema_priors.columns:
         if c != 'cinema_ids':
@@ -132,6 +191,8 @@ def fit_context_priors(train_hist_part, train_targ_part):
     return {
         'cinema_priors': cinema_priors,
         'city_priors': city_priors,
+        'city_genre_priors': city_genre_df,
+        'cinema_genre_priors': cinema_genre_df,
         'transition_table': trans_table,
         'transition_fallback': trans_fallback,
         'priors_medians': medians

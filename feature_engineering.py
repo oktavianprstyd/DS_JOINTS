@@ -76,7 +76,8 @@ GLOBAL_DAY_NUM_FALLBACK = {
 def build_features(history_df, target_df, movies_df, holidays_df, prices_df, 
                    cinema_priors=None, city_priors=None,
                    transition_table=None, transition_fallback=None,
-                   priors_medians=None):
+                   priors_medians=None,
+                   city_genre_priors=None, cinema_genre_priors=None):
     h = history_df.copy()
     t = target_df.copy()
 
@@ -265,6 +266,27 @@ def build_features(history_df, target_df, movies_df, holidays_df, prices_df,
     df['has_animation'] = df['genre'].str.contains('Animation', case=False, na=False).astype(int)
     df['age_rating'] = df['age_rating'].fillna('Semua Umur')
     df['casts_count'] = df['casts'].apply(lambda x: len(str(x).split(',')) if pd.notnull(x) else 0)
+
+    # ----------------------------------------------------
+    # UPGRADE #1: REGIONAL CULTURAL AFFINITY MULTIPLIERS
+    # ----------------------------------------------------
+    if city_genre_priors is not None:
+        df = df.merge(city_genre_priors, on=['city_name', 'genre_primary'], how='left')
+        df['city_genre_affinity'] = df['city_genre_affinity'].fillna(1.0).astype(np.float32)
+    else:
+        df['city_genre_affinity'] = 1.0
+
+    if cinema_genre_priors is not None:
+        df = df.merge(cinema_genre_priors, on=['cinema_ids', 'genre_primary'], how='left')
+        df['cinema_genre_affinity'] = df['cinema_genre_affinity'].fillna(df['city_genre_affinity']).astype(np.float32)
+        df['cinema_genre_ticket_share'] = df['cinema_genre_ticket_share'].fillna(0.10).astype(np.float32)
+    else:
+        df['cinema_genre_affinity'] = df['city_genre_affinity']
+        df['cinema_genre_ticket_share'] = 0.10
+
+    df['affinity_adjusted_scale'] = (df['scale'] * df['cinema_genre_affinity']).clip(lower=1.0)
+    df['log_affinity_adjusted_scale'] = np.log1p(df['affinity_adjusted_scale'])
+    df['affinity_divergence'] = df['cinema_genre_affinity'] - df['city_genre_affinity']
 
     # ----------------------------------------------------
     # PILAR 2: ADVANCED CALENDAR & HOLIDAY PROXIMITY
