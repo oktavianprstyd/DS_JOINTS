@@ -341,6 +341,16 @@ def build_features(history_df, target_df, movies_df, holidays_df, prices_df,
     df['projected_decay_rate'] = df['ratio_d3_d1'] * df['decay_curve']
 
     # ----------------------------------------------------
+    # STAR POWER x WOM & CALENDAR DYNAMICS
+    # ----------------------------------------------------
+    df['star_power_scale'] = (df['is_major_studio'] + df['has_star_director'] + (df['casts_count'] >= 10).astype(int)).astype(np.float32)
+    df['star_wom_interaction'] = ((df['is_major_studio'] * 1.5 + df['has_star_director'] * 1.0) * df['ratio_d3_d1']).astype(np.float32)
+    df['studio_weekend_boost'] = (df['is_major_studio'] * df['effective_weekend']).astype(np.float32)
+    df['director_weekday_persistence'] = (df['has_star_director'] * (1 - df['effective_weekend']) * df['occ_growth_d3_d1']).astype(np.float32)
+    df['star_horror_blockbuster'] = (df['has_horror'] * df['has_star_director']).astype(np.float32)
+    df['studio_survival_score'] = (df['is_major_studio'] * (1.0 - df['dropout_risk_score'])).astype(np.float32)
+
+    # ----------------------------------------------------
     # PILAR 5: EMPIRICAL TRANSITION RATIO BASELINE (FOLD-SAFE)
     # ----------------------------------------------------
     active_trans_dict = transition_table if transition_table is not None else EMPIRICAL_RATIO_DICT
