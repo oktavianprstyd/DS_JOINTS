@@ -13,11 +13,12 @@
 
 | Tolok Ukur | OOF MASE Lokal | Kaggle Public | Status |
 | :--- | :---: | :---: | :--- |
-| **V11 Deep Golden Tri-Blend (55% V11 + 35% Anc + 10% PB)** | **`0.35240`** | **Ready to Submit** 👑 | **👑 ULTIMATE PRIME CANDIDATE (11.595M Vol, Zeros 40.41%, Corr 0.99974)** |
-| **V11 Deep SOTA Engine (Pure Single Model)** | **`0.35313`** 🚀 | **Ready to Submit** 🚀 | **🏆 NEW LOWEST LOCAL OOF SOTA! (Depth 7, 117 domain reconstruction feats)** |
-| **V10 Golden Tri-Blend (55% V10 + 35% Anc + 10% PB)** | **0.35280** | **Ready to Submit** 🚀 | Volume 11.598M, Zeros 40.41% |
-| **V10 Blend (60% SOTA + 40% Anc)** | **0.35351** | **Ready to Submit** 🚀 | Direct Upgrade to PB 0.46562 with Scale-Aware Hurdle + Day-8 Reset |
+| **Master Champion 70/30 Blend (70% PB + 30% V11)** | **`0.35210`** | **Ready to Submit** 👑 | **👑 DUAL-CHAMPION ENSEMBLE (11.591M Vol, Zeros 40.41%, Corr 0.99998)** |
+| **Day-Calibrated Master Blend (D4-8: 60/40, D9-10: PB)** | **`0.35220`** | **Ready to Submit** 🎯 | **Dinamika Kalender Khusus (Mencegah over-surge D9-D10)** |
 | **Upgrade SOTA 60 / Anchor 40 (ZP Blend)** | **0.35410** | **`0.46562`** 🏆 | **🏆 CURRENT ALL-TIME PERSONAL BEST! (`submission_upgrade_sota60_anchor40.csv`)** |
+| **V11 Deep Golden Tri-Blend (55% V11 + 35% Anc + 10% PB)** | **`0.35240`** | **`0.46605`** 🚀 | **Verified Podium Model (11.595M Vol, Zeros 40.41%, Corr 0.99974)** |
+| **V10 Golden Tri-Blend (55% V10 + 35% Anc + 10% PB)** | **0.35280** | **`0.46665`** | Verified Scale-Aware Blend |
+| **V11 Deep SOTA Engine (Pure Single Model)** | **`0.35313`** 🚀 | **Ready to Submit** 🚀 | **🏆 NEW LOWEST LOCAL OOF SOTA! (Depth 7, 117 domain reconstruction feats)** |
 | Roadmap Clean SOTA (Pure V9) | 0.34826 | `0.46832` 🚀 | Verified Single Model SOTA |
 | Podium Roadmap Blend | 0.35820 | `0.46888` | Intermediate Blend |
 | Podium 98F Blend (80% Anchor + 20% 98F) | 0.36210 | `0.46890` | Previous Verified PB |
