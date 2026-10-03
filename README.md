@@ -3,9 +3,9 @@
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/oktavianprstyd/DS_JOINTS/blob/main/solution.ipynb)
 
 Repositori resmi tim untuk kompetisi **JOINTS X INSPIRE UGM 2026** (Data Science Track).
-- **Public Leaderboard Best**: **`0.47303`** (Rank 34, moving toward top podium).
-- **Latest Local SOTA Record**: **`0.34738`** OOF MASE (Clean Consecutive Alignment + Hierarchical Fallback Bayesian Shrinkage).
-- **Architecture**: **Two-Stage Hurdle Multi-Paradigm Ensemble** (XGBoost CUDA + CatBoost GPU) + **14-Segment Continuous Bayesian Power Shrinkage** with Prior Fallback on $N < 2,500$.
+- **Public Leaderboard Best**: **`0.46832`** (NEW PERSONAL BEST! 🚀; previous: `0.46888` / `0.47303`).
+- **Latest Local SOTA Record**: **`0.34826`** OOF MASE (Leak-Free Per-Horizon Hurdle Architecture).
+- **Architecture**: **Two-Stage Hurdle Multi-Paradigm Ensemble** (XGBoost CUDA + CatBoost GPU) + **Leak-Free Context Priors & Per-Horizon Calibration**.
 
 ---
 
@@ -26,24 +26,22 @@ Repositori resmi tim untuk kompetisi **JOINTS X INSPIRE UGM 2026** (Data Science
 .
 ├── data/                                      # Dataset kompetisi (train.csv, test.csv, movies.csv, dsb.)
 ├── submissions/                               # Berkas hasil inferensi kompetisi
-│   ├── submission_grand_champion_blend.csv    # File Juara Utama (50% Anchor 0.47303 + 50% Clean Consecutive)
+│   ├── submission_grand_champion_blend.csv    # File Juara Utama (Anchor + Clean Consecutive)
 │   ├── submission_clean_consecutive_master.csv# File Master Clean Consecutive SOTA (OOF MASE 0.34738)
 │   ├── submission_plan_b_7horizon.csv         # File Master Plan B (OOF MASE 0.51220)
 │   ├── submission_trio_bayes_master.csv       # File Master Trio Multi-Paradigm Bayes (OOF 0.52566)
-│   └── submission_hurdle_top.csv              # Anchor Terverifikasi Kaggle (Score: 0.47303)
+│   ├── submission_hurdle_top.csv              # Anchor Terverifikasi Kaggle (Score: 0.47303)
+│   └── archive/                               # Arsip variasi submisi & sweep grid search
 ├── weights/                                   # Bobot model & Out-Of-Fold cache (<= 200 MB)
+├── experiments/                               # Arsip seluruh script riset, benchmark & diagnostik
+│   └── README.md                              # Dokumentasi isi folder eksperimen
+├── eda_plots/                                 # Visualisasi & grafik analisis data eksploratif
 ├── train_plan_b_clean_consecutive.py          # Script eksekusi SOTA Clean Consecutive (OOF 0.34738)
-├── train_plan_b_7horizon_bayes.py             # Script eksekusi Plan B 14-Segmen (OOF 0.51220)
-├── benchmark_trio_ensemble_bayes.py           # Pipeline training Trio Ensemble 100% GPU
-├── train_deep_hurdle_gpu.py                   # Arsitektur PyTorch Deep ResHurdleNet di CUDA
-├── train_hurdle_ensemble.py                   # Pipeline Two-Stage Hurdle Ensemble (0.47303)
-├── feature_engineering.py                     # Modul 5 pilar rekayasa fitur bioskop Indonesia
+├── train_podium_90f_gpu.py                    # Script eksekusi model Podium 90F (0.46890 PB)
+├── feature_engineering.py                     # Modul rekayasa fitur bioskop Indonesia
+├── build_solution_notebook.py                 # Generator notebook publikasi mandiri
 ├── solution.ipynb                             # Notebook mandiri (self-contained) untuk audit juri
 ├── plan.md                                    # Rencana strategis peningkatan akurasi
-├── PROGRESS_SUMMARY.md                        # Dokumentasi lengkap eksperimen & temuan teknis
-├── feature_engineering.py                     # Modul 5 pilar rekayasa fitur bioskop Indonesia
-├── test_bayes_shrinkage.py                    # Uji matematis Continuous Bayesian Shrinkage
-├── solution.ipynb                             # Notebook mandiri (self-contained) untuk audit juri
 ├── PROGRESS_SUMMARY.md                        # Dokumentasi lengkap eksperimen & temuan teknis
 ├── tm_slides.pdf                              # Panduan teknis & materi TM resmi panitia
 └── tm_slides_text.txt                         # Transkrip teks materi TM

@@ -27,3 +27,7 @@ env/
 venv/
 .idea/
 .vscode/
+
+# Archive & Sweep Submissions
+submissions/archive/
+

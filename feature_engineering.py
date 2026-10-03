@@ -74,7 +74,9 @@ GLOBAL_DAY_NUM_FALLBACK = {
 }
 
 def build_features(history_df, target_df, movies_df, holidays_df, prices_df, 
-                   cinema_priors=None, city_priors=None):
+                   cinema_priors=None, city_priors=None,
+                   transition_table=None, transition_fallback=None,
+                   priors_medians=None):
     h = history_df.copy()
     t = target_df.copy()
 
@@ -296,33 +298,43 @@ def build_features(history_df, target_df, movies_df, holidays_df, prices_df,
     df['projected_decay_rate'] = df['ratio_d3_d1'] * df['decay_curve']
 
     # ----------------------------------------------------
-    # PILAR 5: EMPIRICAL TRANSITION RATIO BASELINE
+    # PILAR 5: EMPIRICAL TRANSITION RATIO BASELINE (FOLD-SAFE)
     # ----------------------------------------------------
+    active_trans_dict = transition_table if transition_table is not None else EMPIRICAL_RATIO_DICT
+    active_fallback_dict = transition_fallback if transition_fallback is not None else GLOBAL_DAY_NUM_FALLBACK
+
     def get_empirical_ratio(row):
         key = (int(row['opening_dow']), int(row['day_num_clipped']))
-        if key in EMPIRICAL_RATIO_DICT:
-            return EMPIRICAL_RATIO_DICT[key]
-        return GLOBAL_DAY_NUM_FALLBACK.get(int(row['day_num_clipped']), 1.0)
+        if key in active_trans_dict:
+            return active_trans_dict[key]
+        return active_fallback_dict.get(int(row['day_num_clipped']), 1.0)
 
     df['empirical_transition_ratio'] = df.apply(get_empirical_ratio, axis=1)
 
     # ----------------------------------------------------
-    # PILAR 3: CINEMA & CITY PRIORS (WITH ROBUST FALLBACKS)
+    # PILAR 3: CINEMA & CITY PRIORS (WITH FOLD-SAFE FALLBACKS)
     # ----------------------------------------------------
     if cinema_priors is not None:
         df = df.merge(cinema_priors, on='cinema_ids', how='left')
         for c in cinema_priors.columns:
             if c != 'cinema_ids':
-                df[c] = df[c].fillna(df[c].median())
+                fallback_val = priors_medians.get(c, df[c].median()) if priors_medians is not None else df[c].median()
+                df[c] = df[c].fillna(fallback_val)
 
     if city_priors is not None:
         df = df.merge(city_priors, on='city_name', how='left')
         for c in city_priors.columns:
             if c != 'city_name':
-                df[c] = df[c].fillna(df[c].median())
+                fallback_val = priors_medians.get(c, df[c].median()) if priors_medians is not None else df[c].median()
+                df[c] = df[c].fillna(fallback_val)
         if 'city_prior_tickets' in df.columns:
             df['cinema_to_city_share'] = df['scale'] / (df['city_prior_tickets'] * df.get('city_prior_cinemas', 1) + 1.0)
     else:
         df['cinema_to_city_share'] = 0.5
+
+    # ----------------------------------------------------
+    # CINEMA CHAIN CONTEXT FEATURE
+    # ----------------------------------------------------
+    df['chain'] = df['cinema_ids'].astype(str).str.extract(r'^([A-Z]+)')[0].fillna('UNKNOWN')
 
     return df

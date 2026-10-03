@@ -1,6 +1,6 @@
 # 🗺️ PLAN.MD — Rencana Peningkatan Akurasi JOINTS X INSPIRE 2026
 **Dibuat**: 30 September 2026 | **Target Skor**: < 0.40 (Podium Top 5)
-**Status Terbaik Saat Ini**: Public Leaderboard `0.46890` (NEW PERSONAL BEST! 🚀)
+**Status Terbaik Saat Ini**: Public Leaderboard **`0.46832`** (NEW PERSONAL BEST! 🚀)
 
 ---
 
@@ -13,12 +13,11 @@
 
 | Tolok Ukur | OOF MASE Lokal | Kaggle Public | Status |
 | :--- | :---: | :---: | :--- |
-| Hurdle LGB + CB (Old Anchor) | 0.53730 | 0.47303 | Former Best |
-| **Podium 98F Blend (80% Anchor + 20% 98F SOTA)** | **0.36210** | **`0.46890`** ✅ | **🏆 CURRENT BEST VERIFIED (NEW PB!)** |
-| Clean Consecutive + Hierarchical Fallback | 0.34738 | 0.48908 | Over-Shrinkage Lesson |
-| **Podium 98-Feature Dual GBDT (th=0.50)** | **`0.34828`** | **Est. ~0.392–0.415** | **🥇 Rank #1 Ready Candidate** |
-| **Target Podium Top 5** | ~0.42 | **~0.39–0.41** | 🎯 (Sudah Terlampaui!) |
-| **Target Rank #1** | ~0.37 | **~0.39** | 🏆 (Sudah Masuk Radar!) |
+| **Roadmap Clean SOTA (Pure V9)** | **0.34826** | **`0.46832`** 🚀 | **🏆 NEW VERIFIED PERSONAL BEST! (Murni Leak-Free SOTA)** |
+| Podium 98F Blend (80% Anchor + 20% 98F) | 0.36210 | `0.46888` / `0.46890` | Previous Verified PB |
+| Hurdle LGB + CB (Initial Anchor) | 0.53730 | 0.47303 | Former Best Anchor |
+| **Target Podium Top 5** | ~0.42 | **~0.39–0.41** | 🎯 (Sudah Sangat Dekat!) |
+| **Target Rank #1** | ~0.37 | **~0.39** | 🏆 (Target Utama Juara) |
 
 ---
 
