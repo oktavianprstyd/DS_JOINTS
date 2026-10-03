@@ -152,15 +152,23 @@ flowchart LR
 | **PODIUM ROADMAP BLEND** | **80% Anchor (0.47303) + 20% Roadmap Clean SOTA (Zero-Preserved)** | **Kaggle Public: `0.46888`** | Volume 11.95M tiket, zeros 40.41%. File: `submissions/submission_podium_roadmap_blend.csv`. |
 | **PODIUM 98F SOTA ZERO-PRESERVED BLEND (80/20)** | **80% Anchor (0.47303) + 20% Podium 98-Feature Pipeline (th=0.50)** | **Kaggle Public: `0.46890`** | Volume 11.94M tiket, zeros persis **40.41%**, MAE vs Anchor 4.70. File: `submissions/submission_podium_blend_anchor_80_90f_20_zp.csv`. |
 | **UPGRADE SOTA 60 / ANCHOR 40 (ZP BLEND)** | **60% Roadmap Clean SOTA (0.46832) + 40% Anchor Hurdle (0.47303) dengan Zero-Preservation** | **Local OOF: `0.35410`**<br/>**Kaggle Public: `0.46562`** 🏆 | **👑 CURRENT ALL-TIME PERSONAL BEST!** Mengombinasikan ketajaman sinyal leak-free V9 dengan stabilitas distribusi volume anchor. Volume 11.59M tiket, zeros 40.41%. File: `submissions/submission_upgrade_sota60_anchor40.csv`. |
+| **V10 SCALE-AWARE SOTA ENGINE (GPU)** | **Two-Tier Thresholding ($s_p \le 15$ vs $s_p > 15$) + Sample-Weighted Loss ($1/\sqrt{s_p}$) + Day-8 Reset & Weekend-2 Rebound Features** | **Local OOF: `0.35351`** *(AUC: **0.9398**)* | **Next-Gen SOTA Engine**: Memangkas runaway error di bioskop kecil ($s_p \le 15$), zero-rate stabil, 100% GPU training di RTX 3050 (404s). Model weights 53.0 MB. File: `submissions/submission_v10_scale_aware_pure.csv`. |
+| **V10 GOLDEN TRI-BLEND (READY TO SUBMIT)** | **55% V10 SOTA + 35% Anchor Hurdle + 10% PB 0.46562 (Zero-Preserved)** | **Target: < 0.450** 🚀 | **👑 PRIME SUBMISSION CANDIDATE!** Volume optimal 11.598M tiket, zeros persis 40.41% (29.341 baris), korelasi 0.99965 vs 0.46562 PB. File: `submissions/submission_upgrade_v10_golden_tri_blend.csv`. |
 
 > [!TIP]
 > **Riwayat Hasil Submisi Kaggle Terverifikasi:**
-> - `submission_upgrade_sota60_anchor40.csv` : **`0.46562`** 🏆 (NEW ALL-TIME PERSONAL BEST!)
+> - `submission_upgrade_sota60_anchor40.csv` : **`0.46562`** 🏆 (CURRENT ALL-TIME PERSONAL BEST!)
 > - `submission_clean_sota_roadmap.csv`      : **`0.46832`** 🚀 (Single Model Pure SOTA)
 > - `submission_podium_roadmap_blend.csv`    : **`0.46888`**
 > - `submission_podium_blend_anchor_80_90f_20_zp.csv` : **`0.46890`**
 > - `submission_hurdle_top.csv`              : **`0.47303`** (Initial Anchor)
 > - `submission_clean_consecutive_master.csv`: **`0.48908`** (Over-Shrunk Baseline)
+> 
+> **Kandidat Baru V10 Siap Submit:**
+> 1. `submission_upgrade_v10_golden_tri_blend.csv` (11.598M tiket, 40.41% zeros) — **Rekomendasi Utama** 👑
+> 2. `submission_upgrade_v10_sota60_anchor40.csv` (11.608M tiket, 40.41% zeros) — **Upgrade Langsung ke 0.46562**
+> 3. `submission_upgrade_v10_sota65_anchor35.csv` (11.567M tiket, 40.41% zeros)
+
 
 ---
 

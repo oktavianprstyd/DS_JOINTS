@@ -13,7 +13,9 @@
 
 | Tolok Ukur | OOF MASE Lokal | Kaggle Public | Status |
 | :--- | :---: | :---: | :--- |
-| **Upgrade SOTA 60 / Anchor 40 (ZP Blend)** | **0.35410** | **`0.46562`** 🏆 | **🏆 ALL-TIME PERSONAL BEST! (`submission_upgrade_sota60_anchor40.csv`)** |
+| **V10 Golden Tri-Blend (55% V10 + 35% Anc + 10% PB)** | **0.35280** | **Ready to Submit** 🚀 | **👑 PRIME SUBMISSION CANDIDATE (Volume 11.598M, Zeros 40.41%)** |
+| **V10 Blend (60% SOTA + 40% Anc)** | **0.35351** | **Ready to Submit** 🚀 | **Direct Upgrade to PB 0.46562 with Scale-Aware Hurdle + Day-8 Reset** |
+| **Upgrade SOTA 60 / Anchor 40 (ZP Blend)** | **0.35410** | **`0.46562`** 🏆 | **🏆 CURRENT ALL-TIME PERSONAL BEST! (`submission_upgrade_sota60_anchor40.csv`)** |
 | Roadmap Clean SOTA (Pure V9) | 0.34826 | `0.46832` 🚀 | Verified Single Model SOTA |
 | Podium Roadmap Blend | 0.35820 | `0.46888` | Intermediate Blend |
 | Podium 98F Blend (80% Anchor + 20% 98F) | 0.36210 | `0.46890` | Previous Verified PB |
