@@ -155,24 +155,27 @@ flowchart LR
 | **V10 SCALE-AWARE SOTA ENGINE (GPU)** | **Two-Tier Thresholding ($s_p \le 15$ vs $s_p > 15$) + Sample-Weighted Loss ($1/\sqrt{s_p}$) + Day-8 Reset & Weekend-2 Rebound Features** | **Local OOF: `0.35351`** *(AUC: **0.9398**)* | **Next-Gen SOTA Engine**: Memangkas runaway error di bioskop kecil ($s_p \le 15$), zero-rate stabil, 100% GPU training di RTX 3050 (404s). Model weights 53.0 MB. File: `submissions/submission_v10_scale_aware_pure.csv`. |
 | **V11 DEEP SOTA ENGINE (2ND PLACE ADOPTION)** | **Deep Tree Representation (Depth 7, lr 0.022, 650-750 trees) + 117 Fitur Rekonstruksi Kapasitas Domain (`implied_total_capacity`, `slack_seats`, `city_dominance`) + Two-Tier Scale Hurdle** | **Local OOF: `0.35313`** 🚀 *(AUC: **0.9414**)* | **🏆 NEW LOWEST LOCAL OOF SOTA!** Terinspirasi filosofi Kaggle 2nd place ("A better model, not just a better blender"). Rekonstruksi kapasitas implisit & kursi kosong. Volume 11.466M tiket (zeros 36.55%). File: `submissions/submission_deep_sota_v11_pure.csv`. |
 | **V11 DEEP GOLDEN TRI-BLEND** | **55% V11 Deep SOTA + 35% Anchor Hurdle + 10% PB 0.46562 (Zero-Preserved)** | **Local OOF: `0.35240`**<br/>**Kaggle Public: `0.46605`** 🚀 | **Podium Verified**: Memperbaiki skor dari V10 (0.46665 -> 0.46605). Volume presisi 11.595M tiket (+5.6k dari PB), zeros 40.41%. File: `submissions/submission_deep_sota_v11_golden_tri.csv`. |
-| **MASTER CHAMPION 70/30 BLEND** | **70% PB 0.46562 + 30% V11 Deep Golden Tri 0.46605 (Zero-Preserved)** | **Local OOF: `0.35210`**<br/>**Kaggle Public: `0.46524`** 🏆 | **👑 NEW ALL-TIME PERSONAL BEST!** Mengombinasikan stabilitas PB 0.46562 dengan ketajaman V11 Deep SOTA. Volume 11.591M tiket, zeros persis **40.41% (29.341 baris)**. File: `submissions/submission_master_champion_70_30.csv`. |
-| **DAY-CALIBRATED MASTER BLEND** | **D4-D8: 60% V11 + 40% PB \| D9-D10: 100% PB (Zero-Preserved)** | **Target: < 0.464** 🎯 | **Dinamika Kalender Khusus**: Memanfaatkan ketajaman rekonstruksi V11 di D4-D8 sambil mencegah over-surge di D9-D10. File: `submissions/submission_day_calibrated_master.csv`. |
+| **MASTER CHAMPION 70/30 BLEND** | **70% PB 0.46562 + 30% V11 Deep Golden Tri 0.46605 (Zero-Preserved)** | **Local OOF: `0.35210`**<br/>**Kaggle Public: `0.46524`** 🏆 | **Previous PB**: Volume 11.591M tiket, zeros persis **40.41% (29.341 baris)**. File: `submissions/submission_master_champion_70_30.csv`. |
+| **UPGRADE #1: CULTURAL AFFINITY SOTA** | **Genre x City & Cinema Bayes Multipliers + 5-Fold GroupKFold SWA ResNet-1D & GBDT** | **Local OOF: `0.34120`** 🏆 | Rekor pertama tembus sub-0.380 pada Day 4 (`0.3796`). File: `submissions/submission_upgrade1_champion_master_70_30.csv`. |
+| **STAR POWER CHAMPION MASTER 70/30** | **70% PB 0.46524 + 30% Star Power x WOM Dynamics SOTA (Zero-Preserved)** | **Local OOF: `0.34048`**<br/>**Kaggle Public: `0.46432`** 🏆 | **👑 NEW ALL-TIME PERSONAL BEST! (0.46432)** Memecahkan rekor Kaggle PB 0.46524 (-0.00092 drop)! Volume 11.142M tiket, zeros persis **40.41% (29.341 baris)**. File: `submissions/submission_star_power_champion_master_70_30.csv`. |
 
 > [!TIP]
 > **Riwayat Hasil Submisi Kaggle Terverifikasi:**
-> - `submission_master_champion_70_30.csv`        : **`0.46524`** 🏆 (NEW ALL-TIME PERSONAL BEST!)
-> - `submission_upgrade_sota60_anchor40.csv`      : **`0.46562`** (Previous Best)
-> - `submission_deep_sota_v11_golden_tri.csv`     : **`0.46605`** 🚀 (Deep SOTA + Domain Reconstruction)
-> - `submission_upgrade_v10_golden_tri_blend.csv` : **`0.46665`** (V10 Scale-Aware Tri-Blend)
-> - `submission_clean_sota_roadmap.csv`           : **`0.46832`** (Single Model Pure SOTA)
-> - `submission_podium_roadmap_blend.csv`         : **`0.46888`**
+> - `submission_star_power_champion_master_70_30.csv` : **`0.46432`** 🏆 (NEW ALL-TIME PERSONAL BEST!)
+> - `submission_master_champion_70_30.csv`            : **`0.46524`** (Previous PB)
+> - `submission_upgrade_sota60_anchor40.csv`          : **`0.46562`**
+> - `submission_deep_sota_v11_golden_tri.csv`         : **`0.46605`** 🚀 (Deep SOTA + Domain Reconstruction)
+> - `submission_upgrade_v10_golden_tri_blend.csv`     : **`0.46665`** (V10 Scale-Aware Tri-Blend)
+> - `submission_clean_sota_roadmap.csv`               : **`0.46832`** (Single Model Pure SOTA)
+> - `submission_podium_roadmap_blend.csv`             : **`0.46888`**
 > - `submission_podium_blend_anchor_80_90f_20_zp.csv` : **`0.46890`**
-> - `submission_hurdle_top.csv`                   : **`0.47303`** (Initial Anchor)
-> - `submission_clean_consecutive_master.csv`     : **`0.48908`** (Over-Shrunk Baseline)
+> - `submission_hurdle_top.csv`                       : **`0.47303`** (Initial Anchor)
+> - `submission_clean_consecutive_master.csv`         : **`0.48908`** (Over-Shrunk Baseline)
 > 
-> **Kandidat Juara Berikutnya (Siap Dieksekusi):**
-> 1. `submission_day_calibrated_master.csv` (11.580M tiket, 40.41% zeros) — **Fokus Presisi D4-D8** 🎯
-> 2. `submission_master_champion_80_20.csv` (11.590M tiket, 40.41% zeros) — **Ultra-Conservative Blend**
+> **Kandidat Juara Berikutnya (Berbasis PB 0.46432, Invariant Zero Preserved):**
+> 1. `submission_pb46432_push_80_20.csv` (10.933M tiket, 40.41% zeros) — **Konservatif & Sangat Stabil** 🎯
+> 2. `submission_pb46432_push_70_30.csv` (10.828M tiket, 40.41% zeros) — **Optimal Gradient Step** 🚀
+> 3. `submission_pb46432_golden_hybrid.csv` (10.819M tiket, 40.41% zeros) — **Triple Hybrid (+ SWA ResNet)**
 
 
 
