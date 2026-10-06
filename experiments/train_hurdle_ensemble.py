@@ -1,3 +1,9 @@
+import sys, os
+_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+if _ROOT not in sys.path:
+    sys.path.insert(0, _ROOT)
+os.chdir(_ROOT)
+
 """
 JOINTS X INSPIRE 2026 - Master Two-Stage Hurdle Ensemble Pipeline
 Stage 1: Cinema Survival / Screening Classification (LightGBM + CatBoost)

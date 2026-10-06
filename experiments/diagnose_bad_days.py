@@ -1,3 +1,9 @@
+import sys, os
+_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+if _ROOT not in sys.path:
+    sys.path.insert(0, _ROOT)
+os.chdir(_ROOT)
+
 """
 Deep Diagnostic Script for Bad MASE Segments in Plan B:
 - Day 6 (Weekend): MASE 1.20948 (1,096 rows)

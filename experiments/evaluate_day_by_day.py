@@ -1,3 +1,9 @@
+import sys, os
+_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+if _ROOT not in sys.path:
+    sys.path.insert(0, _ROOT)
+os.chdir(_ROOT)
+
 """
 Detailed Day-by-Day Evaluation of the 98-Feature SOTA Pipeline (Days 4 - 10)
 """

@@ -1,3 +1,9 @@
+import sys, os
+_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+if _ROOT not in sys.path:
+    sys.path.insert(0, _ROOT)
+os.chdir(_ROOT)
+
 """
 JOINTS X INSPIRE 2026 - Comprehensive Two-Stage System with 5-Pillar Features
 Evaluates 5-Fold GroupKFold CV on Ground Truth Validation Set.

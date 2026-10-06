@@ -1,3 +1,9 @@
+import sys, os
+_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+if _ROOT not in sys.path:
+    sys.path.insert(0, _ROOT)
+os.chdir(_ROOT)
+
 """
 JOINTS X INSPIRE 2026 - ULTIMATE GACOR SUBMISSION
 Refining the proven 0.47303 Champion Hurdle model:

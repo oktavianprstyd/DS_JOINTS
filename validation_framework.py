@@ -172,7 +172,10 @@ def fit_context_priors(train_hist_part, train_targ_part, movies_df=None):
     scale_df = (train_hist_part.groupby(['movie_title', 'cinema_ids'])['total_ticket'].sum() / 3.0).clip(lower=1.0).rename('scale').reset_index()
     first_dow = pd.to_datetime(train_hist_part.groupby('movie_title')['date_show'].min()).dt.dayofweek.rename('opening_dow').reset_index()
 
-    targ_eval = train_targ_part.merge(scale_df, on=['movie_title', 'cinema_ids'], how='inner')
+    if 'scale' in train_targ_part.columns:
+        targ_eval = train_targ_part.copy()
+    else:
+        targ_eval = train_targ_part.merge(scale_df, on=['movie_title', 'cinema_ids'], how='inner')
     targ_eval = targ_eval.merge(first_dow, on='movie_title', how='inner')
     targ_eval['target_z'] = targ_eval['total_ticket'] / targ_eval['scale']
 

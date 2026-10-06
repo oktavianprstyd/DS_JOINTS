@@ -1,3 +1,9 @@
+import sys, os
+_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+if _ROOT not in sys.path:
+    sys.path.insert(0, _ROOT)
+os.chdir(_ROOT)
+
 """
 Evaluate Fix 3 (Volume Rescale) and Fix 4 (Smart Blend with Anchor 0.47303)
 Checks ticket volume, zero-ticket percentage, cinema coverage, and comparisons.

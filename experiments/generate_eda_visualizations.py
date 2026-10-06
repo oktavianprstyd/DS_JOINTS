@@ -1,3 +1,9 @@
+import sys, os
+_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+if _ROOT not in sys.path:
+    sys.path.insert(0, _ROOT)
+os.chdir(_ROOT)
+
 """
 Publication-Grade EDA Visualization Generator for JOINTS X INSPIRE 2026.
 Produces high-resolution, beautifully annotated figures for notebook & jury presentation.

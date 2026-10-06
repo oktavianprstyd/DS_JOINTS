@@ -1,3 +1,9 @@
+import sys, os
+_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+if _ROOT not in sys.path:
+    sys.path.insert(0, _ROOT)
+os.chdir(_ROOT)
+
 """
 Test PyTorch Tab-ResNet on the 214-movie unbiased dataset.
 Evaluate if blending it with LightGBM and CatBoost lowers MASE below 0.56232.

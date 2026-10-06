@@ -1,3 +1,9 @@
+import sys, os
+_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+if _ROOT not in sys.path:
+    sys.path.insert(0, _ROOT)
+os.chdir(_ROOT)
+
 """
 Experiment: PyTorch Tab-ResNet with Empirical Prior Residual Connection & Direct L1Loss
 Target: Beat 0.49654 standalone MASE and lower quad ensemble error further.

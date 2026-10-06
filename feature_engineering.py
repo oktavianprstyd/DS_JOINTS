@@ -172,6 +172,17 @@ def build_features(history_df, target_df, movies_df, holidays_df, prices_df,
     pair_stats['tps_mean'] = (pair_stats['tps_d1'] + pair_stats['tps_d2'] + pair_stats['tps_d3']) / 3.0
     pair_stats['tps_trend'] = pair_stats['tps_d3'] - pair_stats['tps_d1']
 
+    # ----------------------------------------------------
+    # MANAGERIAL RETENTION & FLOP / SELLOUT DYNAMICS
+    # ----------------------------------------------------
+    pair_stats['is_flop'] = (pair_stats['occ_mean'] < 15.0).astype(int)
+    pair_stats['is_deep_flop'] = (pair_stats['occ_mean'] < 10.0).astype(int)
+    pair_stats['is_sellout'] = (pair_stats['occ_max'] >= 70.0).astype(int)
+    pair_stats['show_cut_severity'] = (np.maximum(pair_stats['show_d1'] - pair_stats['show_d3'], 0) / np.maximum(pair_stats['show_d1'], 1.0)).astype(np.float32)
+    pair_stats['show_growth'] = ((pair_stats['show_d3'] - pair_stats['show_d1']) / np.maximum(pair_stats['show_d1'], 1.0)).astype(np.float32)
+    pair_stats['tps_growth_d3_d1'] = ((pair_stats['tps_d3'] + 0.1) / (pair_stats['tps_d1'] + 0.1)).astype(np.float32)
+    pair_stats['opening_capacity_saturation'] = (pair_stats['daily_scale'] / np.maximum(pair_stats['implied_total_capacity'], 1.0)).clip(upper=1.5).astype(np.float32)
+
 
     # Nationwide stats
     nat_stats = h.groupby('movie_title').agg(
@@ -196,7 +207,8 @@ def build_features(history_df, target_df, movies_df, holidays_df, prices_df,
     first_date_map['opening_dow'] = first_date_map['opening_date'].dt.dayofweek
 
     # Base merge
-    df = t.merge(pair_stats, on=['movie_title', 'cinema_ids'], how='left')
+    t_clean = t.drop(columns=['scale'], errors='ignore')
+    df = t_clean.merge(pair_stats, on=['movie_title', 'cinema_ids'], how='left')
     df = df.merge(nat_stats, on='movie_title', how='left')
     df = df.merge(first_date_map, on='movie_title', how='left')
 
@@ -222,6 +234,12 @@ def build_features(history_df, target_df, movies_df, holidays_df, prices_df,
     df['dropout_risk_score'] = (1.0 - (df['occ_mean'] / 100.0)).clip(lower=0.0) * (df['day_num_clipped'] >= 7).astype(int)
     df['weekend2_rebound'] = df['is_weekend'] * (df['day_num_clipped'] >= 8).astype(int) * (df['ratio_d3_d1'] > 0.90).astype(int)
     df['small_screen_risk'] = (df['scale'] <= 15.0).astype(int)
+
+    # Managerial hazard & retention dynamics
+    df['flop_day_hazard'] = (df['is_flop'] * (df['day_num_clipped'] - 3)).astype(np.float32)
+    df['deep_flop_day_hazard'] = (df['is_deep_flop'] * (df['day_num_clipped'] - 3)).astype(np.float32)
+    df['sellout_retention_shield'] = (df['is_sellout'] / np.sqrt(df['day_num_clipped'])).astype(np.float32)
+    df['occ_decay_interaction'] = (df['occ_mean'] / np.sqrt(df['day_num_clipped'])).astype(np.float32)
 
 
     # Formats
@@ -265,6 +283,8 @@ def build_features(history_df, target_df, movies_df, holidays_df, prices_df,
     df['has_comedy'] = df['genre'].str.contains('Comedy', case=False, na=False).astype(int)
     df['has_animation'] = df['genre'].str.contains('Animation', case=False, na=False).astype(int)
     df['age_rating'] = df['age_rating'].fillna('Semua Umur')
+    df['is_family_friendly'] = (df['age_rating'] == 'Semua Umur').astype(int)
+    df['is_adult_rating'] = df['age_rating'].isin(['Dewasa', 'Dewasa 21']).astype(int)
     df['casts_count'] = df['casts'].apply(lambda x: len(str(x).split(',')) if pd.notnull(x) else 0)
 
     # ----------------------------------------------------
@@ -298,6 +318,29 @@ def build_features(history_df, target_df, movies_df, holidays_df, prices_df,
     hol_copy['is_wknd'] = hol_copy['day_tipe'].isin(['weekend']).astype(int)
     hol_copy['eff_off'] = ((hol_copy['is_holiday'] == 1) | (hol_copy['is_wknd'] == 1)).astype(int)
 
+    # Holiday Tiers & Seasonal Blockbuster Windows
+    def get_holiday_tier(row):
+        h_type = str(row.get('holiday_tipe', '')).lower()
+        if h_type != 'holiday':
+            return 0
+        h_name = str(row.get('holiday_name', '')).lower()
+        if any(k in h_name for k in ['idulfitri', 'lebaran', 'natal', 'tahun baru masehi']):
+            return 3 # Mega holiday
+        elif any(k in h_name for k in ['wafat yesus', 'paskah', 'maulid', 'buruh', 'kemerdekaan', 'proklamasi']):
+            return 2 # Major national holiday
+        else:
+            return 1 # Standard holiday
+
+    hol_copy['holiday_tier'] = hol_copy.apply(get_holiday_tier, axis=1)
+    hol_copy['is_mega_holiday'] = (hol_copy['holiday_tier'] == 3).astype(int)
+    hol_copy['is_major_holiday'] = (hol_copy['holiday_tier'] >= 2).astype(int)
+
+    # Seasonality windows (Lebaran March/April & Nataru Dec/Jan)
+    m = hol_copy['date_show'].dt.month
+    d = hol_copy['date_show'].dt.day
+    hol_copy['holiday_lebaran_season'] = (((m == 3) & (d >= 18)) | ((m == 4) & (d <= 7))).astype(int)
+    hol_copy['holiday_nataru_season'] = (((m == 12) & (d >= 23)) | ((m == 1) & (d <= 3))).astype(int)
+
     # Lead and lag holidays
     hol_copy['is_next_day_holiday'] = hol_copy['is_holiday'].shift(-1).fillna(0).astype(int)
     hol_copy['is_prev_day_holiday'] = hol_copy['is_holiday'].shift(1).fillna(0).astype(int)
@@ -308,17 +351,52 @@ def build_features(history_df, target_df, movies_df, holidays_df, prices_df,
     hol_copy['long_weekend_span'] = (hol_copy.groupby(blocks)['eff_off'].transform('sum') * s).astype(int)
     hol_copy['is_bridge_day'] = ((hol_copy['eff_off'] == 0) & (hol_copy['is_next_day_holiday'] == 1) & (hol_copy['date_show'].dt.dayofweek == 4)).astype(int)
 
-    cal_cols = ['date_show', 'day_tipe', 'is_holiday', 'is_next_day_holiday', 'is_prev_day_holiday', 'long_weekend_span', 'is_bridge_day']
+    cal_cols = [
+        'date_show', 'day_tipe', 'is_holiday', 'is_next_day_holiday', 'is_prev_day_holiday',
+        'long_weekend_span', 'is_bridge_day', 'holiday_tier', 'is_mega_holiday',
+        'is_major_holiday', 'holiday_lebaran_season', 'holiday_nataru_season'
+    ]
     df = df.merge(hol_copy[cal_cols], on='date_show', how='left')
     df['is_holiday'] = df['is_holiday'].fillna(0).astype(int)
     df['is_next_day_holiday'] = df['is_next_day_holiday'].fillna(0).astype(int)
     df['is_prev_day_holiday'] = df['is_prev_day_holiday'].fillna(0).astype(int)
     df['long_weekend_span'] = df['long_weekend_span'].fillna(1).astype(int)
     df['is_bridge_day'] = df['is_bridge_day'].fillna(0).astype(int)
+    df['holiday_tier'] = df['holiday_tier'].fillna(0).astype(int)
+    df['is_mega_holiday'] = df['is_mega_holiday'].fillna(0).astype(int)
+    df['is_major_holiday'] = df['is_major_holiday'].fillna(0).astype(int)
+    df['holiday_lebaran_season'] = df['holiday_lebaran_season'].fillna(0).astype(int)
+    df['holiday_nataru_season'] = df['holiday_nataru_season'].fillna(0).astype(int)
     df['effective_weekend'] = ((df['is_weekend'] == 1) | (df['is_holiday'] == 1)).astype(int)
 
-    # Ticket prices
+    # Audience & Age Rating Interactions
+    df['family_sunday_boost'] = (df['is_family_friendly'] * df['is_sunday']).astype(np.float32)
+    df['family_holiday_boost'] = (df['is_family_friendly'] * df['is_major_holiday']).astype(np.float32)
+    df['adult_friday_boost'] = (df['is_adult_rating'] * df['is_friday']).astype(np.float32)
+    df['adult_saturday_boost'] = (df['is_adult_rating'] * df['is_saturday']).astype(np.float32)
+
+    # Ticket prices & Surcharge Elasticity
     p_df = prices_df.copy()
+    p_piv = p_df.pivot(index='city_name', columns='price_day', values='ceil').reset_index()
+    if 'Weekend' in p_piv.columns and 'Weekday' in p_piv.columns:
+        p_piv['weekend_surcharge_pct'] = ((p_piv['Weekend'] - p_piv['Weekday']) / p_piv['Weekday']).astype(np.float32)
+    else:
+        p_piv['weekend_surcharge_pct'] = 0.25
+    if 'Friday' in p_piv.columns and 'Weekday' in p_piv.columns:
+        p_piv['friday_surcharge_pct'] = ((p_piv['Friday'] - p_piv['Weekday']) / p_piv['Weekday']).astype(np.float32)
+    else:
+        p_piv['friday_surcharge_pct'] = 0.15
+    if 'Weekday' in p_piv.columns:
+        p_piv['city_price_tier'] = pd.qcut(p_piv['Weekday'], q=3, labels=[1, 2, 3]).astype(int)
+    else:
+        p_piv['city_price_tier'] = 2
+
+    price_cols_to_merge = ['city_name', 'weekend_surcharge_pct', 'friday_surcharge_pct', 'city_price_tier']
+    df = df.merge(p_piv[price_cols_to_merge], on='city_name', how='left')
+    df['weekend_surcharge_pct'] = df['weekend_surcharge_pct'].fillna(0.25).astype(np.float32)
+    df['friday_surcharge_pct'] = df['friday_surcharge_pct'].fillna(0.15).astype(np.float32)
+    df['city_price_tier'] = df['city_price_tier'].fillna(2).astype(np.int32)
+
     def get_price_day(row):
         if row['effective_weekend'] == 1:
             return 'Weekend'
@@ -329,6 +407,7 @@ def build_features(history_df, target_df, movies_df, holidays_df, prices_df,
     df['price_day'] = df.apply(get_price_day, axis=1)
     df = df.merge(p_df, on=['city_name', 'price_day'], how='left')
     df['ceil'] = df['ceil'].fillna(df['ceil'].median())
+    df['monetary_scale'] = ((df['scale'] * df['ceil']) / 1000.0).astype(np.float32)
 
     # Transitions & Decays
     df['dow_pair'] = df['opening_dow'].astype(str) + '_' + df['day_of_week'].astype(str)
@@ -339,6 +418,7 @@ def build_features(history_df, target_df, movies_df, holidays_df, prices_df,
 
     # Interaction of trajectory and decay curve
     df['projected_decay_rate'] = df['ratio_d3_d1'] * df['decay_curve']
+    df['adult_weekday_penalty'] = (df['is_adult_rating'] * (1 - df['effective_weekend']) * df['decay_curve']).astype(np.float32)
 
     # ----------------------------------------------------
     # STAR POWER x WOM & CALENDAR DYNAMICS
