@@ -1,11 +1,11 @@
 # 📋 PROBLEM STATEMENT, PROGRESS & BOTTLENECK ANALYSIS
 ## Data Science Competition — JOINTS X INSPIRE UGM 2026
 **Tim**: JARVIS  
-**Terakhir Diperbarui**: 05 Oktober 2026, 18:50 WIB  
-**Status Personal Best (PB)**: Public Leaderboard **`0.46376`** 🏆 ([`submissions/Final_B_Golden_Vertex.csv`](file:///C:/Users/oktav/BOT_clean/JOINTS/jarvis/submissions/Final_B_Golden_Vertex.csv))  
+**Terakhir Diperbarui**: 10 Oktober 2026, 21:51 WIB  
+**Status Personal Best (PB)**: Public Leaderboard **`0.46332`** 🏆 ([`submissions/SUBMISSION_TRI_PARADIGM_MASTER_SOTA.csv`](file:///C:/Users/oktav/BOT_clean/Kuliah/JOINTS/jarvis/submissions/SUBMISSION_TRI_PARADIGM_MASTER_SOTA.csv))  
 **All-Time Lowest Local OOF**: **`0.34002`** 🏆 (Managerial 5-Pillar Record SOTA)  
-**Batas Akhir Pengumpulan**: 13 Oktober 2026, 23:59 WIB (*8 Hari Tersisa*)  
-**Batas Ukuran Submission ZIP**: Maksimal 200 MB (*Status saat ini: **13.86 MB** dalam [`jarvis.zip`](file:///C:/Users/oktav/BOT_clean/JOINTS/jarvis/jarvis.zip)*)
+**Batas Akhir Pengumpulan**: 13 Oktober 2026, 23:59 WIB (*3 Hari Tersisa*)  
+**Batas Ukuran Submission ZIP**: Maksimal 200 MB (*Status saat ini: **14.5 MB** dalam [`jarvis.zip`](file:///C:/Users/oktav/BOT_clean/Kuliah/JOINTS/jarvis/jarvis.zip)*)
 
 ---
 

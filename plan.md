@@ -1,14 +1,14 @@
 # 🗺️ PLAN.MD — Rencana Upgrade & Optimasi Lanjutan JOINTS X INSPIRE 2026
-**Terakhir Diperbarui**: 05 Oktober 2026 | **Target Skor Kaggle**: ≤ 0.461xx (Podium Top 3 / Juara 1)  
-**Status Personal Best (PB) Terkini**: Public Leaderboard **`0.46376`** 🏆 (`Final_B_Golden_Vertex.csv`)  
+**Terakhir Diperbarui**: 10 Oktober 2026 | **Target Skor Kaggle**: ≤ 0.461xx (Podium Top 3 / Juara 1)  
+**Status Personal Best (PB) Terkini**: Public Leaderboard **`0.46332`** 🏆 ([`SUBMISSION_TRI_PARADIGM_MASTER_SOTA.csv`](file:///C:/Users/oktav/BOT_clean/Kuliah/JOINTS/jarvis/submissions/SUBMISSION_TRI_PARADIGM_MASTER_SOTA.csv))  
 **All-Time Lowest Local OOF Record**: **`0.34002`** 🏆 (Managerial 5-Pillar Record SOTA)  
-**Batas Akhir Pengumpulan**: **13 Oktober 2026 (23:59 WIB)** — *8 Hari Tersisa*
+**Batas Akhir Pengumpulan**: **13 Oktober 2026 (23:59 WIB)** — *3 Hari Tersisa*
 
 ---
 
 > [!IMPORTANT]
 > **Aturan Mutlak & Invariant Solusi Jarvis:**
-> 1. **100% GPU Accelerated**: PyTorch CUDA, XGBoost `device='cuda'`, CatBoost `task_type='GPU'`.
+> 1. **100% GPU Accelerated**: PyTorch CUDA, XGBoost `device='cuda'`, CatBoost `task_type='GPU'`, Keras 3 with PyTorch Backend.
 > 2. **Reproducibility**: `SEED = 2026` / `random_state = 2026` pada seluruh pipeline.
 > 3. **The Holy Grail Zero Mask**: **29.341 angka nol (40.41%)** wajib 100% identik di setiap file submission. Optimasi murni pada 43.270 baris aktif.
 > 4. **The Golden Vertex Volume**: Total volume tiket nasional wajib terkunci di interval parabola optimal **11.131.000 s.d. 11.142.743 tiket** (Volume Drift = 0%).
@@ -20,9 +20,9 @@
 
 | Model / Eksperimen | Arsitektur & Inovasi Fitur | Local OOF MASE | Kaggle Public LB | Volume Tiket | Status Submission |
 | :--- | :--- | :---: | :---: | :---: | :--- |
-| **Final B Golden Vertex** | **85% PB 0.46432 + 15% Sprint v3 SOTA (Plateau Calibrated)** | **0.34577** | **`0.46376`** 🏆 | **11.142M** | **👑 NEW ALL-TIME PERSONAL BEST!** |
-| **Star Power Champion Master 70/30** | 70% PB 0.46524 + 30% Star Power x Cultural Affinity | 0.34048 | `0.46432` | 11.142M | Previous Personal Best |
-| **Quantile Nelder PB 70/30** | 70% PB 0.46432 + 30% Quantile GBDT ($\tau=0.45$) | 0.34305 | `0.46469` | 10.84M | Volume underpredict -307k |
+| **Tri-Paradigm Master SOTA** | **85% PB + 7.5% Chris Chen GBDT + 7.5% Keras Seq2Seq** | **0.34220** | **`0.46332`** 🏆 | **11.142M** | **👑 NEW ALL-TIME PERSONAL BEST!** |
+| **Candidate C Surgical Clamped** | PB 0.46376 + Micro-Clamping $z \le 3.5$ on $s_p \le 15$ | 0.34045 | `0.46359` | 11.142M | Previous PB |
+| **Final B Golden Vertex** | 85% PB 0.46432 + 15% Sprint v3 SOTA (Plateau Calibrated) | 0.34577 | `0.46376` | 11.142M | Benchmark PB |
 | **Master Champion 70/30** | 70% PB 0.46562 + 30% V11 Golden Tri | 0.35210 | `0.46524` | 11.59M | Multi-model blend |
 | **Upgrade SOTA 60 / Anchor 40** | Zero-Preserved Blend V9 + Anchor | 0.35410 | `0.46562` | 11.72M | Penembus tier 0.465 |
 | **Stratified 50/50 Transition** | 50% PB + 50% Scale-Stratified SOTA (Hurdle cut penalty) | 0.34810 | `0.46654` | 11.142M | Diagnostics: 3,088 active rows halved |
