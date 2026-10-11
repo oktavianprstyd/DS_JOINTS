@@ -19,8 +19,9 @@
 ## 📊 1. Matriks Rekor Eksperimen & Baseline Terkini
 
 | Model / Eksperimen | Arsitektur & Inovasi Fitur | Local OOF MASE | Kaggle Public LB | Volume Tiket | Status Submission |
-| :--- | :--- | :---: | :---: | :---: | :--- |
-| **Tri-Paradigm Master SOTA** | **85% PB + 7.5% Chris Chen GBDT + 7.5% Keras Seq2Seq** | **0.34220** | **`0.46332`** 🏆 | **11.142M** | **👑 NEW ALL-TIME PERSONAL BEST!** |
+| **Quad-Paradigm Master Champion** | **80% PB + 7% GBDT + 7% Seq2Seq + 6% HF Temporal Transformer** | **0.34150** | *Siap Submit* 🎯 | **11.142M** | **👑 NEW MULTI-PARADIGM CHAMPION** |
+| **HuggingFace Temporal Transformer** | **90% PB + 10% HF Temporal Transformer (GRN + Cross-Attention)** | **0.35308** | *Siap Submit* 🎯 | **11.142M** | **Single DL Model Checkpoint 2.39 MB** |
+| **Tri-Paradigm Master SOTA** | **85% PB + 7.5% Chris Chen GBDT + 7.5% Keras Seq2Seq** | **0.34220** | **`0.46332`** 🏆 | **11.142M** | **👑 CURRENT PUBLIC LB PERSONAL BEST!** |
 | **Candidate C Surgical Clamped** | PB 0.46376 + Micro-Clamping $z \le 3.5$ on $s_p \le 15$ | 0.34045 | `0.46359` | 11.142M | Previous PB |
 | **Final B Golden Vertex** | 85% PB 0.46432 + 15% Sprint v3 SOTA (Plateau Calibrated) | 0.34577 | `0.46376` | 11.142M | Benchmark PB |
 | **Master Champion 70/30** | 70% PB 0.46562 + 30% V11 Golden Tri | 0.35210 | `0.46524` | 11.59M | Multi-model blend |
@@ -155,6 +156,25 @@ flowchart TD
   $$\text{Subject to:} \quad \sum_{i=1}^{N_{\text{test}}} \hat{y}_{\text{final}, i} \in [11.135.000, 11.142.743]$$
   $$\text{Subject to:} \quad \hat{y}_{\text{final}, i} = 0 \quad \forall i \in \text{ZeroMask}_{\text{Anchor}} \quad (29.341 \text{ baris})$$
 - **File Target**: `optimize_golden_vertex_blend.py`
+
+---
+
+### 🌟 UPGRADE 7: HuggingFace & PyTorch Temporal Transformer (STATUS: [SELESAI] ✅)
+*Multi-Horizon Cross-Attention Decoder + Gated Residual Networks (GRN) + Two-Head Hurdle.*
+
+- **Rasional**: Memanfaatkan representasi laten atensi temporal untuk memodelkan interaksi antara riwayat 3 hari awal rilis dengan kalender hari ke-4 s.d. 10 secara serentak.
+- **Arsitektur & Inovasi**:
+  - **Temporal Cross-Attention**: Query adalah embedding kalender 7 hari ke depan (D4-D10), sedangkan Key & Value adalah encoder kontekstual 3 hari riwayat (D1-D3).
+  - **Gated Residual Networks (GRN)**: Mengontrol aliran gradien dan seleksi fitur dinamis dari 38 kovariat statik (Entity embedding bioskop 16-D, kota 8-D, rasio momentum rilis, harga tiket, dan volume nasional).
+  - **Two-Head Hurdle Decoder**: Memisahkan estimasi probabilitas film aktif ($P(\text{aktif})$ via Sigmoid) dengan intensitas penjualan ($z = y / s_p$ via Softplus).
+  - **Optimization**: Dilatih menggunakan optimizer Ranger (`torch-optimizer`) dengan ReduceLROnPlateau dan early stopping.
+- **Hasil 5-Fold GroupKFold OOF MASE**: **`0.35308`** (Fold 3 tembus **0.26539**).
+- **Efisiensi Memori & Model Size**: Total bobot 5-fold hanya **2.39 MB** (sangat jauh di bawah batas regulasi 200 MB!).
+- **Kandidat Submisi Terverifikasi**:
+  - `submissions/SUBMISSION_HF_TRANSFORMER_SOTA_10.csv` (11,142,743 tiket, 29,341 zeros)
+  - `submissions/SUBMISSION_HF_TRANSFORMER_SMOOTH_05.csv` (11,142,743 tiket, 29,341 zeros)
+  - `submissions/SUBMISSION_HF_TRANSFORMER_BALANCED_15.csv` (11,142,743 tiket, 29,341 zeros)
+  - `submissions/SUBMISSION_QUAD_PARADIGM_SOTA.csv` (11,142,743 tiket, 29,341 zeros — 80% PB + 7% GBDT + 7% Seq2Seq + 6% HF Transformer)
 
 ---
 
