@@ -1,6 +1,6 @@
 # 🗺️ PLAN.MD — Rencana Upgrade & Optimasi Lanjutan JOINTS X INSPIRE 2026
-**Terakhir Diperbarui**: 11 Oktober 2026 | **Target Skor Kaggle**: ≤ 0.459xx (Podium Top 3 / Juara 1)  
-**Status Personal Best (PB) Terkini**: Public Leaderboard **`0.46011`** 🏆 ([`SUBMISSION_QUAD_PARADIGM_SOTA.csv`](file:///C:/Users/oktav/BOT_clean/Kuliah/JOINTS/jarvis/submissions/SUBMISSION_QUAD_PARADIGM_SOTA.csv))  
+**Terakhir Diperbarui**: 11 Oktober 2026 | **Target Skor Kaggle**: ≤ 0.450xx / 0.40xxx (Podium Top 3 / Juara 1)  
+**Status Personal Best (PB) Terkini**: Public Leaderboard **`0.45842`** 🏆 ([`SUBMISSION_PENTA_PARADIGM_CHAMPION.csv`](file:///C:/Users/oktav/BOT_clean/Kuliah/JOINTS/jarvis/submissions/SUBMISSION_PENTA_PARADIGM_CHAMPION.csv))  
 **All-Time Lowest Local OOF Record**: **`0.34002`** 🏆 (Managerial 5-Pillar Record SOTA)  
 **Batas Akhir Pengumpulan**: **13 Oktober 2026 (23:59 WIB)** — *2 Hari Tersisa*
 
@@ -20,11 +20,12 @@
 
 | Model / Eksperimen | Arsitektur & Inovasi Fitur | Local OOF MASE | Kaggle Public LB | Volume Tiket | Status Submission |
 | :--- | :--- | :---: | :---: | :---: | :--- |
-| **Penta-Paradigm Champion** | **80% PB 0.46011 + 8% Bagged Trans + 5% Seq2Seq + 4% GBDT + 3% Hurdle** | **0.34080** | *Siap Submit* 🎯 | **11.142M** | **👑 NEW APEX CANDIDATE** |
-| **Apex Transformer SOTA 10** | **90% PB 0.46011 + 10% 15-Model Bagged Transformer (3 Seeds)** | **0.34756** | *Siap Submit* 🎯 | **11.142M** | **Single DL Bagged Suite** |
-| **Balanced Diversity Apex** | **85% PB 0.46011 + 6% Bagged Trans + 5% Seq2Seq + 4% GBDT** | **0.34110** | *Siap Submit* 🎯 | **11.142M** | **Tri-Engine Orthogonal Apex** |
-| **Dual Neural Apex** | **80% PB 0.46011 + 10% Bagged Trans + 10% Keras Seq2Seq** | **0.34215** | *Siap Submit* 🎯 | **11.142M** | **Pure Dual-Neural Ensemble** |
-| **Quad-Paradigm Master SOTA** | **80% PB 0.46332 + 7% GBDT + 7% Seq2Seq + 6% HF Transformer** | **0.34150** | **`0.46011`** 🏆 | **11.142M** | **👑 CURRENT PUBLIC LB PERSONAL BEST!** |
+| **Hexa-Paradigm Apex Champion** | **78% PB 0.45842 + 7% Trans + 5% Seq2Seq + 5% SE-ResNet + 3% GBDT + 2% Hurdle** | **0.33980** | *Siap Submit Final* 🎯 | **11.142M** | **👑 ULTIMATE ALL-TIME APEX** |
+| **Deep Neural Trifecta Apex** | **80% PB 0.45842 + 8% Transformer + 6% Seq2Seq + 6% SE-ResNet-1D** | **0.34015** | *Siap Submit* 🎯 | **11.142M** | **Pure Tri-Neural SOTA** |
+| **Ultra Diversity 70/30 Apex** | **70% PB 0.45842 + 10% Trans + 7% Seq2Seq + 7% SE-ResNet + 4% GBDT + 2% Hurdle** | **0.33910** | *Siap Submit* 🎯 | **11.142M** | **Maximum Orthogonal Injection** |
+| **Conservative Surgical Apex** | **90% PB 0.45842 + 10% Hexa (Adaptive Micro-Clamp $z \le 3.0$)** | **0.34350** | *Siap Submit* 🎯 | **11.142M** | **Ultra-Safe Micro Precision** |
+| **Penta-Paradigm Champion** | **80% PB 0.46011 + 8% Bagged Trans + 5% Seq2Seq + 4% GBDT + 3% Hurdle** | **0.34080** | **`0.45842`** 🏆 | **11.142M** | **👑 CURRENT PUBLIC LB PERSONAL BEST!** |
+| **Quad-Paradigm Master SOTA** | **80% PB 0.46332 + 7% GBDT + 7% Seq2Seq + 6% HF Transformer** | **0.34150** | `0.46011` | **11.142M** | Previous PB (Tier 0.460) |
 | **Tri-Paradigm Master SOTA** | **85% PB + 7.5% Chris Chen GBDT + 7.5% Keras Seq2Seq** | **0.34220** | `0.46332` | **11.142M** | Previous PB (Tier 0.463) |
 | **Candidate C Surgical Clamped** | PB 0.46376 + Micro-Clamping $z \le 3.5$ on $s_p \le 15$ | 0.34045 | `0.46359` | 11.142M | Previous PB |
 | **Final B Golden Vertex** | 85% PB 0.46432 + 15% Sprint v3 SOTA (Plateau Calibrated) | 0.34577 | `0.46376` | 11.142M | Benchmark PB |
@@ -191,10 +192,26 @@ flowchart TD
   - **Multi-Seed Stability**: Dilatih pada 3 seed acak terpisah (`2026`, `42`, `123`) di 5-fold GroupKFold.
   - **Hasil Bagged OOF MASE**: Berhasil turun drastis dari `0.35308` (single seed) menjadi **`0.34756`** 🏆 (reduksi -0.00552 MASE).
 - **Kandidat Apex Submisi (Terkalibrasi Golden Vertex & Berakar pada PB 0.46011)**:
-  - `submissions/SUBMISSION_PENTA_PARADIGM_CHAMPION.csv` (80% PB 0.46011 + 8% Bagged Trans + 5% Seq2Seq + 4% GBDT + 3% Hurdle) — **Kandidat Utama Rekor Baru Sub-0.460**
+  - `submissions/SUBMISSION_PENTA_PARADIGM_CHAMPION.csv` (80% PB 0.46011 + 8% Bagged Trans + 5% Seq2Seq + 4% GBDT + 3% Hurdle -> Public LB **`0.45842`** 🏆)
   - `submissions/SUBMISSION_APEX_TRANSFORMER_SOTA_10.csv` (90% PB 0.46011 + 10% Bagged Trans)
   - `submissions/SUBMISSION_BALANCED_DIVERSITY_APEX.csv` (85% PB 0.46011 + 6% Bagged Trans + 5% Seq2Seq + 4% GBDT)
   - `submissions/SUBMISSION_DUAL_NEURAL_APEX.csv` (80% PB 0.46011 + 10% Bagged Trans + 10% Seq2Seq)
+
+---
+
+### 🌟 UPGRADE 9: SE-ResNet-1D Deep Temporal Network & Hexa-Paradigm Apex SOTA (STATUS: [SELESAI] ✅)
+*1D Convolutional Residual Network + Squeeze-and-Excitation (SEBlock1D) + Adaptive Scale-Stratified Micro-Clamping.*
+
+- **Rasional**: Melengkapi representasi global atensi (Transformer) dan sekuensial rekuren (LSTM) dengan konvolusi residual 1D multi-skala dan channel attention adaptif.
+- **Arsitektur & Inovasi**:
+  - **SE-ResNet-1D Backbone**: 2 blok residual 1D konvolusi untuk riwayat (D1-D3) dan 2 blok residual untuk kalender masa depan (D4-D10), diintegrasikan dengan Squeeze-and-Excitation channel gating.
+  - **OOF MASE Rekor Baru**: Berhasil mencetak Full OOF MASE **`0.34102`** (Fold 3 tembus **`0.26565`**, Fold 4 tembus **`0.29631`**)!
+  - **Adaptive Scale-Stratified Micro-Clamping**: Membatasi rasio $\hat{z} \le 3.0$ khusus pada bioskop mikro ($s_p \le 10$), mencegah lonjakan penalti MASE tanpa memengaruhi bioskop normal.
+- **Kandidat Apex Final Submisi (Berakar pada PB 0.45842)**:
+  - `submissions/SUBMISSION_HEXA_PARADIGM_APEX_CHAMPION.csv` (78% PB 0.45842 + 7% Trans + 5% Seq2Seq + 5% SE-ResNet + 3% GBDT + 2% Hurdle) — **👑 ULTIMATE SOTA SUBMISSION TARGET SUB-0.450 / 0.40XXX**
+  - `submissions/SUBMISSION_DEEP_NEURAL_TRIFECTA_APEX.csv` (80% PB 0.45842 + 8% Transformer + 6% Seq2Seq + 6% SE-ResNet-1D)
+  - `submissions/SUBMISSION_ULTRA_DIVERSITY_70_30_APEX.csv` (70% PB 0.45842 + 10% Trans + 7% Seq2Seq + 7% SE-ResNet + 4% GBDT + 2% Hurdle)
+  - `submissions/SUBMISSION_CONSERVATIVE_SURGICAL_APEX.csv` (90% PB 0.45842 + 10% Hexa)
 
 ---
 
