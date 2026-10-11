@@ -1,8 +1,8 @@
 # 🗺️ PLAN.MD — Rencana Upgrade & Optimasi Lanjutan JOINTS X INSPIRE 2026
-**Terakhir Diperbarui**: 10 Oktober 2026 | **Target Skor Kaggle**: ≤ 0.461xx (Podium Top 3 / Juara 1)  
-**Status Personal Best (PB) Terkini**: Public Leaderboard **`0.46332`** 🏆 ([`SUBMISSION_TRI_PARADIGM_MASTER_SOTA.csv`](file:///C:/Users/oktav/BOT_clean/Kuliah/JOINTS/jarvis/submissions/SUBMISSION_TRI_PARADIGM_MASTER_SOTA.csv))  
+**Terakhir Diperbarui**: 11 Oktober 2026 | **Target Skor Kaggle**: ≤ 0.459xx (Podium Top 3 / Juara 1)  
+**Status Personal Best (PB) Terkini**: Public Leaderboard **`0.46011`** 🏆 ([`SUBMISSION_QUAD_PARADIGM_SOTA.csv`](file:///C:/Users/oktav/BOT_clean/Kuliah/JOINTS/jarvis/submissions/SUBMISSION_QUAD_PARADIGM_SOTA.csv))  
 **All-Time Lowest Local OOF Record**: **`0.34002`** 🏆 (Managerial 5-Pillar Record SOTA)  
-**Batas Akhir Pengumpulan**: **13 Oktober 2026 (23:59 WIB)** — *3 Hari Tersisa*
+**Batas Akhir Pengumpulan**: **13 Oktober 2026 (23:59 WIB)** — *2 Hari Tersisa*
 
 ---
 
@@ -19,9 +19,13 @@
 ## 📊 1. Matriks Rekor Eksperimen & Baseline Terkini
 
 | Model / Eksperimen | Arsitektur & Inovasi Fitur | Local OOF MASE | Kaggle Public LB | Volume Tiket | Status Submission |
-| **Quad-Paradigm Master Champion** | **80% PB + 7% GBDT + 7% Seq2Seq + 6% HF Temporal Transformer** | **0.34150** | *Siap Submit* 🎯 | **11.142M** | **👑 NEW MULTI-PARADIGM CHAMPION** |
-| **HuggingFace Temporal Transformer** | **90% PB + 10% HF Temporal Transformer (GRN + Cross-Attention)** | **0.35308** | *Siap Submit* 🎯 | **11.142M** | **Single DL Model Checkpoint 2.39 MB** |
-| **Tri-Paradigm Master SOTA** | **85% PB + 7.5% Chris Chen GBDT + 7.5% Keras Seq2Seq** | **0.34220** | **`0.46332`** 🏆 | **11.142M** | **👑 CURRENT PUBLIC LB PERSONAL BEST!** |
+| :--- | :--- | :---: | :---: | :---: | :--- |
+| **Penta-Paradigm Champion** | **80% PB 0.46011 + 8% Bagged Trans + 5% Seq2Seq + 4% GBDT + 3% Hurdle** | **0.34080** | *Siap Submit* 🎯 | **11.142M** | **👑 NEW APEX CANDIDATE** |
+| **Apex Transformer SOTA 10** | **90% PB 0.46011 + 10% 15-Model Bagged Transformer (3 Seeds)** | **0.34756** | *Siap Submit* 🎯 | **11.142M** | **Single DL Bagged Suite** |
+| **Balanced Diversity Apex** | **85% PB 0.46011 + 6% Bagged Trans + 5% Seq2Seq + 4% GBDT** | **0.34110** | *Siap Submit* 🎯 | **11.142M** | **Tri-Engine Orthogonal Apex** |
+| **Dual Neural Apex** | **80% PB 0.46011 + 10% Bagged Trans + 10% Keras Seq2Seq** | **0.34215** | *Siap Submit* 🎯 | **11.142M** | **Pure Dual-Neural Ensemble** |
+| **Quad-Paradigm Master SOTA** | **80% PB 0.46332 + 7% GBDT + 7% Seq2Seq + 6% HF Transformer** | **0.34150** | **`0.46011`** 🏆 | **11.142M** | **👑 CURRENT PUBLIC LB PERSONAL BEST!** |
+| **Tri-Paradigm Master SOTA** | **85% PB + 7.5% Chris Chen GBDT + 7.5% Keras Seq2Seq** | **0.34220** | `0.46332` | **11.142M** | Previous PB (Tier 0.463) |
 | **Candidate C Surgical Clamped** | PB 0.46376 + Micro-Clamping $z \le 3.5$ on $s_p \le 15$ | 0.34045 | `0.46359` | 11.142M | Previous PB |
 | **Final B Golden Vertex** | 85% PB 0.46432 + 15% Sprint v3 SOTA (Plateau Calibrated) | 0.34577 | `0.46376` | 11.142M | Benchmark PB |
 | **Master Champion 70/30** | 70% PB 0.46562 + 30% V11 Golden Tri | 0.35210 | `0.46524` | 11.59M | Multi-model blend |
@@ -174,7 +178,23 @@ flowchart TD
   - `submissions/SUBMISSION_HF_TRANSFORMER_SOTA_10.csv` (11,142,743 tiket, 29,341 zeros)
   - `submissions/SUBMISSION_HF_TRANSFORMER_SMOOTH_05.csv` (11,142,743 tiket, 29,341 zeros)
   - `submissions/SUBMISSION_HF_TRANSFORMER_BALANCED_15.csv` (11,142,743 tiket, 29,341 zeros)
-  - `submissions/SUBMISSION_QUAD_PARADIGM_SOTA.csv` (11,142,743 tiket, 29,341 zeros — 80% PB + 7% GBDT + 7% Seq2Seq + 6% HF Transformer)
+  - `submissions/SUBMISSION_QUAD_PARADIGM_SOTA.csv` (11,142,743 tiket, 29,341 zeros — 80% PB + 7% GBDT + 7% Seq2Seq + 6% HF Transformer -> Public LB **`0.46011`** 🏆)
+
+---
+
+### 🌟 UPGRADE 8: Multi-Seed Temporal Transformer 15-Model Bagging Suite (STATUS: [SELESAI] ✅)
+*Ensemble 3 Seeds (2026, 42, 123) x 5-Fold GroupKFold + Expanded Latent Capacity (96-D / 6-Head Attention).*
+
+- **Rasional**: Meredam variansi stokastik bobot atensi temporal dan dropout neural network dengan bagging multi-seed lintas 15 model independen.
+- **Arsitektur & Inovasi**:
+  - **Expanded Latent Capacity**: `d_model = 96`, `nhead = 6`, `dim_feedforward = 192` untuk menangkap pola non-linear kalender masa depan yang lebih kompleks.
+  - **Multi-Seed Stability**: Dilatih pada 3 seed acak terpisah (`2026`, `42`, `123`) di 5-fold GroupKFold.
+  - **Hasil Bagged OOF MASE**: Berhasil turun drastis dari `0.35308` (single seed) menjadi **`0.34756`** 🏆 (reduksi -0.00552 MASE).
+- **Kandidat Apex Submisi (Terkalibrasi Golden Vertex & Berakar pada PB 0.46011)**:
+  - `submissions/SUBMISSION_PENTA_PARADIGM_CHAMPION.csv` (80% PB 0.46011 + 8% Bagged Trans + 5% Seq2Seq + 4% GBDT + 3% Hurdle) — **Kandidat Utama Rekor Baru Sub-0.460**
+  - `submissions/SUBMISSION_APEX_TRANSFORMER_SOTA_10.csv` (90% PB 0.46011 + 10% Bagged Trans)
+  - `submissions/SUBMISSION_BALANCED_DIVERSITY_APEX.csv` (85% PB 0.46011 + 6% Bagged Trans + 5% Seq2Seq + 4% GBDT)
+  - `submissions/SUBMISSION_DUAL_NEURAL_APEX.csv` (80% PB 0.46011 + 10% Bagged Trans + 10% Seq2Seq)
 
 ---
 
