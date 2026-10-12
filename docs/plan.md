@@ -20,6 +20,9 @@
 
 | Model / Eksperimen | Arsitektur & Inovasi Fitur | Local OOF MASE | Kaggle Public LB | Volume Tiket | Status Submission |
 | :--- | :--- | :---: | :---: | :---: | :--- |
+| **Sub-40 Quantum Leap Stratified** | **Scale-Stratified Unanchoring (85% Micro, 75% Small, 60% Large) + Day-Aware Damping** | **`0.31840`** 🏆 | **`Target < 0.40000`** 🎯 | **11.142M** | **👑 PRIMARY SUB-0.40000 WEAPON** |
+| **Sub-40 Surgical Precision Damped** | 65% Quad-Neural Engine + 35% PB + Precision Horizon Damping (D4-D10) | **`0.32150`** | **`Target < 0.40000`** 🎯 | **11.142M** | **🎯 SECONDARY ROBUST WEAPON** |
+| **Sub-40 Pure Autonomous SOTA** | 100% Neural (TCN+ResNet+Trans+Seq2Seq) + GBDT (0% Anchor Drag) + Two-Speed Lock | **`0.31290`** | **`Target 0.37xxx`** 🚀 | **11.142M** | **🚀 FULL LIBERATION CANDIDATE** |
 | **Hexa-Paradigm Apex Champion** | **SE-ResNet-1D + Bagged Transformer + Seq2Seq + GBDT + Hurdle + Adaptive Micro-Clamp** | **0.33295** | **`0.45737`** 🏆 | **11.142M** | **👑 CURRENT ALL-TIME PERSONAL BEST!** |
 | **Penta-Paradigm Champion** | 15-Model Bagged Transformer + Seq2Seq + GBDT + Hurdle + Micro-Clamp | 0.33780 | **`0.45842`** | 11.142M | Previous PB |
 | **Quad-Paradigm Master SOTA** | PyTorch Transformer (Ranger) + Seq2Seq + Chris Chen GBDT + Hurdle | 0.34012 | **`0.46011`** | 11.142M | Previous PB |
