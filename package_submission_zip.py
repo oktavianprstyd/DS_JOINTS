@@ -8,10 +8,8 @@ Packages [Nama Tim].zip according to Technical Meeting rules (Page 8):
 
 import os
 import sys
-import io
 import shutil
 import zipfile
-import pickle
 
 if hasattr(sys.stdout, 'reconfigure'):
     sys.stdout.reconfigure(encoding='utf-8')
@@ -21,8 +19,8 @@ def create_submission_package(team_name="jarvis"):
     print(f"[*] PACKAGING OFFICIAL SUBMISSION FOR TEAM: {team_name.upper()}")
     print("=" * 80)
 
-    notebook_source = "solution.ipynb"
-    weights_source = "weights/leak_free_hurdle_ensemble.pkl"
+    notebook_source = "jarvis.ipynb" if os.path.exists("jarvis.ipynb") else "solution.ipynb"
+    weights_source = "jarvis.pkl" if os.path.exists("jarvis.pkl") else "weights/jarvis.pkl"
 
     if not os.path.exists(notebook_source):
         raise FileNotFoundError(f"Notebook {notebook_source} not found!")
@@ -33,9 +31,11 @@ def create_submission_package(team_name="jarvis"):
     target_weights = f"{team_name}.pkl"
     target_zip = f"{team_name}.zip"
 
-    # Copy files with official naming
-    shutil.copyfile(notebook_source, target_nb)
-    shutil.copyfile(weights_source, target_weights)
+    # Copy files with official naming if not already identical
+    if os.path.abspath(notebook_source) != os.path.abspath(target_nb):
+        shutil.copyfile(notebook_source, target_nb)
+    if os.path.abspath(weights_source) != os.path.abspath(target_weights):
+        shutil.copyfile(weights_source, target_weights)
 
     weights_size_mb = os.path.getsize(target_weights) / (1024 * 1024)
     print(f"  • Notebook File: {target_nb} ({os.path.getsize(target_nb)/1024:.1f} KB)")
@@ -56,9 +56,13 @@ def create_submission_package(team_name="jarvis"):
     print(f"  * Size: {zip_size_mb:.2f} MB")
     print("=" * 80)
 
-    # Clean temporary uncompressed copies to keep folder neat
-    if os.path.exists(target_nb): os.remove(target_nb)
-    if os.path.exists(target_weights): os.remove(target_weights)
+    # Verify zip content
+    with zipfile.ZipFile(target_zip, 'r') as zf:
+        print("  * Verified contents inside ZIP:")
+        for info in zf.infolist():
+            print(f"    - {info.filename} ({info.file_size / (1024*1024):.2f} MB uncompressed)")
+
+    return target_zip
 
 if __name__ == '__main__':
     t_name = sys.argv[1] if len(sys.argv) > 1 else "jarvis"
