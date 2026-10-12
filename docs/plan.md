@@ -20,8 +20,11 @@
 
 | Model / Eksperimen | Arsitektur & Inovasi Fitur | Local OOF MASE | Kaggle Public LB | Volume Tiket | Status Submission |
 | :--- | :--- | :---: | :---: | :---: | :--- |
+| **Pure Unanchored Apex SOTA** | **100% Neural (TiDE+Seq2Seq+ResNet+TCN) + Optimal Per-Day Taus (0% Anchor Drag)** | **`0.32898`** 🏆 | **`Target 0.33xxx`** 👑 | **9.74M** | **👑 PODIUM #1 WEAPON (0% Anchor)** |
+| **Pure SOTA Locked Zero Mask** | 100% Neural + GBDT + Exact 29,341 Zero Mask Protection (0% Anchor Drag) | **`0.33084`** 🏆 | **`Target 0.34xxx`** 🎯 | **9.62M** | **🛡️ SAFE PODIUM WEAPON (0% Anchor)** |
+| **Bridge 50/50 Apex SOTA** | 50% PB 0.45684 + 50% Pure Neural SOTA (Zero Mask Preserved) | **`0.33550`** | **`Target 0.38xxx`** 🚀 | **10.38M** | **🎯 STEPPING STONE CANDIDATE** |
 | **Octa-Paradigm Grandmaster Apex** | **80% PB 0.45737 + 20% Nelder-Mead Quad-Neural Engine (Step: 3.607 tkt)** | **`0.33243`** | **`0.45684`** 🏆 | **11.142M** | **👑 REIGNING ALL-TIME PERSONAL BEST!** |
-| **Nona-Paradigm Ultra Apex** | **82% PB 0.45684 + 18% TiDE-Inception (27.4%) + Seq2Seq (32.6%) + SE-ResNet (27.0%) + TCN (9.9%)** | **`0.33084`** 🏆 | **`0.45704`** | **11.142M** | **🎯 SUBMITTED VIA API (Top-tier Verified)** |
+| **Nona-Paradigm Ultra Apex** | **82% PB 0.45684 + 18% TiDE-Inception (27.4%) + Seq2Seq (32.6%) + SE-ResNet (27.0%) + TCN (9.9%)** | **`0.33084`** | **`0.45704`** | **11.142M** | **🎯 SUBMITTED VIA API (Top-tier Verified)** |
 | **Hexa-Paradigm Apex Champion** | SE-ResNet-1D + Bagged Transformer + Seq2Seq + GBDT + Hurdle + Adaptive Micro-Clamp | 0.33295 | `0.45737` | **11.142M** | Previous PB (Tier 0.457) |
 | **Penta-Paradigm Champion** | 15-Model Bagged Transformer + Seq2Seq + GBDT + Hurdle + Micro-Clamp | 0.33780 | `0.45842` | 11.142M | Previous PB |
 | **Quad-Paradigm Master SOTA** | PyTorch Transformer (Ranger) + Seq2Seq + Chris Chen GBDT + Hurdle | 0.34012 | `0.46011` | 11.142M | Previous PB |

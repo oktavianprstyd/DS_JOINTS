@@ -1,0 +1,101 @@
+iteration,category,description,oof_mase,zero_rate
+55,Zero Threshold Sweep,Taus scaled by 1.80x (Mean tau: 18.5 tkt),0.3289828896522522,42.52870787398722
+41,Zero Threshold Sweep,Taus scaled by 1.03x (Mean tau: 10.6 tkt),0.3290283977985382,39.472572056461836
+42,Zero Threshold Sweep,Taus scaled by 1.08x (Mean tau: 11.1 tkt),0.3290475010871887,39.700786070492775
+46,Zero Threshold Sweep,Taus scaled by 1.30x (Mean tau: 13.4 tkt),0.3290617763996124,40.65107405484381
+43,Zero Threshold Sweep,Taus scaled by 1.14x (Mean tau: 11.7 tkt),0.3290724456310272,39.948319789415216
+75,Micro-Clamping,Cap z <= 5.00 on sp <= 10,0.32907676696777344,39.35544634555707
+54,Zero Threshold Sweep,Taus scaled by 1.74x (Mean tau: 17.9 tkt),0.32908377051353455,42.336718306627866
+49,Zero Threshold Sweep,Taus scaled by 1.47x (Mean tau: 15.1 tkt),0.3290870785713196,41.28983179781929
+74,Micro-Clamping,Cap z <= 4.84 on sp <= 10,0.3290896713733673,39.35544634555707
+40,Zero Threshold Sweep,Taus scaled by 0.97x (Mean tau: 10.0 tkt),0.3290899097919464,39.234698189985146
+52,Zero Threshold Sweep,Taus scaled by 1.63x (Mean tau: 16.8 tkt),0.32909834384918213,41.939456874796235
+47,Zero Threshold Sweep,Taus scaled by 1.36x (Mean tau: 14.0 tkt),0.329099178314209,40.88170303198619
+73,Micro-Clamping,Cap z <= 4.68 on sp <= 10,0.32910609245300293,39.35544634555707
+48,Zero Threshold Sweep,Taus scaled by 1.41x (Mean tau: 14.5 tkt),0.3291161060333252,41.10267215668281
+72,Micro-Clamping,Cap z <= 4.53 on sp <= 10,0.32912540435791016,39.35544634555707
+50,Zero Threshold Sweep,Taus scaled by 1.52x (Mean tau: 15.7 tkt),0.3291392922401428,41.49027373606869
+53,Zero Threshold Sweep,Taus scaled by 1.69x (Mean tau: 17.4 tkt),0.3291402757167816,42.1507661470471
+71,Micro-Clamping,Cap z <= 4.37 on sp <= 10,0.32914596796035767,39.35544634555707
+51,Zero Threshold Sweep,Taus scaled by 1.58x (Mean tau: 16.2 tkt),0.3291566073894501,41.70882789765386
+70,Micro-Clamping,Cap z <= 4.21 on sp <= 10,0.32916784286499023,39.35544634555707
+69,Micro-Clamping,Cap z <= 4.05 on sp <= 10,0.329190731048584,39.35544634555707
+45,Zero Threshold Sweep,Taus scaled by 1.25x (Mean tau: 12.8 tkt),0.3291932940483093,40.433727374814346
+39,Zero Threshold Sweep,Taus scaled by 0.92x (Mean tau: 9.4 tkt),0.3291971981525421,38.97871210017267
+68,Micro-Clamping,Cap z <= 3.89 on sp <= 10,0.3292127847671509,39.35544634555707
+67,Micro-Clamping,Cap z <= 3.74 on sp <= 10,0.32923752069473267,39.35544634555707
+44,Zero Threshold Sweep,Taus scaled by 1.19x (Mean tau: 12.3 tkt),0.3292495906352997,40.186193655891906
+100,Smooth Sigmoid Gating,Sigmoid steepness k = 3.00,0.3292604088783264,36.74849366675924
+66,Micro-Clamping,Cap z <= 3.58 on sp <= 10,0.3292613625526428,39.35544634555707
+99,Smooth Sigmoid Gating,Sigmoid steepness k = 2.90,0.3292643129825592,36.68811958897328
+98,Smooth Sigmoid Gating,Sigmoid steepness k = 2.79,0.3292684257030487,36.63982032674451
+64,Micro-Clamping,Cap z <= 3.26 on sp <= 10,0.3292689919471741,39.356653827112794
+97,Smooth Sigmoid Gating,Sigmoid steepness k = 2.69,0.32927268743515015,36.57823876740282
+96,Smooth Sigmoid Gating,Sigmoid steepness k = 2.58,0.3292771875858307,36.51544972650543
+95,Smooth Sigmoid Gating,Sigmoid steepness k = 2.48,0.3292817771434784,36.44662327782943
+65,Micro-Clamping,Cap z <= 3.42 on sp <= 10,0.3292854428291321,39.35544634555707
+94,Smooth Sigmoid Gating,Sigmoid steepness k = 2.38,0.3292866349220276,36.363307050484806
+93,Smooth Sigmoid Gating,Sigmoid steepness k = 2.27,0.3292916715145111,36.27395341536158
+63,Micro-Clamping,Cap z <= 3.11 on sp <= 10,0.3292926847934723,39.356653827112794
+92,Smooth Sigmoid Gating,Sigmoid steepness k = 2.17,0.32929685711860657,36.18580726179408
+91,Smooth Sigmoid Gating,Sigmoid steepness k = 2.06,0.32930251955986023,36.08800125578082
+90,Smooth Sigmoid Gating,Sigmoid steepness k = 1.96,0.32930880784988403,35.97329050798749
+89,Smooth Sigmoid Gating,Sigmoid steepness k = 1.85,0.32931551337242126,35.8609947233056
+62,Micro-Clamping,Cap z <= 2.95 on sp <= 10,0.32932087779045105,39.356653827112794
+88,Smooth Sigmoid Gating,Sigmoid steepness k = 1.75,0.3293229341506958,35.76801864351522
+87,Smooth Sigmoid Gating,Sigmoid steepness k = 1.65,0.32933127880096436,35.684702416170595
+86,Smooth Sigmoid Gating,Sigmoid steepness k = 1.54,0.3293406665325165,35.57965152082302
+85,Smooth Sigmoid Gating,Sigmoid steepness k = 1.44,0.3293514847755432,35.48063803325404
+38,Zero Threshold Sweep,Taus scaled by 0.86x (Mean tau: 8.9 tkt),0.3293538987636566,38.70461378702441
+61,Micro-Clamping,Cap z <= 2.79 on sp <= 10,0.3293611705303192,39.356653827112794
+84,Smooth Sigmoid Gating,Sigmoid steepness k = 1.33,0.32936421036720276,35.3586823961264
+83,Smooth Sigmoid Gating,Sigmoid steepness k = 1.23,0.32937997579574585,35.230689351220164
+82,Smooth Sigmoid Gating,Sigmoid steepness k = 1.12,0.32940050959587097,35.114771121871115
+81,Smooth Sigmoid Gating,Sigmoid steepness k = 1.02,0.32942938804626465,34.998852892522066
+60,Micro-Clamping,Cap z <= 2.63 on sp <= 10,0.3294413983821869,39.35786130866851
+37,Zero Threshold Sweep,Taus scaled by 0.81x (Mean tau: 8.3 tkt),0.3294510245323181,38.42327058454182
+80,Smooth Sigmoid Gating,Sigmoid steepness k = 0.92,0.32946908473968506,34.86240747672579
+36,Zero Threshold Sweep,Taus scaled by 0.75x (Mean tau: 7.7 tkt),0.3295170068740845,38.13830493739208
+79,Smooth Sigmoid Gating,Sigmoid steepness k = 0.81,0.32952460646629333,34.74407428426531
+59,Micro-Clamping,Cap z <= 2.47 on sp <= 10,0.3295520544052124,39.360276271779945
+78,Smooth Sigmoid Gating,Sigmoid steepness k = 0.71,0.3296092450618744,34.642645833584886
+58,Micro-Clamping,Cap z <= 2.32 on sp <= 10,0.32962509989738464,39.36148375333567
+35,Zero Threshold Sweep,Taus scaled by 0.70x (Mean tau: 7.2 tkt),0.3296296000480652,37.85937669802094
+34,Zero Threshold Sweep,Taus scaled by 0.64x (Mean tau: 6.6 tkt),0.32969245314598083,37.559921272202565
+57,Micro-Clamping,Cap z <= 2.16 on sp <= 10,0.329700767993927,39.362691234891386
+77,Smooth Sigmoid Gating,Sigmoid steepness k = 0.60,0.3297457993030548,34.558122124684544
+56,Micro-Clamping,Cap z <= 2.00 on sp <= 10,0.3297572433948517,39.362691234891386
+33,Zero Threshold Sweep,Taus scaled by 0.59x (Mean tau: 6.0 tkt),0.32977816462516785,37.239938659936975
+32,Zero Threshold Sweep,Taus scaled by 0.53x (Mean tau: 5.5 tkt),0.329895555973053,36.90425878744702
+31,Zero Threshold Sweep,Taus scaled by 0.48x (Mean tau: 4.9 tkt),0.32995861768722534,36.56254150717847
+76,Smooth Sigmoid Gating,Sigmoid steepness k = 0.50,0.32996153831481934,34.45427871089269
+30,Zero Threshold Sweep,Taus scaled by 0.42x (Mean tau: 4.3 tkt),0.3300768733024597,36.16528007534685
+29,Zero Threshold Sweep,Taus scaled by 0.37x (Mean tau: 3.8 tkt),0.3301369547843933,35.763188717292344
+28,Zero Threshold Sweep,Taus scaled by 0.31x (Mean tau: 3.2 tkt),0.33020851016044617,35.24517912988879
+27,Zero Threshold Sweep,Taus scaled by 0.26x (Mean tau: 2.6 tkt),0.3303197920322418,34.73682939493099
+26,Zero Threshold Sweep,Taus scaled by 0.20x (Mean tau: 2.1 tkt),0.3303931653499603,34.08358187328688
+16,Architecture Subset,Nelder-Mead on TiDE+Seq2Seq+ResNet,0.33105877190764,0.0
+17,Architecture Subset,Nelder-Mead on TiDE+Seq2Seq+TCN,0.33216012458572497,0.0
+22,Architecture Subset,Nelder-Mead on Seq2Seq+ResNet+TCN,0.3328485935278289,0.0
+18,Architecture Subset,Nelder-Mead on TiDE+Seq2Seq+Trans,0.3329200657999167,0.0
+23,Architecture Subset,Nelder-Mead on Seq2Seq+ResNet+Trans,0.33293018029481203,0.0
+6,Architecture Subset,Nelder-Mead on TiDE+Seq2Seq,0.33366621658592377,0.0
+10,Architecture Subset,Nelder-Mead on Seq2Seq+ResNet,0.3336902764768583,0.0
+24,Architecture Subset,Nelder-Mead on Seq2Seq+TCN+Trans,0.3342267509887863,0.0
+19,Architecture Subset,Nelder-Mead on TiDE+ResNet+TCN,0.33425175947919133,0.0
+20,Architecture Subset,Nelder-Mead on TiDE+ResNet+Trans,0.33432632102999843,0.0
+7,Architecture Subset,Nelder-Mead on TiDE+ResNet,0.33501237874911366,0.0
+11,Architecture Subset,Nelder-Mead on Seq2Seq+TCN,0.3356820468818017,0.0
+21,Architecture Subset,Nelder-Mead on TiDE+TCN+Trans,0.3356933230295321,0.0
+25,Architecture Subset,Nelder-Mead on ResNet+TCN+Trans,0.33606133179400277,0.0
+8,Architecture Subset,Nelder-Mead on TiDE+TCN,0.33700457249229804,0.0
+12,Architecture Subset,Nelder-Mead on Seq2Seq+Trans,0.33715513837109634,0.0
+14,Architecture Subset,Nelder-Mead on ResNet+Trans,0.3372756536174668,0.0
+13,Architecture Subset,Nelder-Mead on ResNet+TCN,0.337965945301787,0.0
+9,Architecture Subset,Nelder-Mead on TiDE+Trans,0.3388950375443868,0.0
+15,Architecture Subset,Nelder-Mead on TCN+Trans,0.33926307125416966,0.0
+3,Architecture Subset,Nelder-Mead on ResNet,0.3410192629821152,0.0
+1,Architecture Subset,Nelder-Mead on TiDE,0.3443520944292368,0.0
+2,Architecture Subset,Nelder-Mead on Seq2Seq,0.3444795863077485,0.0
+4,Architecture Subset,Nelder-Mead on TCN,0.3454107252588736,0.0
+5,Architecture Subset,Nelder-Mead on Trans,0.3475649535647993,0.0
