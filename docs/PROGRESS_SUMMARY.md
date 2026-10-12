@@ -1,8 +1,9 @@
 # 📊 JOINTS X INSPIRE 2026 - Data Science Competition
 ## Ringkasan Progres & Dokumentasi Eksperimen Terkini (Folder: `jarvis`)
-*Terakhir Diperbarui: 04 Oktober 2026*
+*Terakhir Diperbarui: 12 Oktober 2026 (H-1 Menuju Deadline)*
 
 Dokumen ini merangkum seluruh tahapan, analisis teoritis, implementasi kode, hasil eksperimen, serta berkas yang telah dibuat selama pengerjaan kompetisi **JOINTS X INSPIRE UGM 2026**.
+Status All-Time Personal Best: **`0.45737`** 🏆 (`SUBMISSION_HEXA_PARADIGM_APEX_CHAMPION.csv`).
 
 ---
 
@@ -114,11 +115,11 @@ $$\text{MASE} = 0.004370 \times \text{Vol}^2 - 0.097294 \times \text{Vol} + 1.00
 
 | Model / Eksperimen | Pendekatan & Fitur | Local OOF MASE | Kaggle Public LB | Status & Catatan |
 | :--- | :--- | :---: | :---: | :--- |
-| **Initial Anchor** | Hurdle Two-Stage Baseline | 0.53730 | **`0.47303`** | Fondasi masker 29.341 nol (12.10M tiket) |
-| **Roadmap Clean SOTA (V9)** | 100% Leak-Free Context Priors | 0.34826 | **`0.46832`** | Single Model SOTA murni |
-| **Upgrade SOTA 60 / Anchor 40** | Zero-Preserved Blend V9 + Anchor | 0.35410 | **`0.46562`** | Lompatan pertama ke tier 0.465 |
-| **Master Champion 70/30** | 70% PB 0.46562 + 30% V11 Golden Tri | 0.35210 | **`0.46524`** | Volume 11.591M tiket |
-| **Final B Golden Vertex** | **85% PB 0.46432 + 15% Sprint v3 SOTA (Plateau Calibrated)** | **0.34577** | **`0.46376`** 🏆 | **👑 CURRENT ALL-TIME PERSONAL BEST!** (Volume: 11.142M tiket) |
+| **Hexa-Paradigm Apex Champion** | **SE-ResNet-1D + Bagged Transformer + Seq2Seq + GBDT + Hurdle + Adaptive Micro-Clamp** | **0.33295** | **`0.45737`** 🏆 | **👑 CURRENT ALL-TIME PERSONAL BEST!** (Volume: 11.142M tiket) |
+| **Penta-Paradigm Champion** | 15-Model Bagged Transformer + Seq2Seq + GBDT + Hurdle + Micro-Clamp | 0.33780 | **`0.45842`** | Previous PB (Volume: 11.142M tiket) |
+| **Quad-Paradigm Master SOTA** | PyTorch Transformer (Ranger) + Seq2Seq + Chris Chen GBDT + Hurdle | 0.34012 | **`0.46011`** | Previous PB (Volume: 11.142M tiket) |
+| **Tri-Paradigm Master SOTA** | Chris Chen GBDT Stacking + Keras 3 Seq2Seq Multi-Horizon | 0.34415 | **`0.46332`** | Penembus tier 0.463 (Volume: 11.142M tiket) |
+| **Final B Golden Vertex** | 85% PB 0.46432 + 15% Sprint v3 SOTA (Plateau Calibrated) | 0.34577 | **`0.46376`** | Previous PB (Volume: 11.142M tiket) |
 | **Star Power Champion Master 70/30** | 70% PB 0.46524 + 30% Star Power x Cultural Affinity | 0.34048 | `0.46432` | Previous PB (Volume: 11.142M tiket) |
 | **Quantile Nelder PB 70/30** | 70% PB 0.46432 + 30% Quantile GBDT ($\tau=0.45$) | 0.34305 | `0.46469` | Beda hanya +0.00037 karena volume turun ke 10.84M tiket |
 | **Master Champion 70/30** | 70% PB 0.46562 + 30% V11 Golden Tri | 0.35210 | `0.46524` | Volume 11.591M tiket |
@@ -127,10 +128,9 @@ $$\text{MASE} = 0.004370 \times \text{Vol}^2 - 0.097294 \times \text{Vol} + 1.00
 | **Stratified 50/50 Transition** | 50% PB + 50% Scale-Stratified SOTA (Hurdle cut penalty) | 0.34810 | `0.46654` | Diagnostics: 3,088 active rows halved |
 | **Roadmap Clean SOTA (V9)** | 100% Leak-Free Context Priors | 0.34826 | `0.46832` | Single Model SOTA murni |
 | **Initial Anchor** | Hurdle Two-Stage Baseline | 0.53730 | `0.47303` | Fondasi masker 29.341 nol (12.10M tiket) |
-| **Scale-Stratified Tri-Engine SOTA** | Tri-Engine (Micro 0.442, Mid 0.360, Mega 0.346) + Two-Speed Volume | `0.35878` 🎯 | *Ready to Submit* 🚀 | Micro MASE turun dari 0.485 ke 0.442! Vol 11.142M |
-| **PB Micro-Clamped** | PB 0.46432 + Clamping 68 baris anomali $z > 3.5$ ($s_p \le 10$) | 0.34020 | *Ready to Submit* | Volume identik 11.142M tiket (-441 tiket) |
-| **Vertex Quantile PB 85/15** | 85% PB + 15% Quantile Nelder (Volume Locked 11.142M) | 0.34110 | *Ready to Submit* | Injeksi kuantil tanpa volume drift |
-| **Managerial 5-Pillar Record SOTA** | 27 Fitur Manajerial (Hazard Flop + Holiday Tier + Surcharges) | `0.34002` 🏆 | *Ready to Submit* | All-Time Lowest Local OOF Record |
+| **Quantum Leap 50/50 Apex** | 50% PB 0.45737 + 50% Inception-TCN & Quad-Neural Apex | **0.32980** | *Siap Submit (Kuota Reset)* 🚀 | Target Penembus sub-0.450 / 0.40xxx |
+| **Scale-Stratified Quantum Apex** | Skala Mikro 75/25, Menengah 65/35, Besar 50/50 + Two-Speed Volume | **0.32840** | *Siap Submit (Kuota Reset)* 🚀 | Target Penembus 0.40xxx / 0.3xxxx |
+| **Managerial 5-Pillar Record SOTA** | 27 Fitur Manajerial (Hazard Flop + Holiday Tier + Surcharges) | `0.34002` 🏆 | *Arsip Eksperimen* | Record GBDT OOF MASE |
 
 ---
 
@@ -138,21 +138,30 @@ $$\text{MASE} = 0.004370 \times \text{Vol}^2 - 0.097294 \times \text{Vol} + 1.00
 
 | Berkas | Keterangan & Deskripsi |
 | :--- | :--- |
-| [`submissions/Final_B_Golden_Vertex.csv`](file:///C:/Users/oktav/BOT_clean/JOINTS/jarvis/submissions/Final_B_Golden_Vertex.csv) | **👑 ALL-TIME PERSONAL BEST RESMI (0.46376)**: Volume 11,142,743 tiket, 29,341 zeros. 85% PB + 15% Sprint v3 SOTA Meta-Stack dengan Plateau Calibration. |
-| [`submissions/submission_star_power_champion_master_70_30.csv`](file:///C:/Users/oktav/BOT_clean/JOINTS/jarvis/submissions/submission_star_power_champion_master_70_30.csv) | Previous Personal Best (0.46432): Volume 11,142,743 tiket, 29,341 zeros. |
-| [`submissions/submission_stratified_soft_85_15_locked.csv`](file:///C:/Users/oktav/BOT_clean/JOINTS/jarvis/submissions/submission_stratified_soft_85_15_locked.csv) | **🎯 KANDIDAT PENEMBUS BERIKUTNYA**: 85% PB + 15% Scale-Stratified Tri-Engine Regressor (Soft Continuous, 0 baris terpotong). |
-| [`submissions/submission_pb_micro_clamped.csv`](file:///C:/Users/oktav/BOT_clean/JOINTS/jarvis/submissions/submission_pb_micro_clamped.csv) | PB 0.46432 dengan clamping 68 baris anomali skala mikro ($s_p \le 10, z > 3.5$). Volume terkunci: 11,142,302 tiket. |
-| [`submissions/submission_vertex_quantile_pb_85_15.csv`](file:///C:/Users/oktav/BOT_clean/JOINTS/jarvis/submissions/submission_vertex_quantile_pb_85_15.csv) | **🚀 INJEKSI KUANTIL TERKUNCI**: 85% PB + 15% Quantile Nelder, volume persis terkunci di 11,142,743 tiket (0% volume drift). |
-| [`submissions/submission_managerial_record_pb_70_30.csv`](file:///C:/Users/oktav/BOT_clean/JOINTS/jarvis/submissions/submission_managerial_record_pb_70_30.csv) | 70% PB 0.46432 + 30% Rekor Manajerial 0.34002. Volume 10.830M tiket, 29,341 zeros. |
-| [`submissions/submission_tuned_cnn_xgboost_pb_80_20.csv`](file:///C:/Users/oktav/BOT_clean/JOINTS/jarvis/submissions/submission_tuned_cnn_xgboost_pb_80_20.csv) | 80% PB 0.46432 + 20% Tuned SE-ResNet-1D + CUDA XGBoost. Volume 10.945M tiket, 29,341 zeros. |
-| [`submissions/submission_hurdle_top.csv`](file:///C:/Users/oktav/BOT_clean/JOINTS/jarvis/submissions/submission_hurdle_top.csv) | Baseline anchor terverifikasi (Skor: 0.47303, 29,341 zeros). |
-| [`train_quantile_nelder_combo.py`](file:///C:/Users/oktav/BOT_clean/JOINTS/jarvis/train_quantile_nelder_combo.py) | Engine training GBDT Kuantil ($\tau=0.45$) + Nelder-Mead metric optimizer end-to-end. |
-| [`tune_cnn_xgboost_master.py`](file:///C:/Users/oktav/BOT_clean/JOINTS/jarvis/tune_cnn_xgboost_master.py) | Engine tuning PyTorch SE-ResNet-1D ConvNet (SWA) + CUDA XGBoost. |
-| [`train_managerial_holiday_sota.py`](file:///C:/Users/oktav/BOT_clean/JOINTS/jarvis/train_managerial_holiday_sota.py) | Script training 5 pilar manajerial & hari libur (pencetak rekor OOF 0.34002). |
-| [`feature_engineering.py`](file:///C:/Users/oktav/BOT_clean/JOINTS/jarvis/feature_engineering.py) | Modul ekstraksi 155 fitur domain lengkap bebas kebocoran data (*leak-free*). |
-| [`validation_framework.py`](file:///C:/Users/oktav/BOT_clean/JOINTS/jarvis/validation_framework.py) | Modul evaluasi komprehensif metrik MASE, GroupKFold cold-start, dan prior kontekstual. |
-| [`jarvis.zip`](file:///C:/Users/oktav/BOT_clean/JOINTS/jarvis/jarvis.zip) | **Berkas Pengumpulan Resmi Panitia**: Berisi `jarvis.ipynb` dan `jarvis.pkl`. Ukuran **13.86 MB** ($\le 200$ MB). |
-| [`package_submission_zip.py`](file:///C:/Users/oktav/BOT_clean/JOINTS/jarvis/package_submission_zip.py) | Script generator otomatis berkas pengumpulan akhir `jarvis.zip`. |
+| [`submissions/SUBMISSION_HEXA_PARADIGM_APEX_CHAMPION.csv`](file:///C:/Users/oktav/BOT_clean/Kuliah/JOINTS/jarvis/submissions/SUBMISSION_HEXA_PARADIGM_APEX_CHAMPION.csv) | **👑 ALL-TIME PERSONAL BEST RESMI (0.45737)**: Volume 11,142,743 tiket, 29,341 zeros. Fusi 6 pilar neural & GBDT dengan adaptive micro-clamping. |
+| [`submissions/SUBMISSION_PENTA_PARADIGM_CHAMPION.csv`](file:///C:/Users/oktav/BOT_clean/Kuliah/JOINTS/jarvis/submissions/SUBMISSION_PENTA_PARADIGM_CHAMPION.csv) | Previous Personal Best (0.45842): Bagged Transformer + Seq2Seq + GBDT + Hurdle. |
+| [`submissions/SUBMISSION_QUAD_PARADIGM_SOTA.csv`](file:///C:/Users/oktav/BOT_clean/Kuliah/JOINTS/jarvis/submissions/SUBMISSION_QUAD_PARADIGM_SOTA.csv) | Previous Personal Best (0.46011): Transformer (Ranger) + Seq2Seq + GBDT + Hurdle. |
+| [`submissions/SUBMISSION_TRI_PARADIGM_MASTER_SOTA.csv`](file:///C:/Users/oktav/BOT_clean/Kuliah/JOINTS/jarvis/submissions/SUBMISSION_TRI_PARADIGM_MASTER_SOTA.csv) | Previous Personal Best (0.46332): Chris Chen GBDT + Keras Seq2Seq. |
+| [`submissions/Final_B_Golden_Vertex.csv`](file:///C:/Users/oktav/BOT_clean/Kuliah/JOINTS/jarvis/submissions/Final_B_Golden_Vertex.csv) | Previous Personal Best (0.46376): Volume 11,142,743 tiket, 29,341 zeros. |
+| [`submissions/submission_star_power_champion_master_70_30.csv`](file:///C:/Users/oktav/BOT_clean/Kuliah/JOINTS/jarvis/submissions/submission_star_power_champion_master_70_30.csv) | Baseline Anchor (0.46432): Volume 11,142,743 tiket, 29,341 zeros. |
+| [`train_quantum_apex_grandmaster.py`](file:///C:/Users/oktav/BOT_clean/Kuliah/JOINTS/jarvis/train_quantum_apex_grandmaster.py) | Engine Inception-TCN 1D dilated convolutions + Rekonstruksi Fitur Aritmatika 2nd Place Kaggle + Quantum Leap Blending. |
+| [`train_se_resnet_and_apex_master.py`](file:///C:/Users/oktav/BOT_clean/Kuliah/JOINTS/jarvis/train_se_resnet_and_apex_master.py) | Engine PyTorch SE-ResNet-1D Temporal Network (OOF 0.34102) & Hexa-Paradigm Apex Champion generator. |
+| [`train_hf_multiseed_transformer.py`](file:///C:/Users/oktav/BOT_clean/Kuliah/JOINTS/jarvis/train_hf_multiseed_transformer.py) | Engine 15-Model Bagged PyTorch Temporal Transformer (Ranger Optimizer). |
+| [`feature_engineering.py`](file:///C:/Users/oktav/BOT_clean/Kuliah/JOINTS/jarvis/feature_engineering.py) | Modul ekstraksi 155 fitur domain lengkap bebas kebocoran data (*leak-free*). |
+| [`validation_framework.py`](file:///C:/Users/oktav/BOT_clean/Kuliah/JOINTS/jarvis/validation_framework.py) | Modul evaluasi komprehensif metrik MASE, GroupKFold cold-start, dan prior kontekstual. |
+| [`jarvis.zip`](file:///C:/Users/oktav/BOT_clean/Kuliah/JOINTS/jarvis/jarvis.zip) | **Berkas Pengumpulan Resmi Panitia**: Berisi `jarvis.ipynb` dan `jarvis.pkl`. Ukuran **13.86 MB** ($\le 200$ MB limit). |
+| [`package_submission_zip.py`](file:///C:/Users/oktav/BOT_clean/Kuliah/JOINTS/jarvis/package_submission_zip.py) | Script generator otomatis berkas pengumpulan akhir `jarvis.zip`. |
+
+---
+
+## 6. Checklist Kesiapan Pengumpulan Akhir (13 Oktober 2026)
+
+- [x] Model 100% menggunakan data resmi (Bebas diskualifikasi data eksternal).
+- [x] Zero AutoML & Zero LLM inference (Sesuai regulasi TM).
+- [x] 100% Reproducible (`SEED = 2026` / `random_state = 2026`).
+- [x] Berkas `jarvis.zip` terverifikasi **13.86 MB** ($\le 200$ MB limit).
+- [x] Invariant 29,341 zeros ($40.41\%$) terjaga 100% identik di seluruh kandidat submission.
+- [x] Berkas submission terkalibrasi ke titik volume optimal (11.14M tiket).
 
 ---
 

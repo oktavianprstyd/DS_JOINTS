@@ -15,6 +15,7 @@ weights/
 *.h5
 *.pt
 *.pth
+*.npy
 
 # Training artifacts & Logs
 catboost_info/

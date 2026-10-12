@@ -1,8 +1,8 @@
 # 🎯 MASTER BLUEPRINT: ROADMAP PENEMBUS SKOR KAGGLE 0.3xx
 ## DS JOINTS X INSPIRE UGM 2026 — Tim JARVIS
-**Target**: Public & Private Leaderboard Kaggle **`0.37xx — 0.39xx`**  
-**Status Personal Best (PB)**: Public LB **`0.46432`** | Local OOF: **`0.34002`**  
-**Batas Akhir (Deadline)**: 13 Oktober 2026, 23:59 WIB (*8 Hari Tersisa*)  
+**Target**: Public & Private Leaderboard Kaggle **`0.35xx — 0.39xx`** (Podium Juara 1)  
+**Status Personal Best (PB)**: Public LB **`0.45737`** 🏆 (`SUBMISSION_HEXA_PARADIGM_APEX_CHAMPION.csv`) | Local OOF: **`0.33295`**  
+**Batas Akhir (Deadline)**: 13 Oktober 2026, 23:59 WIB (*H-1 / 1 Hari Tersisa*)  
 **Infrastruktur**: NVIDIA GeForce RTX 3050 6GB Laptop GPU (CUDA 13.0) | `SEED = 2026`
 
 ---
@@ -11,7 +11,7 @@
 
 > [!IMPORTANT]
 > **JAWABAN TEGAS: YA, SANGAT MUNGKIN.**  
-> Local OOF saat ini **sudah berada di level `0.34002`**. Alasan utama Public LB masih tertahan di `0.46432` bukanlah karena batas teoritis metrik, melainkan karena **3 faktor teknis konkret yang selama ini membelenggu model**:
+> Local OOF saat ini **sudah berada di level `0.33295`** (Hexa-Paradigm SOTA). Alasan Public LB telah turun dari `0.46376` ke **`0.45737`** adalah pelepasan parsial anchor dan integrasi model neural temporal. 3 faktor teknis konkret yang selama ini membelenggu model:
 > 1. **"The Anchor Trap" (Keterikatan 99.2% pada Anchor Lama)**: Seluruh submission terbaik (`PB 0.46432`) masih mengadopsi skema *70% PB Lama + 30% SOTA*. PB Lama tersebut berakar dari `submission_hurdle_top.csv` yang memiliki skor awal buruk (`0.47303`). Model baru terbukti hanya menyumbang 10%–20% sinyal aktif; kapal prediksi tertahan oleh jangkar usang.
 > 2. **Pergeseran Distribusi Skala (Covariate Shift) $s_p \le 50$**: Di data Train, bioskop kecil ($s_p \le 50$) hanya mencakup **6.37%** baris. Di Test Set, porsinya melonjak **5x lipat menjadi 31.31%** (dan $s_p \le 100$ mencapai **51.47%**). Model global yang dilatih pada Train memprioritaskan bioskop raksasa, sehingga menghasilkan error relatif besar pada bioskop kecil yang berbobot MASE masif.
 > 3. **Distorsi Skalasi Volume Global (The Two-Speed Dilemma)**: Menggunakan loss L1/MAE menghasilkan estimasi median kondisional ($\sim 10.3\text{M}$ tiket total). Untuk mengejar target Golden Vertex ($\sim 11.14\text{M}$ tiket), model sebelumnya mengalikan seluruh baris secara seragam (+8%), yang secara fatal menggelembungkan error pada bioskop mikro ($s_p \le 15$).

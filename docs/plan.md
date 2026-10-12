@@ -1,8 +1,8 @@
 # 🗺️ PLAN.MD — Rencana Upgrade & Optimasi Lanjutan JOINTS X INSPIRE 2026
-**Terakhir Diperbarui**: 05 Oktober 2026 | **Target Skor Kaggle**: ≤ 0.461xx (Podium Top 3 / Juara 1)  
-**Status Personal Best (PB) Terkini**: Public Leaderboard **`0.46376`** 🏆 (`Final_B_Golden_Vertex.csv`)  
-**All-Time Lowest Local OOF Record**: **`0.34002`** 🏆 (Managerial 5-Pillar Record SOTA)  
-**Batas Akhir Pengumpulan**: **13 Oktober 2026 (23:59 WIB)** — *8 Hari Tersisa*
+**Terakhir Diperbarui**: 12 Oktober 2026 | **Target Skor Kaggle**: ≤ 0.44xxx / 0.39xxx / 0.35xxx (Juara 1 & Podium Tertinggi)  
+**Status Personal Best (PB) Terkini**: Public Leaderboard **`0.45737`** 🏆 (`SUBMISSION_HEXA_PARADIGM_APEX_CHAMPION.csv`)  
+**All-Time Lowest Local OOF Record**: **`0.33295`** 🏆 (Quad-Neural Bagged Ensemble Record SOTA)  
+**Batas Akhir Pengumpulan**: **13 Oktober 2026 (23:59 WIB)** — *H-1 (1 Hari Tersisa)*
 
 ---
 
@@ -20,8 +20,14 @@
 
 | Model / Eksperimen | Arsitektur & Inovasi Fitur | Local OOF MASE | Kaggle Public LB | Volume Tiket | Status Submission |
 | :--- | :--- | :---: | :---: | :---: | :--- |
-| **Final B Golden Vertex** | **85% PB 0.46432 + 15% Sprint v3 SOTA (Plateau Calibrated)** | **0.34577** | **`0.46376`** 🏆 | **11.142M** | **👑 NEW ALL-TIME PERSONAL BEST!** |
-| **Star Power Champion Master 70/30** | 70% PB 0.46524 + 30% Star Power x Cultural Affinity | 0.34048 | `0.46432` | 11.142M | Previous Personal Best |
+| **Hexa-Paradigm Apex Champion** | **SE-ResNet-1D + Bagged Transformer + Seq2Seq + GBDT + Hurdle + Adaptive Micro-Clamp** | **0.33295** | **`0.45737`** 🏆 | **11.142M** | **👑 CURRENT ALL-TIME PERSONAL BEST!** |
+| **Penta-Paradigm Champion** | 15-Model Bagged Transformer + Seq2Seq + GBDT + Hurdle + Micro-Clamp | 0.33780 | **`0.45842`** | 11.142M | Previous PB |
+| **Quad-Paradigm Master SOTA** | PyTorch Transformer (Ranger) + Seq2Seq + Chris Chen GBDT + Hurdle | 0.34012 | **`0.46011`** | 11.142M | Previous PB |
+| **Tri-Paradigm Master SOTA** | Chris Chen GBDT Stacking + Keras 3 Seq2Seq Multi-Horizon | 0.34415 | **`0.46332`** | 11.142M | Penembus tier 0.463 |
+| **Final B Golden Vertex** | 85% PB 0.46432 + 15% Sprint v3 SOTA (Plateau Calibrated) | 0.34577 | **`0.46376`** | 11.142M | Previous PB |
+| **Star Power Champion Master 70/30** | 70% PB 0.46524 + 30% Star Power x Cultural Affinity | 0.34048 | `0.46432` | 11.142M | Baseline Anchor SOTA |
+| **Quantum Leap 50/50 Apex** | 50% PB 0.45737 + 50% Inception-TCN & Quad-Neural Apex Engine | **0.32980** | *Siap Submit (Kuota Reset)* 🚀 | 11.142M | Target Penembus Tier sub-0.450 |
+| **Scale-Stratified Quantum Apex** | Skala Mikro 75/25, Menengah 65/35, Besar 50/50 + Two-Speed Volume | **0.32840** | *Siap Submit (Kuota Reset)* 🚀 | 11.142M | Target Penembus 0.40xxx / 0.3xxxx |
 | **Quantile Nelder PB 70/30** | 70% PB 0.46432 + 30% Quantile GBDT ($\tau=0.45$) | 0.34305 | `0.46469` | 10.84M | Volume underpredict -307k |
 | **Master Champion 70/30** | 70% PB 0.46562 + 30% V11 Golden Tri | 0.35210 | `0.46524` | 11.59M | Multi-model blend |
 | **Upgrade SOTA 60 / Anchor 40** | Zero-Preserved Blend V9 + Anchor | 0.35410 | `0.46562` | 11.72M | Penembus tier 0.465 |
@@ -158,20 +164,67 @@ flowchart TD
 
 ---
 
-## 📅 4. Roadmap & Jadwal Eksekusi Harian (H-9 Deadline)
+### 🌟 UPGRADE 7: Multi-Seed Bagged PyTorch Temporal Transformer (STATUS: [SELESAI] ✅)
+*Transformer berbasis Multi-Head Attention dengan Ranger Optimizer (LookAhead + RAdam) pada calendar cross-attention.*
+
+- **Rasional**: Transformer mengestimasi multi-horizon D4–D10 secara simultan dengan menangkap interaksi libur, akhir pekan, dan tren decay pembukaan film tanpa batasan Markovian.
+- **Implementasi**:
+  - 3 Random Seeds (`2026, 42, 123`) $\times$ 5 Folds = **15 Model Bagged Transformer** dilatih di RTX 3050.
+  - Encoder Transformer (d_model=64, 4 heads, 2 layers) + Future Decoder Cross-Attention.
+- **Hasil**: OOF MASE **0.34756**, mengantarkan **Penta-Paradigm Champion** tembus LB **`0.45842`**!
+- **File**: `train_hf_multiseed_transformer.py`
+
+---
+
+### 🌟 UPGRADE 8: SE-ResNet-1D Deep Temporal Network (STATUS: [SELESAI] ✅)
+*1D Residual Network dengan Squeeze-and-Excitation Channel Attention untuk menangkap pola temporal lokal.*
+
+- **Rasional**: Konvolusi 1D dengan SE-attention memfokuskan bobot pada saluran fitur opening momentum yang paling relevan untuk masing-masing tipe bioskop.
+- **Implementasi**:
+  - 5-Fold GroupKFold, 3 residual blocks dengan channel expansion 64 $\to$ 128 $\to$ 256.
+  - OOF MASE mencapai rekor neural tunggal: **`0.34102`** (sangat tajam pada horizon D4–D7).
+- **File**: `train_se_resnet_and_apex_master.py`
+
+---
+
+### 🌟 UPGRADE 9: Hexa-Paradigm Apex Champion (STATUS: [SELESAI] ✅)
+*Fusi 6 pilar independen (SE-ResNet-1D + Bagged Transformer + Seq2Seq + Chris Chen GBDT + Keras Hurdle + Adaptive Clamping).*
+
+- **Rasional**: Ensembling lintas paradigma (GBDT vs ConvNet vs Attention vs Recurrent) memotong variansi stokastik individual hingga batas terendah.
+- **Hasil**: **`0.45737`** 🏆 (👑 **ALL-TIME PERSONAL BEST RESMI DI PUBLIC LEADERBOARD!**).
+- **File Submisi**: `submissions/SUBMISSION_HEXA_PARADIGM_APEX_CHAMPION.csv`
+
+---
+
+### 🌟 UPGRADE 10: Quantum Apex Grandmaster & Feature Reconstruction (STATUS: [AKTIF / SIAP SUBMIT] 🚀)
+*Arsitektur Inception-TCN 1D (Dilated Convolutions) + Rekonstruksi Fitur Aritmatika 2nd Place Kaggle + Dynamic EMA Scaling.*
+
+- **Rasional**: Mengatasi "The Anchor Trap" dan mendorong model menuju tier target **0.3xxxx / 0.40xxx**.
+- **Fitur Baru Rekonstruksi Aritmatika**:
+  1. `implied_total_capacity = est_capacity * show_mean`: Menghitung kapasitas fisik kursi bioskop.
+  2. `slack_seats_d1..d3 = implied_total_capacity - ticket_d1..d3`: Mengukur kursi kosong terbuang.
+  3. `show_cut_severity = (shw1 - shw3) / max(1.0, shw1)` & `flop_day_hazard`: Sinyal pemangkasan layar.
+  4. `ema_sp = 0.2*t1 + 0.3*t2 + 0.5*t3`: Skala dinamis yang menangkap momentum Hari ke-3 sebelum Hari ke-4.
+  5. `cinema_latent_embeddings` (16-dim) & `city_latent_embeddings` (8-dim) dilatih *end-to-end* di GPU.
+- **Kandidat Submisi Agresif**:
+  - `SUBMISSION_QUANTUM_LEAP_50_50_APEX.csv` (50% PB 0.45737 + 50% Neural Apex Engine)
+  - `SUBMISSION_ACCELERATED_GRANDMASTER_60_40.csv` (60% PB 0.45737 + 40% Neural Apex Engine)
+  - `SUBMISSION_SCALE_STRATIFIED_QUANTUM_APEX.csv` (Mikro 75/25, Menengah 65/35, Besar 50/50 + Two-Speed Volume)
+- **File**: `train_quantum_apex_grandmaster.py`
+
+---
+
+## 📅 4. Roadmap & Jadwal Eksekusi Harian (H-1 & H-0 Menuju Deadline)
 
 | Hari | Tanggal | Target Pengerjaan | Script / Modul | Target Output & Validasi |
 | :---: | :---: | :--- | :--- | :--- |
-| **H-9** | **04 Okt (Hari Ini)** | Eksekusi Submisi Siap Pakai & Audit Micro-Clamped | `create_next_gen_candidates.py` | Submit `submission_pb_micro_clamped.csv` (11.142M) |
-| **H-8** | **05 Okt** | Bangun **Upgrade 1** (Per-Horizon Specialist GBDT) | `train_per_horizon_specialist.py` | OOF MASE per horizon D4-D10 terekam |
-| **H-7** | **06 Okt** | Bangun **Upgrade 2** (Scale-Stratified Tri-Model) | `train_scale_stratified_engine.py` | Eliminasi error overprediksi skala kecil |
-| **H-6** | **07 Okt** | Integrasi **Upgrade 3 & 4** (Bayesian Priors + Hurdle Tuning) | `feature_engineering.py` | Fitur Bayesian OOF + Clamping mikro |
-| **H-5** | **08 Okt** | Eksekusi **Upgrade 5** (Multi-Seed 5x Bagging GPU) | `train_multiseed_bagging_sota.py` | Bobot model terbagging stabil & low variance |
-| **H-4** | **09 Okt** | Eksekusi **Upgrade 6** (Nelder-Mead Golden Vertex Blend) | `optimize_golden_vertex_blend.py` | Kandidat final terkalibrasi 11.14M tiket |
-| **H-3** | **10 Okt** | Pengujian Submisi Kaggle Terbaik (Push PB Tier 0.463) | Kaggle API submission | Evaluasi skor Private & Public Leaderboard |
-| **H-2** | **11 Okt** | Finalisasi Notebook `jarvis.ipynb` & Code Cleanliness | `build_solution_notebook.py` | Uji re-run 100% end-to-end tanpa error |
-| **H-1** | **12 Okt** | Audit Integritas Final `jarvis.zip` ($\le 200$ MB) | `package_submission_zip.py` | Cek bobot model, struktur folder, & reproducibility |
-| **H-0** | **13 Okt** | **SUBMISSION FINAL SEBELUM 23:59 WIB** | Google Form Panitia | Berkas resmi terunggah & terverifikasi aman |
+| **Selesai** | **05–10 Okt** | Rancang Baseline SOTA, Kuantil GBDT, Per-Horizon Specialist | `train_per_horizon_specialist.py` | PB 0.46376 $\to$ 0.46332 |
+| **Selesai** | **11 Okt** | Deep Learning Explosion: Multi-Seed Transformer, SE-ResNet-1D | `train_hf_multiseed_transformer.py` | PB 0.46011 $\to$ 0.45842 $\to$ 0.45737 🏆 |
+| **H-1** | **12 Okt (Hari Ini)** | Audit Folder `docs/`, Upgrade Fitur Rekonstruksi & Inception-TCN | `train_quantum_apex_grandmaster.py` | Submisi Quantum Leap Siap Submit Saat Kuota Reset |
+| **H-0** | **13 Okt (Pagi)** | Eksekusi Submisi Quantum 50/50 & Scale-Stratified di Kaggle | Kaggle Submission API | Validasi skor tembus sub-0.450 / 0.40xxx / 0.3xxxx |
+| **H-0** | **13 Okt (Siang)** | Finalisasi Notebook `jarvis.ipynb` (100% Run All Bersih di GPU) | `build_solution_notebook.py` | Zero AutoML, Zero LLM inference check |
+| **H-0** | **13 Okt (Sore)** | Packaging Final `jarvis.zip` ($\le 200$ MB, status: 13.86 MB) | `package_submission_zip.py` | Verifikasi integritas zip, bobot model, metadata |
+| **H-0** | **13 Okt (23:59)** | **PENGUMPULAN AKHIR VIA GOOGLE FORM PANITIA** | Google Form Panitia | Berkas resmi terunggah & tanda terima tersimpan aman |
 
 ---
 
@@ -188,14 +241,14 @@ def verify_submission(sub_path):
     assert (sub['total_ticket'] < 0).sum() == 0, "Ada nilai negatif"
     
     # Invariant Mask 29,341 Zeros
-    anchor = pd.read_csv('submissions/submission_hurdle_top.csv')
+    anchor = pd.read_csv('submissions/SUBMISSION_HEXA_PARADIGM_APEX_CHAMPION.csv')
     anchor_zero = (anchor['total_ticket'] == 0)
     sub_zero = (sub['total_ticket'] == 0)
     assert np.array_equal(anchor_zero, sub_zero), "Masker 29,341 nol rusak!"
     
     # Golden Volume Check
     vol = sub['total_ticket'].sum()
-    assert 11_120_000 <= vol <= 11_160_000, f"Volume {vol:,.0f} meleset dari golden vertex!"
+    assert 11_130_000 <= vol <= 11_160_000, f"Volume {vol:,.0f} meleset dari golden vertex!"
     print(f"VERIFIKASI BERHASIL: {sub_path} aman untuk disubmit! (Vol: {vol:,.0f})")
 ```
 
@@ -203,7 +256,7 @@ def verify_submission(sub_path):
 
 ## 🏆 6. Indikator Keberhasilan (Milestones)
 
-- **Target Minimal**: Skor Public Leaderboard $\le \mathbf{0.46400}$ (Breakthrough tier baru).
-- **Target Optimal**: Skor Public Leaderboard $\le \mathbf{0.46300}$ (Kandidat kuat Top 3).
-- **Target Juara 1**: Skor Public Leaderboard $\le \mathbf{0.461xx}$ (Dominasi mutlak penyisihan).
+- **Target Minimal**: Skor Public Leaderboard $\le \mathbf{0.45700}$ (Mempertahankan tren positif).
+- **Target Optimal**: Skor Public Leaderboard $\le \mathbf{0.43000}$ (Breakthrough Tier Baru).
+- **Target Juara 1 / Master**: Skor Public Leaderboard $\le \mathbf{0.40xxx}$ s.d. $\mathbf{0.3xxxx}$ (Dominasi Mutlak Penyisihan).
 - **Kondisi Audit**: 100% lolos reproduksi panitia, kode bersih, bobot $< 50$ MB.
