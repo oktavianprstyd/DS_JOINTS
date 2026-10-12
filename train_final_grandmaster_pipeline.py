@@ -60,7 +60,7 @@ from validation_framework import (
     compute_mase, evaluate_predictions, print_evaluation_summary,
     fit_context_priors, encode_xgb_categoricals, apply_xgb_categoricals
 )
-from execute_step1_soft_calibration import apply_soft_calibration
+from experiments.execute_step1_soft_calibration import apply_soft_calibration
 
 SEED = 2026
 np.random.seed(SEED)
@@ -209,66 +209,107 @@ base_tree_features = [c for c in all_candidate_cols if c in df_test.columns]
 
 # Helper to compute LLR and Combo-TE cleanly without data leakage
 def compute_llr_and_combo_te(df_train, df_val, df_test_set):
+    """Build fold-safe target-derived encodings.
+
+    Training rows receive leave-one-movie-out encodings: no target from the same
+    movie group contributes to that movie's encoded feature. Validation/test rows
+    use statistics fitted on the complete training fold only. This matches the
+    movie-group cold-start validation design more closely than row-wise LOO.
+    """
     df_tr = df_train.copy()
     df_va = df_val.copy()
     df_te = df_test_set.copy()
-    
-    y_act = (df_tr['total_ticket'] > 0).astype(float)
-    y_z = df_tr['total_ticket'] / df_tr['scale'].clip(1.0)
-    
-    prior_act = y_act.mean()
-    prior_z = y_z.mean()
+
+    y_act = (df_tr['total_ticket'].to_numpy(dtype=np.float64) > 0).astype(np.float64)
+    scale_tr = np.clip(df_tr['scale'].to_numpy(dtype=np.float64), 1.0, None)
+    y_z = df_tr['total_ticket'].to_numpy(dtype=np.float64) / scale_tr
     m_prior = 15.0
-    
-    # 1. Cinema LLR (Log-Odds)
-    stats_c = df_tr.groupby('cinema_ids')['total_ticket'].agg(
-        count='count', act=lambda x: (x > 0).sum()
-    )
-    stats_c['p'] = (stats_c['act'] + m_prior * prior_act) / (stats_c['count'] + m_prior)
-    stats_c['cinema_llr'] = np.log((stats_c['p'] + 1e-4) / (1.0 - stats_c['p'] + 1e-4))
-    llr_c_map = stats_c['cinema_llr'].to_dict()
-    
-    # 2. City x Genre LLR
-    df_tr['cg_key'] = df_tr['city_name'] + '_' + df_tr['genre_primary'].astype(str)
-    df_va['cg_key'] = df_va['city_name'] + '_' + df_va['genre_primary'].astype(str)
-    df_te['cg_key'] = df_te['city_name'] + '_' + df_te['genre_primary'].astype(str)
-    stats_cg = df_tr.groupby('cg_key')['total_ticket'].agg(
-        count='count', act=lambda x: (x > 0).sum()
-    )
-    stats_cg['p'] = (stats_cg['act'] + m_prior * prior_act) / (stats_cg['count'] + m_prior)
-    stats_cg['city_genre_llr'] = np.log((stats_cg['p'] + 1e-4) / (1.0 - stats_cg['p'] + 1e-4))
-    llr_cg_map = stats_cg['city_genre_llr'].to_dict()
-    
-    # 3. Flop x Day LLR
-    df_tr['fd_key'] = df_tr['is_flop'].astype(str) + '_' + df_tr['day_num_clipped'].astype(str)
-    df_va['fd_key'] = df_va['is_flop'].astype(str) + '_' + df_va['day_num_clipped'].astype(str)
-    df_te['fd_key'] = df_te['is_flop'].astype(str) + '_' + df_te['day_num_clipped'].astype(str)
-    stats_fd = df_tr.groupby('fd_key')['total_ticket'].agg(
-        count='count', act=lambda x: (x > 0).sum()
-    )
-    stats_fd['p'] = (stats_fd['act'] + m_prior * prior_act) / (stats_fd['count'] + m_prior)
-    stats_fd['flop_day_llr'] = np.log((stats_fd['p'] + 1e-4) / (1.0 - stats_fd['p'] + 1e-4))
-    llr_fd_map = stats_fd['flop_day_llr'].to_dict()
-    
-    # 4. Combo-TE: Cinema x Day Target Z
-    df_tr['cd_key'] = df_tr['cinema_ids'] + '_' + df_tr['day_num_clipped'].astype(str)
-    df_va['cd_key'] = df_va['cinema_ids'] + '_' + df_va['day_num_clipped'].astype(str)
-    df_te['cd_key'] = df_te['cinema_ids'] + '_' + df_te['day_num_clipped'].astype(str)
-    stats_cd = df_tr.groupby('cd_key')['total_ticket'].agg(
-        count='count', z_sum=lambda x: (x / df_tr.loc[x.index, 'scale'].clip(1.0)).sum()
-    )
-    stats_cd['combo_cin_day_te'] = (stats_cd['z_sum'] + m_prior * prior_z) / (stats_cd['count'] + m_prior)
-    te_cd_map = stats_cd['combo_cin_day_te'].to_dict()
-    
-    # Apply mappings
-    global_llr = np.log((prior_act + 1e-4) / (1.0 - prior_act + 1e-4))
-    for d in [df_tr, df_va, df_te]:
-        d['cinema_llr'] = d['cinema_ids'].map(llr_c_map).fillna(global_llr).astype(np.float32)
-        d['city_genre_llr'] = d['cg_key'].map(llr_cg_map).fillna(global_llr).astype(np.float32)
-        d['flop_day_llr'] = d['fd_key'].map(llr_fd_map).fillna(global_llr).astype(np.float32)
-        d['combo_cin_day_te'] = d['cd_key'].map(te_cd_map).fillna(prior_z).astype(np.float32)
-        d.drop(columns=['cg_key', 'fd_key', 'cd_key'], inplace=True, errors='ignore')
-        
+    train_groups = df_tr['movie_title'].fillna('__MISSING_GROUP__').astype(str).reset_index(drop=True)
+
+    def _key(frame, kind):
+        if kind == 'cinema':
+            return frame['cinema_ids'].fillna('__MISSING__').astype(str)
+        if kind == 'city_genre':
+            return (frame['city_name'].fillna('__MISSING__').astype(str) + '_' +
+                    frame['genre_primary'].fillna('__MISSING__').astype(str))
+        if kind == 'flop_day':
+            return (frame['is_flop'].astype(str) + '_' +
+                    frame['day_num_clipped'].astype(str))
+        if kind == 'cinema_day':
+            return (frame['cinema_ids'].fillna('__MISSING__').astype(str) + '_' +
+                    frame['day_num_clipped'].astype(str))
+        raise ValueError(f'Unknown target-encoding key type: {kind}')
+
+    def _smoothed_encoding(keys_tr, target, keys_va, keys_te, groups_tr, smoothing, prior=None):
+        """Return leave-one-group-out train encodings and fold-fit val/test encodings."""
+        keys_tr = pd.Series(keys_tr).fillna('__MISSING__').astype(str).reset_index(drop=True)
+        groups_tr = pd.Series(groups_tr).fillna('__MISSING_GROUP__').astype(str).reset_index(drop=True)
+        target = np.asarray(target, dtype=np.float64)
+        n = len(target)
+        if n == 0:
+            raise ValueError('Cannot fit target encoding on an empty training fold.')
+        if len(keys_tr) != n or len(groups_tr) != n:
+            raise ValueError('Target-encoding keys/groups must align with the target array.')
+        if prior is None:
+            prior = float(np.mean(target))
+
+        temp = pd.DataFrame({'key': keys_tr.to_numpy(), 'group': groups_tr.to_numpy(), 'target': target})
+        stats = temp.groupby('key', sort=False)['target'].agg(['sum', 'count'])
+        stats_key_group = temp.groupby(['key', 'group'], sort=False)['target'].agg(['sum', 'count'])
+        stats_group = temp.groupby('group', sort=False)['target'].agg(['sum', 'count'])
+
+        # Remove every target row belonging to the current movie from its own
+        # category statistic and global prior. This prevents target information
+        # from another horizon/cinema of the same film leaking into train features.
+        key_sum_all = keys_tr.map(stats['sum']).to_numpy(dtype=np.float64)
+        key_count_all = keys_tr.map(stats['count']).to_numpy(dtype=np.float64)
+        group_sum = groups_tr.map(stats_group['sum']).to_numpy(dtype=np.float64)
+        group_count = groups_tr.map(stats_group['count']).to_numpy(dtype=np.float64)
+        row_multi = pd.MultiIndex.from_arrays([keys_tr.to_numpy(), groups_tr.to_numpy()], names=['key', 'group'])
+        key_group_sum = stats_key_group['sum'].reindex(row_multi).to_numpy(dtype=np.float64)
+        key_group_count = stats_key_group['count'].reindex(row_multi).to_numpy(dtype=np.float64)
+
+        prior_den = n - group_count
+        prior_num = float(target.sum()) - group_sum
+        prior_excl = np.divide(prior_num, prior_den, out=np.full(n, float(prior), dtype=np.float64), where=prior_den > 0)
+        key_sum_excl = key_sum_all - key_group_sum
+        key_count_excl = key_count_all - key_group_count
+        enc_tr = (key_sum_excl + smoothing * prior_excl) / (key_count_excl + smoothing)
+
+        full_map = (stats['sum'] + smoothing * float(prior)) / (stats['count'] + smoothing)
+        keys_va = pd.Series(keys_va).fillna('__MISSING__').astype(str).reset_index(drop=True)
+        keys_te = pd.Series(keys_te).fillna('__MISSING__').astype(str).reset_index(drop=True)
+        enc_va = keys_va.map(full_map).fillna(float(prior)).to_numpy(dtype=np.float64)
+        enc_te = keys_te.map(full_map).fillna(float(prior)).to_numpy(dtype=np.float64)
+        return enc_tr, enc_va, enc_te
+
+    def _logit(prob):
+        prob = np.clip(np.asarray(prob, dtype=np.float64), 0.0, 1.0)
+        return np.log((prob + 1e-4) / (1.0 - prob + 1e-4)).astype(np.float32)
+
+    # 1. Cinema activeness LLR. LOO encodings are used only for the training
+    # rows; held-out rows map against the training-fold statistics.
+    k_tr, k_va, k_te = _key(df_tr, 'cinema'), _key(df_va, 'cinema'), _key(df_te, 'cinema')
+    e_tr, e_va, e_te = _smoothed_encoding(k_tr, y_act, k_va, k_te, train_groups, m_prior)
+    df_tr['cinema_llr'], df_va['cinema_llr'], df_te['cinema_llr'] = _logit(e_tr), _logit(e_va), _logit(e_te)
+
+    # 2. City x genre activeness LLR.
+    k_tr, k_va, k_te = _key(df_tr, 'city_genre'), _key(df_va, 'city_genre'), _key(df_te, 'city_genre')
+    e_tr, e_va, e_te = _smoothed_encoding(k_tr, y_act, k_va, k_te, train_groups, m_prior)
+    df_tr['city_genre_llr'], df_va['city_genre_llr'], df_te['city_genre_llr'] = _logit(e_tr), _logit(e_va), _logit(e_te)
+
+    # 3. Flop x horizon activeness LLR.
+    k_tr, k_va, k_te = _key(df_tr, 'flop_day'), _key(df_va, 'flop_day'), _key(df_te, 'flop_day')
+    e_tr, e_va, e_te = _smoothed_encoding(k_tr, y_act, k_va, k_te, train_groups, m_prior)
+    df_tr['flop_day_llr'], df_va['flop_day_llr'], df_te['flop_day_llr'] = _logit(e_tr), _logit(e_va), _logit(e_te)
+
+    # 4. Cinema x horizon target-z encoding; again, training rows are LOO.
+    k_tr, k_va, k_te = _key(df_tr, 'cinema_day'), _key(df_va, 'cinema_day'), _key(df_te, 'cinema_day')
+    e_tr, e_va, e_te = _smoothed_encoding(k_tr, y_z, k_va, k_te, train_groups, m_prior)
+    df_tr['combo_cin_day_te'] = e_tr.astype(np.float32)
+    df_va['combo_cin_day_te'] = e_va.astype(np.float32)
+    df_te['combo_cin_day_te'] = e_te.astype(np.float32)
+
     return df_tr, df_va, df_te
 
 new_fe_cols = ['cinema_llr', 'city_genre_llr', 'flop_day_llr', 'combo_cin_day_te']

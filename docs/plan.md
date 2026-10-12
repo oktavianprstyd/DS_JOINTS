@@ -1,7 +1,7 @@
 # 🗺️ PLAN.MD — Rencana Upgrade & Optimasi Lanjutan JOINTS X INSPIRE 2026
 **Terakhir Diperbarui**: 12 Oktober 2026 | **Target Skor Kaggle**: ≤ 0.44xxx / 0.39xxx / 0.35xxx (Juara 1 & Podium Tertinggi)  
-**Status Personal Best (PB) Terkini**: Public Leaderboard **`0.45737`** 🏆 (`SUBMISSION_HEXA_PARADIGM_APEX_CHAMPION.csv`)  
-**All-Time Lowest Local OOF Record**: **`0.33295`** 🏆 (Quad-Neural Bagged Ensemble Record SOTA)  
+**Status Personal Best (PB) Terkini**: Public Leaderboard **`0.45684`** 🏆 (`SUBMISSION_OCTA_PARADIGM_GRANDMASTER_APEX.csv`)  
+**All-Time Lowest Local OOF Record**: **`0.33084`** 🏆 (Nona-Paradigm TiDE-Inception Neural Blend Record SOTA)  
 **Batas Akhir Pengumpulan**: **13 Oktober 2026 (23:59 WIB)** — *H-1 (1 Hari Tersisa)*
 
 ---
@@ -20,14 +20,12 @@
 
 | Model / Eksperimen | Arsitektur & Inovasi Fitur | Local OOF MASE | Kaggle Public LB | Volume Tiket | Status Submission |
 | :--- | :--- | :---: | :---: | :---: | :--- |
-| **Sub-40 Quantum Leap Stratified** | **Scale-Stratified Unanchoring (85% Micro, 75% Small, 60% Large) + Day-Aware Damping** | **`0.31840`** 🏆 | **`Target < 0.40000`** 🎯 | **11.142M** | **👑 PRIMARY SUB-0.40000 WEAPON** |
-| **Sub-40 Surgical Precision Damped** | 65% Quad-Neural Engine + 35% PB + Precision Horizon Damping (D4-D10) | **`0.32150`** | **`Target < 0.40000`** 🎯 | **11.142M** | **🎯 SECONDARY ROBUST WEAPON** |
-| **Sub-40 Pure Autonomous SOTA** | 100% Neural (TCN+ResNet+Trans+Seq2Seq) + GBDT (0% Anchor Drag) + Two-Speed Lock | **`0.31290`** | **`Target 0.37xxx`** 🚀 | **11.142M** | **🚀 FULL LIBERATION CANDIDATE** |
-| **Hexa-Paradigm Apex Champion** | **SE-ResNet-1D + Bagged Transformer + Seq2Seq + GBDT + Hurdle + Adaptive Micro-Clamp** | **0.33295** | **`0.45737`** 🏆 | **11.142M** | **👑 CURRENT ALL-TIME PERSONAL BEST!** |
-| **Penta-Paradigm Champion** | 15-Model Bagged Transformer + Seq2Seq + GBDT + Hurdle + Micro-Clamp | 0.33780 | **`0.45842`** | 11.142M | Previous PB |
-| **Quad-Paradigm Master SOTA** | PyTorch Transformer (Ranger) + Seq2Seq + Chris Chen GBDT + Hurdle | 0.34012 | **`0.46011`** | 11.142M | Previous PB |
-| **Tri-Paradigm Master SOTA** | Chris Chen GBDT Stacking + Keras 3 Seq2Seq Multi-Horizon | 0.34415 | **`0.46332`** | 11.142M | Penembus tier 0.463 |
-| **Final B Golden Vertex** | 85% PB 0.46432 + 15% Sprint v3 SOTA (Plateau Calibrated) | 0.34577 | **`0.46376`** | 11.142M | Previous PB |
+| **Octa-Paradigm Grandmaster Apex** | **80% PB 0.45737 + 20% Nelder-Mead Quad-Neural Engine (Step: 3.607 tkt)** | **`0.33243`** | **`0.45684`** 🏆 | **11.142M** | **👑 REIGNING ALL-TIME PERSONAL BEST!** |
+| **Nona-Paradigm Ultra Apex** | **82% PB 0.45684 + 18% TiDE-Inception (27.4%) + Seq2Seq (32.6%) + SE-ResNet (27.0%) + TCN (9.9%)** | **`0.33084`** 🏆 | **`0.45704`** | **11.142M** | **🎯 SUBMITTED VIA API (Top-tier Verified)** |
+| **Hexa-Paradigm Apex Champion** | SE-ResNet-1D + Bagged Transformer + Seq2Seq + GBDT + Hurdle + Adaptive Micro-Clamp | 0.33295 | `0.45737` | **11.142M** | Previous PB (Tier 0.457) |
+| **Penta-Paradigm Champion** | 15-Model Bagged Transformer + Seq2Seq + GBDT + Hurdle + Micro-Clamp | 0.33780 | `0.45842` | 11.142M | Previous PB |
+| **Quad-Paradigm Master SOTA** | PyTorch Transformer (Ranger) + Seq2Seq + Chris Chen GBDT + Hurdle | 0.34012 | `0.46011` | 11.142M | Previous PB |
+| **Sub-40 Quantum Leap Stratified** | Unanchored Scale-Stratified (Aggressive Clamping) | 0.31840 | `0.46037` | 11.142M | Step size 10.73 tkt (Over-clamped) |
 | **Star Power Champion Master 70/30** | 70% PB 0.46524 + 30% Star Power x Cultural Affinity | 0.34048 | `0.46432` | 11.142M | Baseline Anchor SOTA |
 | **Quantum Leap 50/50 Apex** | 50% PB 0.45737 + 50% Inception-TCN & Quad-Neural Apex Engine | **0.32980** | *Siap Submit (Kuota Reset)* 🚀 | 11.142M | Target Penembus Tier sub-0.450 |
 | **Scale-Stratified Quantum Apex** | Skala Mikro 75/25, Menengah 65/35, Besar 50/50 + Two-Speed Volume | **0.32840** | *Siap Submit (Kuota Reset)* 🚀 | 11.142M | Target Penembus 0.40xxx / 0.3xxxx |
