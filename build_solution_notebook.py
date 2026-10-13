@@ -515,11 +515,26 @@ Tabel riwayat eksperimen tim Jarvis dari awal kompetisi hingga memecahkan rekor 
     # Cell 8: Model Loading & Standalone Inference Verification
     add_md("""## 8. Two-Stage Dual Engine Inference (`jarvis.pkl` Artifact Verification)
 Memuat berkas bobot model `jarvis.pkl` yang mandiri dan memverifikasi fungsi inferensi juri. Jika berkas bobot model tersedia, inferensi berjalan seketika dalam waktu $< 15$ detik tanpa membutuhkan pelatihan ulang GPU.""")
-    add_code("""# Deteksi path bobot model jarvis.pkl (baik di root '.' maupun di 'weights/')
-weights_path = 'jarvis.pkl' if os.path.exists('jarvis.pkl') else os.path.join('weights', 'jarvis.pkl')
+    add_code("""# Deteksi path bobot model secara fleksibel (jarvis.pkl, [Nama Tim].pkl, atau di weights/)
+weights_candidates = [
+    'jarvis.pkl',
+    'jarvis tolong anu kan pendafta.pkl',
+    os.path.join('weights', 'jarvis.pkl'),
+    os.path.join('weights', 'jarvis tolong anu kan pendafta.pkl')
+]
+# Tambahkan seluruh file .pkl yang ada di folder kerja
+weights_candidates += [f for f in os.listdir('.') if f.endswith('.pkl')]
+if os.path.exists('weights'):
+    weights_candidates += [os.path.join('weights', f) for f in os.listdir('weights') if f.endswith('.pkl')]
 
-if not os.path.exists(weights_path):
-    raise FileNotFoundError(f"Berkas bobot model {weights_path} tidak ditemukan!")
+weights_path = None
+for cand in weights_candidates:
+    if os.path.exists(cand):
+        weights_path = cand
+        break
+
+if weights_path is None:
+    raise FileNotFoundError("Berkas bobot model (.pkl) tidak ditemukan di direktori!")
 
 weights_mb = os.path.getsize(weights_path) / (1024 * 1024)
 print(f"Berkas Bobot Model Terdeteksi: {weights_path}")
